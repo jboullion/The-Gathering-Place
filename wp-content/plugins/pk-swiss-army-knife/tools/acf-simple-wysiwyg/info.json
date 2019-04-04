@@ -1,0 +1,6 @@
+{
+  "name": "ACF Simple WYSIWYG",
+  "description": "Adds a new simple WYSIWYG editor option for the ACF fields. Can be modified / added to with the acf/fields/wysiwyg/toolbars filter",
+  "dependencies": "Advanced Custom Fields Wordpress Plugin",
+  "author": "Nick Kalscheur"
+}

@@ -1,0 +1,67 @@
+//bootstrap variable conversion
+$screen-xs-min: map-get($grid-breakpoints, xs);
+$screen-sm-min: map-get($grid-breakpoints, sm);
+$screen-md-min: map-get($grid-breakpoints, md);
+$screen-lg-min: map-get($grid-breakpoints, lg);
+$screen-xl-min: map-get($grid-breakpoints, xl);
+
+$screen-xs-max: ($screen-sm-min - 1) !default;
+$screen-sm-max: ($screen-md-min - 1) !default;
+$screen-md-max: ($screen-lg-min - 1) !default;
+$screen-lg-max: ($screen-xl-min - 1) !default;
+
+// media query variables
+$mobile-navbar-width:256px;
+$screen-tiny-max: ($screen-xs-min - 1);
+
+//folder locations
+$img-path: '../images/';
+
+// site colors
+$white: white;
+$black: black;
+
+$body-color: $white;
+
+$dark-blue: #0d3c4c;
+$h2blue: #284c72; //used on h2 tags
+$blue: #2a515f;
+$gold: #6b613d;
+$light-gold: #fff1bd;
+$red: #8c0007;
+
+$primary-color: $dark-blue;
+$secondary-color: darken($primary-color, 10%);
+
+//grays
+$white-back: #f8f8f8;
+$light-gray: #e5e5e0;
+$e7-gray: #e7e7e7;
+$upgrayddd: #ddd;
+$dark-gray: #444;
+$degrees-of-gray: #666;
+$gray-problems: #999;
+$almost-black: #231f20;
+$graaay: #aaa;
+$gracccie: #ccc;
+
+// fonts
+$lato: 'Lato', sans-serif;
+
+$body-font: $lato;
+$header-font: $lato;
+
+// Used by font-size() mixin
+$root-font-size: 10px;
+
+// font weights
+$light: 300;
+$bold: 700;
+
+// font - colors
+$text-color: $black;
+
+//font - links
+$anchor-color: $red;
+$anchor-hover: $red;
+

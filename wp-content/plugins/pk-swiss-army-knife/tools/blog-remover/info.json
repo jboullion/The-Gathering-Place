@@ -1,0 +1,5 @@
+{
+  "name": "Blog Remover",
+  "description": "Enable to remove access to the blog posts in the back end if there is no reason for the client to see them.",
+  "author": "James Boullion"
+}

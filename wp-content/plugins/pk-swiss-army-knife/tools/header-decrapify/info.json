@@ -1,0 +1,6 @@
+{
+  "name": "WP Header Decrapify",
+  "description": "Remove some filters and actions that are usually not needed at all in typical Wordpress installations",
+  "author" : "James Boullion",
+  "screenshot": "screenshot.png"
+}

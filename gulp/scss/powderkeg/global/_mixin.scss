@@ -1,0 +1,138 @@
+@mixin user-select($select) {
+	-webkit-user-select: $select;
+	-moz-user-select: $select;
+	-ms-user-select: $select; // IE10+
+	user-select: $select;
+}
+
+/*
+*  Used to horizontally and vertically center an element. 
+*  
+*  Usage: @include center <- no arguments to use transforms to center elements.
+*         @include center(w,h) <- if size is known.
+*
+*/
+
+@mixin center($width: null, $height: null) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  @if not $width and not $height {
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  } @else if $width and $height {
+    width: $width;
+    height: $height;
+    margin: -($width / 2) #{0 0} -($height / 2);
+  } @else if not $height {
+    width: $width;
+    margin-left: -($width / 2);
+    transform: translateY(-50%);
+  } @else {
+    height: $height;
+    margin-top: -($height / 2);
+    transform: translateX(-50%);
+  }
+}
+
+/*
+*  Used to place an transparent layer over an element, usually an image. (Note: must be wrapped in position: relative;). Utilizes the rgba() function.
+*  
+*  Usage: @include overlay(color value, decimal) 
+*  color: Can be word or hex value 
+*  opacity : Must be between 0 and 1 inclusive
+*
+*/
+
+@mixin overlay( $bg-color : #000, $opacity : 0.5 ){ 
+    background-color: rgba($bg-color, $opacity);
+    height: 100%; 
+    left: 0px; 
+    position: absolute; 
+    top: 0px; 
+    width: 100%;  
+    z-index: 2; 
+}
+
+@mixin pkoverlay( $color: $primary-color, $opacity: 0.7){
+  background-color: rgba($color,$opacity);
+}
+
+
+ @mixin rotate($degrees) {
+  -webkit-transform: rotate($degrees);
+  -ms-transform: rotate($degrees); // IE9 only
+  -o-transform: rotate($degrees);
+  transform: rotate($degrees);
+}
+
+/*
+*
+*  Want to use rem, but don't want to do the math? Well, here you go.
+*  Pass the pixel value in font-size() and calculateRem() will return the rem value with a px fallback (Thanks IE)
+*
+*  Note: $root-font-size is set in _pk-variables.scss, so make sure that is the size you want (20px is the WP-gulp root default)
+*
+*  Usage: @include font-size(16px)
+*
+*/
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+@function calculateRem($size) {
+  $remSize: $size / $root-font-size;
+  @return $remSize * 1rem;
+}
+
+/*
+*  
+*  Usage: @include bg-image(x, y) 
+*  x : Can be top, left, bottom, right, center or a percent
+*  y : Can be top, left, bottom, right, center or a percent
+*
+*/
+
+@mixin bg-image($first-position : center, $second-position: center) {
+  background-position: $first-position $second-position; 
+  background-size: cover; 
+  background-repeat: no-repeat;
+}
+
+//Set the Font size
+@mixin fs($fs : 18px) {
+  font-size:$fs;
+}
+
+//Set the line height
+@mixin lh($lh: 30px) {
+  line-height:$lh;
+}
+
+/* 
+*  Set the Font size and line height in 1 call
+*  font-size, line-height, margin-bottom 
+*/
+@mixin txt($fs : 18px, $lh: 30px, $mb : initial) {
+  @include fs($fs);
+  @include lh($lh);
+  margin-bottom:$mb;
+}
+
+/**
+ * All in one font setting mixin
+ *
+ * usage: pktxt(1.8rem, 1.5, $text-color, $body-font, normal, 20px)
+ */
+@mixin pktxt($font-size: 1.8rem, $line-height: 1.5, $color: #000, $font-family: $body-font, $font-weight: normal, $marginb: 20px) {
+  font-size: $font-size;
+  line-height: $line-height;
+  color: $color;
+  font-family: $font-family;
+  font-weight: $font-weight;
+  margin-bottom: $marginb;
+  margin-top: 0;
+}

@@ -1,0 +1,52 @@
+/**
+ * 3rd Party Libraries
+ */
+
+/* There are multiple ways to include bootstrap 4. This is the full include. There are also more simple includes and a flex include */ 
+/*
+@import "./bootstrapv4"; 
+ */
+
+@import "./bootstrapv4"; 
+@import "./fontawesome5/fontawesome";
+
+/*
+* RETINA
+* Allows for retina background images
+* https://github.com/xorcery/retinajs for syntax
+*/
+@import "./powderkeg/common/retina";
+
+/**
+ * Global styles that are probably enabled on most sites
+ */
+@import "./powderkeg/global/pk-variables";
+@import "./powderkeg/global/mixin";
+@import "./powderkeg/global/helpers";
+@import "./powderkeg/global/gravity-forms";
+@import "./powderkeg/global/print";
+@import "./powderkeg/common/typography";
+@import "./powderkeg/common/buttons";
+@import "./powderkeg/common/forms";
+
+/**
+ * More personalized "Common" styles
+ */
+/*
+@import "./powderkeg/common/wppagenavi";
+
+@import "./powderkeg/common/tables";
+@import "./powderkeg/common/carousel";
+@import "./powderkeg/common/slick-slider";
+@import "./powderkeg/common/events"; 
+@import "./powderkeg/common/modals";
+@import "./powderkeg/common/woocommerce"; 
+*/
+
+/**
+ * Site Specific. Will be very different between projects
+ */
+@import "./powderkeg/site/sitewide";
+@import "./powderkeg/site/navigation";
+@import "./powderkeg/site/pages";
+

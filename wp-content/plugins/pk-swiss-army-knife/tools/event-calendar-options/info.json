@@ -1,0 +1,7 @@
+{
+  "name": "Event Calendar Options",
+  "description": "A couple of nice fixes / changes to the events calendar.",
+  "dependencies": "The Events Calendar",
+  "author" : "James Boullion",
+  "screenshot": "screenshot.png"
+}

@@ -1,0 +1,28 @@
+.acf-field input[type="text"],
+.acf-field input[type="url"],
+.acf-field input[type="email"] { line-height:20px !important; }
+
+/* Prevent chrome from displaying missing images when font awesome icons are used */
+#adminmenu .wp-menu-image img { display: none; }
+#adminmenu .toplevel_page_monsterinsights_dashboard .wp-menu-image img,
+#adminmenu .toplevel_page_monsterinsights_reports .wp-menu-image img,
+#adminmenu .toplevel_page_sucuriscan .wp-menu-image img,
+#adminmenu .toplevel_page_addthis_registration .wp-menu-image img,
+#adminmenu .toplevel_page_wpengine-common .wp-menu-image img { display:inline-block; }
+.pk-sortable	{ counter-reset:sortable_counter; margin:0; padding:0; }
+.pk-sortable li	{ background:#eee; border:1px solid #aaa; cursor:move; line-height:18px; min-height:18px; padding:5px 10px; }
+.pk-sortable li &:not(.ui-state-highlight)	{ counter-increment:sortable_counter; }
+.pk-sortable li &:not(.ui-state-highlight)&:before { content:counter(sortable_counter) "."; }
+.pk-sortable li.ui-state-highlight	{ opacity:0.3; }
+
+.acf-fields .acf-field.optional > .acf-label label:after { content:"(Optional)"; color:#db0000; font-size:10px; font-weight:bold; margin-left:5px; }
+/*Hide the unit size if it is a downloadable product*/
+.woocommerce_variable_attributes .pk-unit-size { display:none; }
+.woocommerce_variable_attributes .show_if_variation_downloadable[style="display: none;"] + .pk-unit-size { display:block; }
+/*Hide Parent Link dropdown*/
+#newlink-type_parent { display:none; }
+body.edit-tags-php.taxonomy-link-type .form-field.term-parent-wrap { display:none; }
+body.term-php.taxonomy-link-type .form-field.term-parent-wrap { display:none; }
+
+/* Easier Debugging in the admin */
+pre.pk-print { margin-left: 200px; }

@@ -1,0 +1,5 @@
+{
+  "name": "Hide Uploads Directory",
+  "description": "Prevent Google / Bots from indexing the uploads directory. Useful for portals or other sensative info.",
+  "author" : "James Boullion"
+}

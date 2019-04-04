@@ -1,0 +1,24 @@
+$menu_break_one: 1600px;
+$menu_mobile_break: 1200px;
+
+#header 						{ background-color: $dark-blue; padding: 15px;
+
+	.tagline 					{ 
+		p 						{ color: $white; }
+		span 					{ color: $white; }
+	}
+
+	#main-navigation 			{ float: right; padding-top: 10px;
+		li 						{ 
+			a 					{ color: $white; padding: 15px; text-decoration: none;
+				&:hover 		{  }
+			}
+		}
+	}
+
+}
+
+
+.navbar 						{ padding: 0; }
+.navbar-nav 					{ flex-direction: row;  }
+

@@ -1,0 +1,70 @@
+* { box-sizing:border-box; }
+.form-table th { display:none; }
+.form-table td { padding:0; }
+.plugin-description { margin-bottom:40px; }
+.tools-wrap { display:flex; flex-flow:row wrap; margin:0 -15px; }
+.tool { float:left; line-height:34px; margin-bottom:40px; padding:0 15px; width:33.333333%; }
+.tool .inner { border:1px solid #cfcfcf; border-radius:5px; height:100%; padding:15px;  }
+.tool .description { clear:both; font-style:italic; }
+.tool-name { float:left; margin:0 20px 0 0; }
+.meta >div { line-height:20px; }
+.onoffswitch { float:left; clear:right; }
+
+@media (max-width: 750px) {
+    .tool { width:50%; }
+}
+@media (max-width: 525px) {
+    .tool { width:100%; }
+}
+  
+/* On / Off switch*/
+.onoffswitch {
+	clear:right;
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none !important;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #f1f1f1; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #E97B1B; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #63C1E1; color: #FFFFFF;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 22px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 56px;
+    border: 2px solid #f1f1f1; border-radius: 20px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+/*Specific to always enabled tools*/
+.tool.alwaysenabled .inner { background-color:#e4e4e4; }
+.tool.alwaysenabled .onoffswitch { display:none; }

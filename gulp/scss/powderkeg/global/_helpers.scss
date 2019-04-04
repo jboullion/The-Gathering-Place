@@ -1,0 +1,165 @@
+.font-small					{ font-size: 60%; }
+.font-larger				{ font-size: 130%; }
+
+.font-bold					{ font-weight: bold; }
+.font-normal				{ font-weight: 400; }
+.font-light					{ font-weight: $light; }
+
+.font-italic				{ font-style: italic; }
+.font-uppercase				{ text-transform: uppercase; }
+
+.font-header				{ font-family: $header-font; }
+.font-body					{ font-family: $body-font; }
+
+.text-center				{ text-align: center; }
+.text-right					{ text-align: right; }
+
+.no-text-decoration 		{ text-decoration: none; }
+
+.white-text					{ color: #FFFFFF; }
+.black-text					{ color: #000000; }
+
+.hidden						{ display: none; }
+.clear						{ clear: both; }
+
+.wp-caption 				{ max-width: 100%; }
+
+.wp-caption-text,
+.caption					{ color: $degrees-of-gray; font-size: 14px; font-style: italic; line-height: 20px; }   
+
+.text-overflow 				{ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+.display-flex				{ display: flex; flex-wrap: wrap; }
+.display-table				{ display: table; }
+.display-cell				{ display: table-cell; }
+.display-row				{ display: table-row; }
+
+.border-bottom				{ border-bottom: 1px solid $upgrayddd; }
+
+.pad-me						{ padding: 15px; }
+.center-block				{ margin: 0px auto; }
+.relative					{ position: relative; }
+
+.aligncenter				{
+	&, &dl					{ display:block; margin-left:auto; margin-right:auto; }
+}
+
+.alignleft					{ float: left; margin-right:20px; margin-bottom: 10px; }
+
+.alignright					{ float: right; margin-left:20px; margin-bottom: 10px; }
+
+.center-list				{ float: right; left:-50%; position:relative;
+	ul						{ left:50%; list-style:none; margin:0; padding:0; position:relative;
+		li					{ float: left; }
+	}
+}
+
+.table.table-noborder		{
+	thead, tbody, tfoot		{
+		tr					{
+			th, td			{ border:0; }
+		}
+	}
+}
+
+.modal-open					{ overflow: auto; }
+
+.setup-background			{ background-position: center center; background-size: cover; background-repeat: no-repeat; }
+
+//https://maximilianhoffmann.com/posts/better-font-rendering-on-osx
+//light on dark aliasing
+.txt-antialiased			{ -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-smoothing: antialiased; }
+
+//dark on light aliasing
+//.txt-antialiased            { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; font-smoothing:antialiased; }
+
+span.required				{ color: #FF0000; }
+span.spacer					{ margin: 0px 10px; }
+span.right-spacer			{ margin-right: 30px; }
+
+.divider					{ height: 1px; margin: 20px 0px; width: 70px; 
+	&.divider-primary		{ background-color: $primary-color; }
+	&.divider-primary-thick	{ background-color: $primary-color; height: 3px; }
+}
+
+/* Creates an underline that is overlayed by a text shadow for a neat effect. Mostly used for anchor links. */
+.shadow-decoration {
+	background-image: linear-gradient(to top, $anchor-hover 0%, $anchor-hover 100%);
+	background-size: 2px 2px;
+	background-repeat: repeat-x;
+	background-position: 0 100%;
+	text-shadow: 1px 0.07em 0 #fff, -1px 0.07em 0 #FFF;
+}
+
+/* Prevent our a.btn from being affected */
+.no-shadow-decoration {
+	background-image: none;
+	background-size: 0 0;
+	background-repeat: no-repeat;
+	background-position: 0 100%;
+	text-shadow: none;
+}
+
+/**
+ * Used to create a 16:9 aspect ratio for a video.
+ * 
+ * usage: <div class="pk-video"><iframe src="//www.youtube.com/embed/{ID}" allowFullscreen="1"></iframe></div>
+ */
+.pk-video         { position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;   
+  iframe          { border: 0; position: absolute; top: 0; left: 0; width: 100%; max-width: 100% !important; height: 100%; min-height: 0 !important; }
+}
+
+
+//SITE WIDE MEDIA QUERIES
+//Tiny Phones (480px) and below
+@media(max-width: $screen-tiny-max) {
+	.tiny-only				{ display: block; }
+
+}
+
+// Tiny Phones (480px) and above
+@media (min-width: $screen-xs-min) {
+	.tiny-only				{ display: none; }
+}
+
+//Tablet and Smaller screens (789px) and below
+@media(max-width: $screen-xs-max) {
+	.desktop-hide			{ display: block; }
+	.mobile-hide			{ display: none; }
+
+	.medium-show			{ display: none; }
+
+	.alignright,
+	.alignleft				{ margin: 0px; float: none; }
+
+}
+
+// Tablet and Larger (789px) and above
+@media (min-width: $screen-sm-min) {
+	.desktop-hide			{ display: none; }
+	.mobile-hide			{ display: block; }
+
+}
+
+.medium-only				{ display: none; }
+@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+	.medium-only			{ display: block; }
+}
+
+// Desktop (991px) and below
+@media (max-width: $screen-sm-max) {
+	.fullscreen-only		{ display: none !important; }
+	.fullscreen-hide		{ display: block; }
+}
+
+// Desktop (992px) and above
+@media (min-width: $screen-md-min) {
+	.fullscreen-only		{ display: block; }
+	.fullscreen-hide		{ display: none; }
+
+}
+
+// Fullscreen (1200px) and above
+@media (min-width: $screen-lg-min) {
+	
+}

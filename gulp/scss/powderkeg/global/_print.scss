@@ -1,0 +1,20 @@
+.print-only							{ display:none; }
+
+@media print						{
+	body 							{ overflow:visible; height: auto; width: auto; }
+
+	.no-print						{ display:none !important; }
+	.print-only						{ display:block !important; }
+	.print-full						{ width:100% !important; }
+	
+	a[href]:after,
+	a:link:after,
+	a:visited:after					{ content:""; }
+	
+	.wc-proceed-to-checkout 		{ display:none !important; }
+}
+
+/* FireFox */
+@-moz-document url-prefix() { 
+	@media print {}
+}

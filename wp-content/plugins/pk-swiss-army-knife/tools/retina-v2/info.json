@@ -1,0 +1,6 @@
+{
+  "name": "Retina JS - Version 2",
+  "description": "Enqueue the retina.js script for @2x image checking / inclusion. <strong>This second iteration requires you to add 'data-rjs=\"2\"' to the image elements you want to be retina</strong>.",
+  "dependencies": "jQuery",
+  "author": "Nick Kalscheur"
+}

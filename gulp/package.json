@@ -1,0 +1,25 @@
+{
+  "name": "jbase-default",
+  "version": "1.0.0",
+  "description": "JBoullion Default Package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Boullion",
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.17.5",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-declare": "^0.3.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-uglify": "^1.5.4",
+    "gulp-wrap": "^0.13.0"
+  }
+}

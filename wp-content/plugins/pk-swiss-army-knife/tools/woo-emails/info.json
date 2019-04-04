@@ -1,0 +1,6 @@
+{
+  "name": "Woocommerce Email Preview Tool",
+  "description": "Preview woocommerce emails from a submenu",
+  "dependencies": "Woocommerce",
+  "author": "Nick Kalscheur"
+}

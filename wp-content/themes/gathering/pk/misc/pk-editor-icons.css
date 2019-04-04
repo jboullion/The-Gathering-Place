@@ -1,0 +1,7 @@
+.pk-icons-icon { font-family:FontAwesome !important; }
+#pk-icon-set { width:600px; height:400px; overflow-y:auto; }
+#pk-icon-set ul, #pk-icon-set li { list-style-type:none; list-style:none; margin:0; padding:0; }
+#pk-icon-set li { display:block; float:left; margin:5px; width:30px; height:30px; }
+#pk-icon-set i { font-family:FontAwesome; font-size:30px; color:#000000; }
+#pk-icon-set li.selected i { color:#4444CC; }
+#pk-icon-set li:hover { cursor:pointer; }

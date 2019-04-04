@@ -1,0 +1,5 @@
+{
+  "name": "Secure Check",
+  "description": "Adding the 'secure' class to a GF field will require the user to pass this secure check in order to view that field's entry",
+  "author" : "James Boullion"
+}

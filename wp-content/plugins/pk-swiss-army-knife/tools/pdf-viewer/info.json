@@ -1,0 +1,6 @@
+{
+  "name": "PDF JS Viewer",
+  "description": "Opens local pdf links in a custom pdf viewer instead of relying on the browsers default functionality",
+  "dependencies": "jQuery",
+  "author": "Nick Kalscheur"
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Script Timer",
+  "description": "Returns the speed of the script starting from (wp_head,1) to (wp_footer,1000). Use in conjunction with WP Page Load Stats by Mike Jolly.",
+  "author" : "James Boullion"
+}

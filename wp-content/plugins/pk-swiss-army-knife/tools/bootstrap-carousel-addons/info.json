@@ -1,0 +1,7 @@
+{
+  "name": "Bootstrap Carousel Swipe and Height",
+  "description": "Makes it so any Bootstrap carousel that has the \"slide\" AND \"swipe\" and.or \"vert-swipe\" classes will move forward / backwards and/or up / down with swiping. It also makes it so any Bootstrap carousel that has the \"aheight\" class added to it will have its height animated on transition for a smoother look. You can set the animation speed via \"data-aspeed\" on the carousel.",
+  "dependencies": "jQuery",
+  "author": "Nick Kalscheur",
+  "screenshot": "screenshot.png"
+}

@@ -1,0 +1,59 @@
+// BUTTONS
+.btn								{ border: 0px; 
+										border-radius: 0; 
+										display: inline-block; 
+										font-family: $body-font; 
+										font-size: 1.5rem; 
+										font-weight: bold; 
+										line-height: 1; 
+										margin: 20px 0px; 
+										max-width: 100%; 
+										padding: 15px 40px; 
+										text-align: center; 
+										text-decoration: none;
+										white-space: normal; 
+										@include transition(all 0.2s linear);
+										
+	&:hover							{ cursor: pointer; }
+	&.btn-full						{ width: 100%; }
+	&.no-margin						{ margin: 0px; }
+	&.no-bottom-margin				{ margin-bottom: 0px; }
+
+	&.btn-primary					{ color: #FFFFFF; background-color: $primary-color; border: 1px solid $primary-color;
+		&:hover						{ background-color: $gold; border: 1px solid $gold; }
+		&:focus,
+		&:active,
+		&:hover:active,
+		&:hover:focus,
+		&:active:focus				{ background-color: $primary-color; box-shadow: none; }
+	}
+
+	&.btn-blue						{ color: $dark-blue; background-color: transparent; border: 1px solid $dark-blue;
+		&:hover 					{ color: $white; background-color: $dark-blue; }
+		&:focus,
+		&:active,
+		&:hover:active,
+		&:hover:focus,
+		&:active:focus				{ color: $dark-blue; background-color: transparent; border-color: $dark-blue; box-shadow: none; }
+	}
+
+	&.btn-white						{ color: #FFFFFF; background-color: transparent; border: 1px solid #FFFFFF;
+		&:hover 					{ color: $primary-color; background-color: #FFFFFF; }
+		&:focus,
+		&:active,
+		&:hover:active,
+		&:hover:focus,
+		&:active:focus				{ color: #FFFFFF; background-color: $secondary-color; border-color: $secondary-color; box-shadow: none; }
+	}
+
+	&.btn-white-back				{ color: $dark-blue; background-color: #FFFFFF; border: 1px solid #FFFFFF;
+		&:hover 					{ color: #FFFFFF; background-color: $dark-blue; border-color: $dark-blue; }
+		&:focus,
+		&:active,
+		&:hover:active,
+		&:hover:focus,
+		&:active:focus				{ color: #FFFFFF; background-color: $dark-blue; border-color: $dark-blue; box-shadow: none; }
+	}
+	
+	@media (max-width: $screen-tiny-max)	{  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Lity Lightbox",
+  "description": "Easy, lightweight lightbox enqueuing.",
+  "dependencies": "jQuery",
+  "author": "Nick Kalscheur"
+}

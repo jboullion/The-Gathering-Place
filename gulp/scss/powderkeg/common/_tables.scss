@@ -1,0 +1,8 @@
+table.table  			{
+	th,td 				{ border: 1px solid $upgrayddd; line-height: inherit !important; padding: 10px 20px !important; 
+		@media (max-width: 480px) { padding: 5px !important; word-break: break-word; }
+	}
+
+	th 					{ background-color: $light-gray; }
+	td 					{  }
+}

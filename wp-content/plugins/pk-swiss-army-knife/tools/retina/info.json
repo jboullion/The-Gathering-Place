@@ -1,0 +1,6 @@
+{
+  "name": "Retina JS",
+  "description": "Enqueue the retina.js script for @2x image checking / inclusion",
+  "dependencies": "jQuery",
+  "author": "Nick Kalscheur"
+}

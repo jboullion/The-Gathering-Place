@@ -1,0 +1,5 @@
+{
+  "name": "Robots.txt Addition",
+  "description": "Shouldn't be needed nowadays, but makes sure the wp-includes folder is disallowed",
+  "author": "Matt Engebretson"
+}

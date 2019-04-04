@@ -1,0 +1,6 @@
+{
+  "name": "ACF Merge Tab",
+  "description": "Combine ACF tabs from different field groups in to 1 group of tabs. Uses pk_tool_acf_tab_merge_content filter",
+  "dependencies": "Advanced Custom Fields Wordpress Plugin, jQuery",
+  "author": "Nick Kalscheur"
+}

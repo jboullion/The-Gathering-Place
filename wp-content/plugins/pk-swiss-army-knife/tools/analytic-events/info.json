@@ -1,0 +1,6 @@
+{
+  "name": "Gravity Form Google Analytic Event Tracking",
+  "description": "Save an event to Google Analytics whenever a gravity form is submitted. Form title and entry ID will be saved.",
+  "author" : "James Boullion",
+  "screenshot": "screenshot.png"
+}

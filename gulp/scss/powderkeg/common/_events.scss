@@ -1,0 +1,364 @@
+//TRIBE EVENTS STYLES
+//event variables
+/*
+$caregiver-events: #66CC00;
+$caregiver-events-past: #66CC00;
+
+$educational-seminars: #00FFFF;
+$educational-seminars-past: #00FFFF;
+
+
+#tribe-events								{ padding: 0px; clear: left; } //need to act like container
+
+//curernt day
+#tribe-events-content table.tribe-events-calendar tbody.vcalendar td.tribe-events-present div[id*="tribe-events-daynum-"] {
+	background-color: $primary-color !important;
+}
+
+//all event pages wrapper
+#tribe-events-content-wrapper,
+body.single-tribe_organizer		 		{
+	.tribe-events-page-title			{ font-family: $body-font; font-size: 30px; font-weight: bold; text-align: center; position: relative; 
+		&:before,
+		&:after							{ content: ""; position: absolute; height: 5px; border-top: 1px solid #CCC; top: 50%; 
+			@media (min-width:$screen-lg-min) { width: 32%; }
+			@media (min-width:$screen-md-min) and (max-width:$screen-md-max) { width: 28%; }
+			@media (min-width:$screen-sm-min) and (max-width:$screen-sm-max) { width: 24%; }
+			@media (max-width:$screen-xs-max) { display: none; }
+		}
+
+		&:before						{ left: 0px; }
+		&:after							{ right: 0px; }
+	}
+	
+	//filter bar
+	#tribe_events_filters_wrapper { 
+		#tribe_events_filter_control{ border-radius: 3px; font-size: 14px; width: 100%; background-color: #f4f4f4; padding: 6px 10px 6px 20px; 
+			a							{ display: block; }
+		}
+		.tribe-events-filter-group	{ max-height: 390px; 
+			ul							{ max-height: 390px; }
+		}
+		
+		.tribe-events-filter-view.tribe-filters-closed #tribe_events_filters_wrapper #pk_tribe_events_filters_toggle { font-weight: bold; text-decoration: none; margin: 0px;
+			 @media (max-width:$screen-xs-max) { padding-left: 0px; width: 100%; display: block;	}
+		}
+
+		#tribe_events_filter_control #pk_tribe_events_filters_toggle { background: none repeat scroll 0% 0% #666; color: #FFF;	}
+		
+		@media (min-width:$screen-sm-min) { width: 25%; }
+		@media (max-width:$screen-xs-max) { margin-top: 0px; }
+	}
+	
+	//legend
+	#pk-cat-legend						{ margin-top: 20px; text-align: center;
+		li								{ display: inline-block; font-size: 14px; list-style: none; margin: 0px 8px;
+			div							{ display: inline-block; height: 15px; margin-bottom: -3px; margin-right: 2px; width: 30px;
+				&.cat-legend-caregiver-events		{ background-color: $caregiver-events; }
+				&.cat-legend-educational-seminars	{ background-color: $educational-seminars; }
+			}
+			@media (max-width:$screen-xs-max) { font-size: 11px; padding-left: 15%; text-align: left; width: 44%; }
+		}
+		@media (max-width:$screen-xs-max) { margin-left: 0px; }
+	}
+	
+	.tribe-events-button				{ background-color: $anchor-color; 
+		&:hover,
+		&:focus,
+		&:target,
+		&:active						{ background-color: $anchor-hover; }
+	}
+	
+	//mobile current day
+	#tribe-events-content .tribe-events-calendar td.tribe-events-present.mobile-active:hover,
+	.tribe-events-calendar td.tribe-events-present.mobile-active { background-color: #FFFFFF; }
+	.tribe-events-calendar .mobile-active.tribe-events-has-events::after { background-color: #333; }
+
+}
+
+
+@media (max-width:$screen-xs-max) { 
+	//by default just show the filters. The javascript seems to be broken for toggling them.
+	.tribe-events-filter-view.tribe-filters-closed #tribe_events_filters_wrapper #tribe_events_filters_toggle		{ display: none !important; }
+	.tribe-events-filter-view.tribe-filters-closed #tribe_events_filters_form, 
+	.tribe-events-filter-view.tribe-filters-closed #tribe_events_filters_wrapper .tribe-events-filters-label, 
+	.tribe-events-filter-view.tribe-filters-closed #tribe_events_filters_reset { display: block !important; }
+}
+
+
+//events bar
+#tribe-events-bar						{ margin-bottom: 0px !important;
+	#tribe-bar-form						{ background-color: transparent; }		 
+	ul.pk-events-bar					{ margin-bottom: 0px; margin-left: 0px;
+		li								{ display: inline-block; list-style: none; margin-right: 20px; 
+			a							{ background-color: $light-gray; border-radius: 4px; color: $text-color; display: block; font-size: 14px; padding: 2px 24px;
+				&:hover,
+				&:visited,
+				&:link,
+				&:active,
+				&:focus					{ color: $text-color;	}
+				
+				&.current				{ border: 3px solid $primary-color; }
+			}
+			@media (min-width:$screen-xs-min) and (max-width:$screen-xs-max) { width: 45%; margin: 0px 5px 10px 5px; }
+			@media (max-width:$screen-tiny-max) { width: 100%; margin: 0px 0px 10px 0px; }
+		}
+		span[class^="tribe-icon-"]		{ padding-left: 24px; background-repeat: no-repeat !important; background-position: 0px 50% !important; min-height: 16px; display: block; }
+		span.tribe-icon-list			{ background: url("../images/events-bar/icon-list.png"); background-size: 15px 10px; } //TODO: May need to usg image instead of embed for retina
+		span.tribe-icon-month			{ background: url("../images/events-bar/icon-month.png"); background-size: 15px 16px; }
+		span.tribe-icon-week			{ background: url("../images/events-bar/icon-week.png"); background-size: 15px 16px; }
+		span.tribe-icon-today			{ background: url("../images/events-bar/icon-day.png"); background-size: 15px 16px; }
+
+		@media (max-width:$screen-xs-max) { margin-left: 0px; text-align: center; }
+	}
+}
+
+body.events-gridview.events-archive 	{
+	ul.pk-events-bar					{
+		li a.month						{ border: 3px solid $primary-color; }
+	}
+}
+*/
+
+/**
+ *	 MONTH VIEW
+ */
+/*
+table.tribe-events-calendar				{
+	
+	thead								{
+		tr								{
+			th							{ background-color: $primary-color; border-color: $primary-color; padding: 5px 0px; }
+		}
+	}
+	tbody.vcalendar						{
+		td								{
+			&.tribe-events-past					{
+				div[id*="tribe-events-daynum-"] { background-color: $light-gray !important; color: $text-color; 
+					> a							{ background-color: $light-gray !important; color: $text-color; display: block; }
+				}
+			}
+			&.tribe-events-present				{
+				div[id*="tribe-events-daynum-"] { background-color: $e7-gray !important; color: #FFFFFF; 
+					> a							{ background-color: $primary-color !important; color: #FFFFFF; display: block; }
+				}
+			}
+			&.tribe-events-future				{
+				div[id*="tribe-events-daynum-"] { background-color: $light-gray !important; color: $text-color; 
+					> a							{ background-color: $light-gray !important; color: $text-color; display: block; }
+				}
+			}
+		}
+	}
+
+	//all events
+	.tribe_events,
+	.type-tribe_events						{ border-bottom: 0px !important; margin: 4px 4px 0px !important; padding: 2px 6px !important;
+		h3.tribe-events-month-event-title 	{ font-size: 12px !important; font-weight: normal !important; line-height: 16px !important; 
+			a								{ color: $anchor-color; display: block; opacity: 1 !important; }
+		}
+	}
+	
+	//past events
+	.tribe-events-past,
+	.tribe-events-othermonth				{
+		.tribe_events,
+		.type-tribe_events					{
+			&.cat_caregiver-events			{ border-left: 4px solid $caregiver-events-past; }
+			&.cat_educational-seminars		{ border-left: 4px solid $educational-seminars-past; }
+		}
+	}
+	
+	//future events
+	.tribe-events-thismonth			 		{
+		&.tribe-events-future,
+		&.tribe-events-present				{
+			.type-tribe_events				{
+				&.cat_caregiver-events		{ border-left: 4px solid $caregiver-events; }
+				&.cat_educational-seminars	{ border-left: 4px solid $educational-seminars; }
+
+			} 
+		}
+	}
+}
+*/
+/**
+ *	 LIST VIEW
+ */
+/*
+.events-list.tribe-bar-is-disabled #tribe-events-content-wrapper { max-width: 100%; }
+
+.tribe-events-list							{
+	h2										{ font-family: $header-font;
+		a									{  }
+	}
+	
+	.vevent									{ padding: 0px 0px 0px 20px !important; 
+		.description						{
+			p, a							{ font-size: 16px; line-height: 22px; }
+		}
+	}
+	
+	.tribe-events-category-caregiver-events		{ border-left: 10px solid $caregiver-events; }
+	.tribe-events-category-educational-seminars	{ border-left: 10px solid $educational-seminars; }
+
+}
+
+.tribe-events-loop .tribe-events-event-meta 	{ font-size: 18px; }
+
+.tribe-events-event-meta address.tribe-events-address, 
+.tribe-events-list .tribe-events-venue-details 	{ font-style: normal; }
+
+.tribe-events-read-more							{ font-weight: bold; }
+
+.events-list .tribe-events-loop, 
+.single-tribe_organizer .tribe-events-loop, 
+.single-tribe_venue .tribe-events-loop, 
+.tribe-events-day .tribe-events-loop			{ max-width: 100% !important; }
+*/
+
+/**
+ *	 WEEK VIEW
+ */
+/*
+.tribe-grid-header								{ background-color: $primary-color; }
+
+.tribe-events-tooltip							{ background-color: #FFF !important; }
+
+.tribe-grid-content-wrap						{
+	.tribe-events-category-caregiver-events		{ background-color: $caregiver-events; border-color: $dark-gray; 
+		> div									{ background-color: $caregiver-events; border-color: $dark-gray; 
+			&:hover								{ background-color: $caregiver-events; }
+		}
+	}
+
+	.tribe-events-category-educational-seminars	{ background-color: $educational-seminars; border-color: $dark-gray; 
+		> div									{ background-color: $educational-seminars; border-color: $dark-gray; 
+			&:hover								{ background-color: $educational-seminars; }
+		}
+	}
+	
+}
+
+.tribe-week-grid-wrapper						{
+
+	.tribe-events-category-caregiver-events		{ 
+		.tribe-events-week-hourly-single		{ background-color: $caregiver-events; border-color: $dark-gray; 
+			&:hover								{ background-color: $caregiver-events; }
+		}
+	}
+	
+	.tribe-events-category-educational-seminars	{ 
+		.tribe-events-week-hourly-single		{ background-color: $educational-seminars; border-color: $dark-gray; 
+			&:hover								{ background-color: $educational-seminars; }
+		}
+	}
+
+}
+*/
+
+
+/**
+ *	 SINGLE EVENTS
+ */
+/*
+.single-tribe_events							{
+	.tribe-events-event-meta					{ background-color: #FFFFFF; border: 0px; border-top: 1px solid #e0e0e0; }
+}
+
+.tribe-events-single							{
+	h2											{ margin-bottom: 10px !important; }
+
+	.event-title-line							{ background-color: $anchor-color; height: 4px; margin: 30px 0px; width: 160px;	}
+
+	.tribe_events								{	}
+
+
+	.tribe_events_cat-caregiver-events			{
+		.tribe-border							{ border-left: 10px solid $caregiver-events;	}
+	} 
+
+	.tribe_events_cat-educational-seminars		{
+		.tribe-border							{ border-left: 10px solid $educational-seminars;	}
+	} 
+
+
+	.tribe-events-schedule						{ margin: 0px 0px 1em; }
+	.tribe-events-venue-details					{ font-weight: 400; font-style: italic; line-height: 1.2; margin: 0px 0px 20px; display: block; }
+	.tribe-events-address						{ padding-right: 3px; font-weight: 400; font-style: italic; display: inline; font-style: normal; font-family: inherit; font-size: inherit; line-height: inherit; margin-right: 10px; margin-bottom: 20px; font-style: normal; line-height: 1.42857; }
+	.tribe-events-gmap							{ white-space: nowrap; }
+}
+*/
+
+/**
+ *	 CATCH ALL (mostly ugly catch alls for a variety of colors and styles)
+ */
+/*
+#tribe-events-content							{ margin-bottom: 0px;
+	.tribe-events-tooltip						{ background-color: #FFFFFF !important; 
+		h4										{ color: $anchor-color; }
+		p										{ font-size: 16px; line-height: 24px; margin-bottom: 0px; }
+	}
+}
+
+.tribe-events-day .tribe-events-day-time-slot h5 { color: $anchor-color !important; }
+
+#tribe-events .tribe-events-button, 
+#tribe-events .tribe-events-button:hover, 
+#tribe_events_filters_wrapper input[type="submit"], 
+.tribe-events-button, 
+.tribe-events-button.tribe-active:hover, 
+.tribe-events-button.tribe-inactive, 
+.tribe-events-button:hover						{ background-color: $anchor-color; }
+
+.tribe-events-sub-nav li a						{ 
+	@media (max-width:$screen-xs-max) 			{ background-color: $anchor-color; color: #FFFFFF;	}
+}
+
+span.location span.country-name 				{ margin-right: 10px; }
+*/
+
+/**
+* FILTER BAR
+*/
+/*
+#tribe_events_filters_wrapper label span		{ font-weight: 400; }
+
+//these are all sub categories. Filter bar does not assign a "child" class so we have to target them specifically.
+.tribe-events-category-schools,
+.tribe-events-category-leadership				{
+	> label > span								{ margin-left: 20px; }
+}
+*/
+
+/**
+ * SINGLE PAGE
+ */ 
+/*
+.tribe-events-event-meta						{
+	.tribe-events-meta-group					{ padding: 20px 0px 30px;
+		h3.tribe-events-single-section-title	{ font-size: 24px; margin: 20px 0px 20px; }
+
+		&.tribe-events-meta-group-details		{ border-bottom: 1px solid #e0e0e0; width: 100%; 
+			dt									{ line-height: 1.5 !important; float: left; font-size: 16px; margin-right: 10px; padding-bottom: 10px; }
+			dd									{ line-height: 1.5 !important; float: left; font-size: 16px; padding-bottom: 10px; }
+		}
+		&.tribe-events-meta-group-venue			{
+			dt									{ line-height: 1.5 !important; float: left; font-size: 16px; margin-right: 10px; padding-bottom: 10px; }
+			dd									{ line-height: 1.5 !important; float: left; font-size: 16px; padding-bottom: 10px; 
+				&.author						{ font-weight: bold; }
+				&.location						{ font-style: normal; }
+			}
+
+			@media (min-width:$screen-sm-min)	{ width: 40%; }
+			@media (max-width:$screen-xs-max)	{ width: 100%; }
+		}
+		&.tribe-events-meta-group-gmap			{
+			.tribe-events-venue-map				{ background: transparent; border: none; padding: 0px; }
+			@media (min-width:$screen-sm-min)	{ width: 60%; }
+			@media (max-width:$screen-xs-max)	{ width: 100%; }
+		}
+	}
+	@media (max-width:$screen-xs-max)			{ padding: 0px !important; }
+}
+*/

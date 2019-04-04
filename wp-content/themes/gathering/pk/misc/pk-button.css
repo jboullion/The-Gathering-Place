@@ -1,0 +1,20 @@
+#pk-button-form label { font-weight: bold; margin-right: 20px; }
+#pk-button-form input { margin-bottom: 20px; width: 200px; }
+
+i.mce-i-pkButtonBTN {
+    position: relative;
+}
+
+i.mce-i-pkButtonBTN:before {
+    content: "\f0fe"; /* https://fontawesome.com/v4.7.0/icon/plus-square/ */
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #555d66;
+    font-size: 18px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

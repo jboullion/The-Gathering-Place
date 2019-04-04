@@ -1,0 +1,5 @@
+{
+  "name": "WP Remove RSS Feeds",
+  "description": "Remove the automatic RSS feeds and remove the link to them in the header",
+  "author" : "James Boullion"
+}

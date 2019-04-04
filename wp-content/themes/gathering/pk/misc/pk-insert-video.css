@@ -1,0 +1,22 @@
+#insert-video-form label { font-weight: bold; margin-right: 20px; }
+#insert-video-form input[type="text"]	{ width: 200px; }
+#insert-video-form input[type="radio"]	{  }
+#insert-video-form td 	{ padding-bottom: 10px; }
+
+i.mce-i-pkInsertVideo {
+    position: relative;
+}
+
+i.mce-i-pkInsertVideo:before {
+    content: "\f167"; /* Value for the Youtube icon*/
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #555d66;
+    font-size: 18px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

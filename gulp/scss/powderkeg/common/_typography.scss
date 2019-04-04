@@ -1,0 +1,45 @@
+/* FONTS */
+h1,h2,h3,h4,h5,h6 			{ color: $text-color; font-family: $header-font; font-weight: normal; margin-bottom: 20px; margin-top: 0px; }
+
+h1							{ font-size: 7rem; line-height: 1.1; color: $white;
+	@media (max-width: $screen-sm-max)  { font-size: 6rem;  }
+}
+h2							{ font-size: 5.5rem; line-height: 1.25; color: $h2blue;
+	@media (max-width: $screen-sm-max)  { font-size: 5rem;  }
+}
+h3							{ font-size: 4rem; line-height: 1.5; color: $blue; }
+h4							{ font-size: 3rem; line-height: 1.7; color: $gold; }
+h5							{ font-size: 2.4rem; line-height: 1.8; color: $blue; font-style: italic; }
+h6							{ font-size: 1.5rem; line-height: 2.3; font-family: $body-font; }
+
+html 						{ font-size: $root-font-size; line-height: 1.5; }
+
+.default-font-style			{ font-weight: normal; font-size: 2rem; line-height: 1.6; color: $black; font-family: $body-font; margin-bottom: 20px; }
+body 						{ @extend .default-font-style; 
+	p 						{ @extend .default-font-style; }
+
+	a						{ color: $anchor-color; text-decoration: underline;
+
+		&:visited			{ color: $gold; }
+
+		&:focus,
+		&:active			{ color: $anchor-color; }
+
+		&:hover				{ color: $anchor-hover; text-decoration: none; } 
+
+	}
+}
+
+//need to use mixin because pseudo elements don't play well with @extend
+@mixin placeholder-styles($color) {
+	color: $color;
+	font-size: 1.8rem;
+	opacity: 1;
+}
+
+::-webkit-input-placeholder { @include placeholder-styles($graaay); }
+:-moz-placeholder           { @include placeholder-styles($graaay); }
+::-moz-placeholder          { @include placeholder-styles($graaay); }
+:-ms-input-placeholder      { @include placeholder-styles($graaay); }
+
+@media (max-width: $screen-xs-max) { }

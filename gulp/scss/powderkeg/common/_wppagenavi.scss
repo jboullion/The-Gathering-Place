@@ -1,0 +1,13 @@
+//WP PAGENAVI
+.wp-pagenavi					{ clear: both; font-weight: normal !important; margin-top: 20px; display: inline-block; @include box-shadow(0px 0px 10px -2px rgba(0,0,0,0.4));
+		.pages					{ display: none; }
+		span.current			{ color: #FFFFFF; background-color: $primary-color; }
+		a, span					{ background-color: #FFF; border: 0; font-size: 1em; margin: 0px; padding: 4px 14px; display: inline-block;
+		&:hover,
+		&:active,
+		&:focus					{ color: #FFFFFF; background-color: $primary-color; border-color: $upgrayddd; text-decoration: none; }
+		&:nth-child(2)			{  }
+		&:first-child			{  }
+		&:last-child			{  }
+	}
+}

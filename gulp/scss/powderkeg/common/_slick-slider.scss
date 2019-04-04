@@ -1,0 +1,95 @@
+/**
+ * The Slick CSS is also being used. Currently being called over a cdn ( //cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css )
+ */
+/*
+.slick-gallery			{  }
+.slider-for				{ position: relative; margin-bottom: 20px;
+
+	.slick-arrow		{ background-color: $primary-red; color: #FFFFFF; 
+						border: none; cursor: pointer; position: absolute; bottom: 0px; width: 75px; height: 60px; z-index: 1; 
+
+	i 					{ font-size: 40px; }
+
+	&.slick-prev		{ left: 0px; }
+	&.slick-next		{ right: 0px; }
+
+		@media (min-width: $screen-md-min) { top: 225px; }
+		@media (max-width: $screen-sm-max) and (min-width: $screen-sm-min) { top: 175px; }
+		@media (max-width: $screen-xs-max) { display: none; }
+	}
+
+
+	.img-viewer			{ background-color: #f6f6f6; background-size: contain; background-position: center center; background-repeat: no-repeat; outline: 0;
+		@media (max-width: $screen-xs-max) { height: 300px; }
+		@media (max-width: $screen-sm-max) and (min-width: $screen-sm-min) { height: 400px; }
+		@media (min-width: $screen-md-min) { height: 500px; }
+	}
+
+	.slick-list			{ overflow: visible; }
+	
+	.slick-slide img	{ margin: 0px auto;
+		@media (max-width: $screen-xs-max) { max-height: 300px; }
+		@media (max-width: $screen-sm-max) and (min-width: $screen-sm-min) { max-height: 350px; }
+		@media (min-width: $screen-md-min) { max-height: 400px; }
+	}
+
+	.slick-caption		{ padding-top: 10px; background-color: #FFFFFF; }
+
+	.slide-count		{ float: right; font-weight: bold; margin-top: 10px; }
+
+	.slick-dots			{ height: 30px; margin: 0; text-align: center; position: absolute; width: 100%;
+		.slick-active	{
+			button		{ 
+			&:before	{ color: #FFF; }
+		}
+	}
+
+
+	
+
+
+
+	li					{ cursor: pointer; color: #F1F1F1; list-style: none; position: relative; display: inline-block; margin: 0; padding: 0; 
+		&:before		{ display: none; content: ''; }
+	}
+
+		button			{ display: block; padding: 5px; cursor: pointer; color: transparent; border: 0; outline: 0; background: transparent; 
+			&:before	{ color: $upgrayddd; content: "•"; font-size: 22px; line-height: 20px; position: absolute; top: 0px; left: 0px; width: 20px; height: 20px; text-align: center; }
+		}
+
+		@media (min-width: $screen-sm-min) { bottom: 0; }
+		@media (max-width: $screen-xs-max) { top: 100%; 
+			.slick-active		{
+				button			{ 
+					&:before	{ }
+				}
+			}
+		}
+	} 
+}
+
+.slider-nav 				{
+	.slick-slide 			{ outline: 0; cursor: pointer; }
+	.slick-slide img		{ outline: 0; 
+								-webkit-filter: grayscale(100%); 
+								filter: grayscale(100%);
+	}
+
+	.slick-current img		{ 
+							-webkit-filter: none; 
+							filter: none; 
+	}
+}
+
+.slick-lightbox				{
+	.slick-arrow			{ border: none; cursor: pointer; color: transparent; background-color: transparent; position: absolute; bottom: auto; top: 45%; width: 50px; height: 50px; z-index: 100; 
+			&:before		{ color: #FFF; font-family: 'Font Awesome 5 Pro','FontAwesome'; font-size: 20px; padding: 15px; }
+			&.slick-prev	{  
+			&:before		{ content: "\f0a8"; }
+		}
+			&.slick-next	{ 
+			&:before		{ content: "\f0a9"; }
+		}
+	}
+}
+*/

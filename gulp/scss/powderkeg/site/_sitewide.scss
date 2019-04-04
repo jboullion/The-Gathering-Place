@@ -1,0 +1,135 @@
+/* SITE WIDE */   
+html, body					{ width: 100%; display:block; margin: 0; }
+html 						{ position: relative; /* font-size: $root-font-size; */ }
+body 						{ 	background-color: $body-color; 
+								overflow-y:scroll; 
+								overflow-x:hidden; 
+								position:relative; 
+								@extend .txt-antialiased; }
+
+//need to use mixin because pseudo elements don't play well with @extend
+@mixin selection-styles($color) {
+	color: white;
+	background: $color;
+	background: rgba($color, 0.9);
+}
+
+::-moz-selection { /* Code for Firefox */
+	@include selection-styles($red);
+}
+
+::selection {
+	@include selection-styles($red);
+}
+
+
+img 						{ max-width: 100%; height: auto; }
+
+//allow the lazy loaded images to fade in.
+//We have some divs with background images AND normal image sthat are affected by lazy load
+div.lazy,
+img.lazy {
+	opacity: 1;
+	transition: opacity 0.3s;
+}
+
+div.lazy[data-src],
+img.lazy[data-src] {
+	opacity: 0;
+}
+
+a:focus,
+button:focus,
+input:focus 				{ outline: 0 !important; }
+
+
+hr 							{ border-color: $upgrayddd; margin: 40px 0px; }
+
+
+/* styles for the entry / content areas */
+.entry,
+.content 					{
+
+	/*
+	ul, ol 					{ margin-bottom: 20px; display: block; padding-left: 30px; overflow: hidden;
+		li 					{ margin-bottom: 10px; }
+	}
+
+	ul 						{ 
+		li 					{ list-style: none;
+			&:before 		{  font-family: 'Font Awesome 5 Pro'; content: '\f111'; margin:0 15px 0 -20px; color: $text-color; font-size: 0.6rem; position: relative; top: -3px; }
+		}
+	}
+	*/
+
+}
+
+/**
+ * FEATURED
+ */
+#featured 					{ padding-top: 350px; position: relative; text-align: center;
+	.overlay 				{ @include pkoverlay(); position: absolute; top: 0; bottom: 0; right: 0; left: 0; }
+
+	.container 				{ max-width: 100%; padding: 0 30px; }
+
+	h1 						{ margin-bottom: 50px; }
+
+	@media (max-width: $screen-sm-max)  { padding-top: 250px; }
+}
+
+
+/**
+ * WRAPPER
+ */
+.wrapper 					{ position: relative; 
+	> .container 			{ padding: 50px 15px; 
+		&.no-padding 		{ padding: 0px; }
+		&.no-side-padding	{ padding-left: 0px; padding-right: 0px; }
+
+		@media (max-width: $screen-xs-max)  {  }
+		@media (max-width: $screen-tiny-max) { padding: 40px 15px;  }
+	}
+}
+
+blockquote 					{ background: #f1f1f1; border-left: 10px solid $upgrayddd; margin-bottom: 40px; padding: 30px 10px 10px 30px; }
+
+//most common background colors, often applied to the wrapper
+.white-back 				{ background-color: $white; }
+
+
+/**
+ * PAGINATION
+ */
+ .pagination 				{ margin-top: 40px; padding: 0 15px; text-align: center; width: 100%;
+	a, span 				{ border: 1px solid $gold; font-family: $body-font; font-size: 1.5rem; font-weight: bold; margin: 0 3px; padding: 15px 20px; }
+	a 						{ background-color: $white; color: $gold; text-decoration: none; transition: all 0.2s linear;
+		&:visited,
+		&:active 			{ background-color: $white; color: $gold; }
+
+		&:hover 			{ background-color: $gold; color: $white; text-decoration: none; }
+
+	}
+	span 					{ background-color: $gold; color: $white; }
+}
+
+.logo 						{ float: left; width: 50px; height: 50px; }
+
+.tagline 					{ float: left; margin-left: 20px;
+	p 						{ font-weight: bold; margin: 0; line-height: 1; }
+	span 					{ font-size: 1.4rem; }
+}
+
+/**
+ * FOOTER
+ */
+#footer 					{ 
+	.container 				{ padding: 50px 15px 20px; }
+
+	.social 				{ text-align: right;
+		a 					{ font-size: 3rem; display: inline-block; }
+	}
+
+	.copyright 				{ text-align: center; padding-top: 20px;
+		p 					{ font-size: 1.4rem; }
+	}
+}

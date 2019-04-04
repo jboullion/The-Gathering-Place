@@ -1,0 +1,5 @@
+{
+  "name": "Comments Remover",
+  "description": "Enable to remove access to the comments in the back end if there is no reason for the client to see them.",
+  "author": "Nick Kalscheur"
+}
