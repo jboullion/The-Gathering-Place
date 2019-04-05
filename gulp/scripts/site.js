@@ -3,32 +3,7 @@ var $ = jQuery;
 
 // vars are global for use elsewhere on the site
 var	bind = 'click';//('ontouchstart' in document.documentElement ? "touchstart" : "click"); //desktop touchscreens only work with touch when this is set
-	$toggle_btn = $('#mobile-navigation-toggle'),
-	$mobile_container = $('#mobile-navigation'),
-	isScrolling = false; //used in the smooth scroll function
 
-
-//SMOOTH SCROLLING
-var smooth_scroll_site_offset = 0,
-	doNotScroll = ".carousel-control, [data-lity], .nav-tabs a"; 
-
-$('a[href*=\\#]:not([href=\\#])').not( doNotScroll ).click(function() {
-	if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-		var target = $(this.hash),
-			target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-
-		if(target.length) {
-			isScrolling = true;
-			$('html,body').animate({
-				scrollTop: target.offset().top - ($(this).attr('data-scroll-offset') ? $(this).attr('data-scroll-offset') : 0) - smooth_scroll_site_offset
-			}, 1000, function() {
-				isScrolling = false;
-			});
-		
-		return false;
-		}
-	}
-});
 
 /**
  * Initialize Lazyload
@@ -68,26 +43,6 @@ $(window).on('resize', function(e) {
 
 });
 */
-
-/**
- * GRAVITY FORMS
- *
- * Gravity forms need's a little love to work how we want. Put that code here
- */
-//Default functionality for file upload form fields
-$(document).bind('gform_post_render', function(){
-	$(".gfield.file input[type='file']").on('change', function() {
-		var filename = $(this).val().replace("C:\\fakepath\\", "");
-		$(this).parent().parent().find('label').attr('data-content',filename);
-	});
-
-	//Setup some JS validation for the gravity forms. Specifically targeting billing values.
-	$('.address_zip input').addClass('number-input').attr('maxlength', 5);
-	$('.ginput_container_creditcard .ginput_full').first().find('input').addClass('number-input').attr('maxlength', 19);
-	$('.ginput_cardinfo_right input').addClass('number-input').attr('maxlength', 4);
-
-});
-
 
 //check to make sure we actually have a gform, otherwise we can just avoid this code.
 if($('.gform_wrapper form').length){
