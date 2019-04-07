@@ -6,8 +6,8 @@
 
 <div id="404-page" class="page">
 	<?php //get_template_part('templates/common/featured'); ?>
-
-	<?php get_template_part('templates/common/content'); ?>
+	<h2>404</h2>
+	<?php //get_template_part('templates/common/content'); ?>
 </div>
 
 <?php 

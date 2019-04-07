@@ -58,7 +58,7 @@ gulp.task('sass-styles', function() {
 gulp.task('scripts', function() {
     console.log('Scripting...');
 
-    return gulp.src([SRC_PATH+'scripts/variables.js',SRC_PATH+'scripts/functions.js',SRC_PATH+'scripts/site.js', SCRIPTS_PATH])
+    return gulp.src([SRC_PATH+'scripts/lodash.js',SRC_PATH+'scripts/variables.js',SRC_PATH+'scripts/functions.js',SRC_PATH+'scripts/site.js', SCRIPTS_PATH])
         .pipe(plumber(function(err){
           //this function will run WHEN an error occurs in this task
           console.log('Styles Task Error');
@@ -67,7 +67,7 @@ gulp.task('scripts', function() {
         }))
         .pipe(concat('dev.js'))
         .pipe(gulp.dest(THEME_PATH + '/js'))
-        .pipe(uglify())
+        .pipe(uglify({mangle: false}))
         .pipe(concat('live.js'))
         .pipe(gulp.dest(THEME_PATH + '/js'));
 });

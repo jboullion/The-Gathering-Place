@@ -97,7 +97,7 @@
 	// REGISTER our posts types
 	add_action('init', 'pk_register_cpts');
 	function pk_register_cpts() {
-		pk_register_cpt(array('name' => 'party', 'icon' => 'dashicons-groups', 'position' => 30, 'exclude_from_search' => true ));
+		pk_register_cpt(array('name' => 'party', 'icon' => 'dashicons-groups', 'position' => 30, 'has_archive' => true ));
 
 	}
 

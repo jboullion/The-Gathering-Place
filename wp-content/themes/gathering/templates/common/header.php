@@ -14,6 +14,7 @@
 	<nav id="main-navigation" role="navigation">
 		<ul id="menu-main-navigation-menu" class="navbar-nav navbar-expand">
 			<?php if (is_user_logged_in()) { ?>
+				<li class="login"><a href="/parties/">Parties</a></li>
 				<li class="login"><a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a></li>
 			<?php } else { ?>
 				<li class="sign-up"><a href="#">Sign Up</a></li>

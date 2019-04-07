@@ -11255,6 +11255,11 @@ readers do not read off random characters that represent icons */
   background-size: cover;
   background-repeat: no-repeat; }
 
+.contain-background {
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat; }
+
 .txt-antialiased, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -12393,7 +12398,56 @@ blockquote {
       border-color: #666; }
   #party-page #party-gamearea {
     width: 640px;
-    overflow: auto; }
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; }
+    #party-page #party-gamearea #gamearea-map-wrapper {
+      overflow-x: scroll; }
+    #party-page #party-gamearea #gamearea-map {
+      height: 320px;
+      width: 960px;
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden; }
+    #party-page #party-gamearea .tile {
+      border: 1px solid #231f20;
+      height: 32px;
+      width: 32px; }
+  #party-page #dm-tools {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 30px 0; }
+    #party-page #dm-tools .dm-tool {
+      margin-bottom: 30px; }
+      #party-page #dm-tools .dm-tool h6 {
+        font-weight: bold;
+        margin-bottom: 10px;
+        line-height: 1.2; }
+      #party-page #dm-tools .dm-tool .dm-holder {
+        display: flex; }
+        #party-page #dm-tools .dm-tool .dm-holder .dm-tile {
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          margin: 0.5rem; }
+          #party-page #dm-tools .dm-tool .dm-holder .dm-tile img,
+          #party-page #dm-tools .dm-tool .dm-holder .dm-tile input {
+            max-width: 100%;
+            height: 32px;
+            width: 32px; }
+          #party-page #dm-tools .dm-tool .dm-holder .dm-tile.active {
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.8); }
+    #party-page #dm-tools #tool-select .tool {
+      width: 32px;
+      height: 32px;
+      text-align: center;
+      padding: 0.5rem;
+      margin: 0.5rem; }
+      #party-page #dm-tools #tool-select .tool.active, #party-page #dm-tools #tool-select .tool:hover {
+        background-color: #fcfcb6; }
+      #party-page #dm-tools #tool-select .tool i {
+        display: block;
+        font-size: 2rem; }
 
 /**
  * DEFAULT PAGES
