@@ -77,6 +77,7 @@
 	}
 
 	#party-gamearea 			{ width: 640px; overflow: hidden; display: flex; flex-direction: column;
+		
 		#gamearea-map-wrapper 	{ overflow-x: scroll; }
 		#gamearea-map 			{ height: 320px; width: 960px; display: flex; flex-wrap: wrap; overflow: hidden; }
 		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px; }
@@ -85,21 +86,40 @@
 	#dm-tools 					{ flex: 1; overflow-y: scroll; padding: 30px 0;
 
 		.dm-tool 				{ margin-bottom: 30px;
-			h6 					{ font-weight: bold; margin-bottom: 10px; line-height: 1.2; }
+			h6 					{ font-size: 2rem; font-weight: bold; margin-bottom: 10px; line-height: 1.2; }
 			.dm-holder 			{ display: flex;
 
-				.dm-tile		{ cursor: pointer; width: 32px; height: 32px; margin: 0.5rem;
+				.dm-tile		{ cursor: pointer; width: 32px; height: 32px; margin: 5px 5px 5px 0;
 					img,
 					input 		{ max-width: 100%; height: 32px; width: 32px; }
-					
+
 					&.active 	{ box-shadow: 0px 0px 6px rgba(0,0,0,0.8); }
+				}
+			}
+
+			.form-group 		{ 
+				label 				{ font-size: 1.5rem; font-weight: bold; }
+				input 				{ border: 0; font-size: 1.5rem; font-weight: bold; line-height: 2; padding: 0; }
+
+				input[type=text] 	{ padding-left: 10px;}
+
+				input[type=color] 	{ border: none; cursor: pointer; width: 32px; height: 32px; 
+					-webkit-appearance: none;
+
+					&::-webkit-color-swatch-wrapper {
+						padding: 0;
+					}
+
+					&::-webkit-color-swatch {
+						border: none;
+					}
 				}
 			}
 		}
 
 		
 		#tool-select 			{ 
-			.tool 				{ width: 32px; height: 32px; text-align: center; padding: 0.5rem; margin: 0.5rem;
+			.tool 				{ width: 32px; height: 32px; text-align: center; padding: 0.5rem; 
 				&.active,
 				&:hover 		{ background-color: #fcfcb6; }
 
@@ -117,6 +137,11 @@
 		}
 
 		#dm-tile-area 			{ 
+
+			#current-tile 		{ display: inline-block;
+
+			}
+
 			.dm-tile			{
 				img 			{ }
 			}

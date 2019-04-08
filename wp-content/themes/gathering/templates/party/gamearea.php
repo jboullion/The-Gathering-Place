@@ -1,6 +1,6 @@
 <div id="party-gamearea">
 	<div id="gamearea-map-wrapper">
-		<div id="gamearea-map">
+		<div id="gamearea-map" oncontextmenu="return false;">
 			<!-- <h3>Generate this with JS. Store each cell in a 2d array as it's own object.</h3>
 			<p>Should each square be 32x32 (or 64x64, not sure) pixels in size with a 1px border</p>
 			<p>We will generate more map tiles than will fit in game area and then the user can scroll around if needed</p>
@@ -14,29 +14,32 @@
 				<div id="paint-tool" class="tool active"><i class="fas fa-fw fa-paint-roller"></i></div>
 				<div id="fill-tool" class="tool"><i class="fas fa-fw fa-fill-drip"></i></div>
 				<div id="erase-tool" class="tool"><i class="fas fa-fw fa-eraser"></i></div>
-				<div id="highligjt-tool" class="tool"><i class="fas fa-fw fa-highlighter"></i></div>
+				<div id="highlight-tool" class="tool"><i class="fas fa-fw fa-highlighter"></i></div>
+				<div id="sample-tool" class="tool"><i class="fas fa-eye-dropper"></i></div>
+				
 			</div>
 		</div>
 		<div id="dm-tile-area" class="dm-tool">
 			<h6>Tiles</h6>
-			<div id="tile-holder" class="dm-holder"> 
-				<div class="dm-tile active">
-					<input id="tile-color" type="color" value="#ff0000">
+			
+			<div class="form-group">
+				<label for="current-tile">Current Tile</label><br />
+				<div id="current-tile" class="tile" style="background-color: #ff0000"></div>
+			</div>
+
+			<div class="form-group">
+				<label for="tile-color">Select Color</label>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<input id="tile-color" type="color" value="#ff0000">
+					</div>
+					<input id="current-color" type="text" class="form-control" value="#ff0000">
 				</div>
-				<div class="dm-tile">
-					<img src="https://via.placeholder.com/32/00FF00/FFFFFF" alt="1" width="32" height="32" >
-				</div>
-				<div class="dm-tile">
-					<img src="https://via.placeholder.com/32/00FF00/FFFFFF" alt="1" width="32" height="32" >
-				</div>
-				<div class="dm-tile">
-					<img src="https://via.placeholder.com/32/00FF00/FFFFFF" alt="1" width="32" height="32" >
-				</div>
-				<div class="dm-tile">
-					<img src="https://via.placeholder.com/32/00FF00/FFFFFF" alt="1" width="32" height="32" >
-				</div>
-				<div class="dm-tile">
-					<img src="https://via.placeholder.com/32/00FF00/FFFFFF" alt="1" width="32" height="32" >
+			</div>
+			<div class="form-group">
+				<label for="tile-color">Select Texture</label>
+				<div id="texture-holder" class="dm-holder">
+
 				</div>
 			</div>
 		</div>
@@ -58,24 +61,28 @@
 	</div>
 </div>
 
-<script id="tile-template" type="text/template">
-	<div class="tile contain-background" >
-	</div>
-</script>
-
-
-
-
 <script>
 jQuery(document).ready(function($) {
-	var $map = document.getElementById("gamearea-map");
-	var tileTpl = document.createElement("div"); // document.getElementById("tile-template").innerHTML;
-	var tileHolder =  document.createDocumentFragment(); //'';
-	var tileColor = document.getElementById("tile-color"),
-		tileColorVal = tileColor.value;
 
+	//Get our document elements. Label with $ for reference
+	var $map = document.getElementById("gamearea-map"),
+		$tileColor = document.getElementById("tile-color"),
+		$textureHolder = document.getElementById("texture-holder"), 
+		$currentTile = document.getElementById("current-tile"),
+		$currentColor = document.getElementById("current-color");
 
-	tileTpl.setAttribute("class", "tile contain-background")
+	//PURE JS elements
+	var tileTpl = document.createElement("div"),
+		textureTpl = document.createElement("div")
+		tileHolder =  document.createDocumentFragment(), //'';
+		tileColorVal = $tileColor.value;
+
+	var tileDefaultCSS = "tile ",
+		textureDefaultCSS = "tile sprite ";
+
+	//Setup some basic attributes for our tiles
+	tileTpl.setAttribute("class", tileDefaultCSS);
+	textureTpl.setAttribute("class", "dm-tile sprite");
 
 	//Our standard tile
 	var tile = {
@@ -90,6 +97,18 @@ jQuery(document).ready(function($) {
 		tileSize: 32,
 		element: null
 	};
+
+	var textures = ['dirt01','dirt02',
+					'grass01','grass02',
+					'stone01','stone02','stone03','stone04',
+					'wall01','wall02','wall03',
+					'rock01','rock02'];
+
+	//This is the example / current tile that will do the painting
+	var paintTile = {
+		type: 'color', //color / image
+		background: '#FF0000', //hex code or background image
+	}
 
 	//Our NPCs are basically a type of tile so we need all the same values to start with
 	var npc = {
@@ -107,6 +126,7 @@ jQuery(document).ready(function($) {
 		passable: true,
 		type: 'color', //color / image
 		background: '#FF0000', //hex code or background image
+		textures: []
 	};
 
 	//Our main board object that knows it's own state
@@ -140,30 +160,14 @@ jQuery(document).ready(function($) {
 			//Setup a click listener on this tile
 			//tile.element.addEventListener('click', colorTile);
 			tile.element.onmousedown = function(e){
-				console.log("OK Down!");
-				this.style.backgroundColor = tileColorVal;//tileColorVal;
+				doPaintTile(this);
 			};
 
 			tile.element.onmousemove = function(e){
 				if(board.painting){
-					this.style.backgroundColor = tileColorVal;//tileColorVal;
+					doPaintTile(this);
 				}
 			};
-/*
-			//Setup a click listener on this tile
-			tile.element.addEventListener('ondragover', function(e){
-				console.log('ondragover!');
-				e.dataTransfer.dropEffect = "move"
-			});
-
-			//Setup a click listener on this tile
-			tile.element.addEventListener('ondrop', function(e){
-				var data = e.dataTransfer.getData("text/plain");
-
-				//document.getElementById()
-				console.log('ondrop! '+data);
-			});
-*/
 
 			//Put our tile into our state board
 			board.tiles[w][h] = tile;
@@ -171,6 +175,25 @@ jQuery(document).ready(function($) {
 			//Put our tile on the screen
 			tileHolder.appendChild(tile.element);
 		}
+	}
+
+	//Setup our painting textures
+	for(var t = 0; t < textures.length; t++){
+		//Clone our default HTML element
+		dmTiles.textures[t] = textureTpl.cloneNode(false);
+
+		//Add our texture class to this element
+		dmTiles.textures[t].classList.add(textures[t]);
+
+		//setup our click event for this texture tool
+		dmTiles.textures[t].onclick = (function(t) {return function() {
+			setPaintTile('texture', t);
+		};})(t);
+
+
+		//console.log(dmTiles.textures[t]);
+
+		$textureHolder.appendChild(dmTiles.textures[t]);
 	}
 
 	//Set our tiles into our map
@@ -182,6 +205,51 @@ jQuery(document).ready(function($) {
 	$map.onmouseup = function(e){
 		board.painting = false;
 	};
-});
 
+	/**
+	 * Change the paintTile
+	 */
+	function setPaintTile(type, value){
+		paintTile.type = type;
+
+		
+
+		if(type === 'color'){
+			paintTile.background = value;
+		}else if(type === 'texture'){
+			console.log('value: '+value);
+			console.log('textures: '+textures);
+			console.log('textures[value]: '+textures[value]);
+			paintTile.background = textures[value];
+		}else if(type === 'image'){
+			paintTile.background = value;
+		}
+
+		doPaintTile($currentTile);
+	}
+
+	//Set the new tool color
+	$tileColor.addEventListener('input', function(e){
+		setPaintTile('color', this.value);
+
+		$currentColor.value = this.value;
+	}, false);
+
+	
+
+	/**
+	* Paint our map! Update the background of a tile
+	*/
+	function doPaintTile(element){
+		if(paintTile.type === 'color'){
+			element.style.backgroundColor = paintTile.background;
+			element.setAttribute("class", tileDefaultCSS);
+		}else if(paintTile.type === 'texture'){
+			element.style.backgroundColor = '#FF00FF';
+			element.setAttribute("class", textureDefaultCSS+paintTile.background);
+		}else if(paintTile.type === 'image'){
+			element.style.backgroundImage = 'url('+paintTile.background+')';
+		}
+	}
+});
 </script>
