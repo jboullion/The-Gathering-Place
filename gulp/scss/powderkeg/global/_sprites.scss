@@ -1,4 +1,4 @@
-.sprite { display:inline-block; overflow:hidden; background-repeat: no-repeat; background-image:url('/wp-content/themes/gathering/images/terrain_spritesheet.png');}
+.sprite { display:inline-block; overflow:hidden; background-repeat: no-repeat; background-image:url('#{$img-path}terrain_spritesheet.png');}
 
 
 .dirt01 {width:64px; height:64px; background-position: -0px -0px}

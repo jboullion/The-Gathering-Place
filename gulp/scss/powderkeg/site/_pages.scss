@@ -82,10 +82,16 @@ body.single-parties 			{ overflow: hidden;
 
 	#party-gamearea 			{ width: 50%; overflow: hidden; display: flex; flex-direction: column;
 		
+		&.paint-tool 			{ cursor: url(#{$img-path}paint-roller-solid.png), default; }
+		&.fill-tool 			{ cursor: url(#{$img-path}fill-drip-solid.png), default; }
+		&.erase-tool 			{ cursor: url(#{$img-path}eraser-solid.png), default; }
+		&.highlight-tool 		{ cursor: url(#{$img-path}highlighter-solid.png), default; }
+		&.sample-tool 			{ cursor: url(#{$img-path}eye-dropper-solid.png), default; }
+
 		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; width: 100%; overflow: auto; }
 		#gamearea-map 			{ height: 1160px; width: 1160px; padding: 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
 		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px;
-			&:before 			{ content: ''; display: block; width: 32px; height: 32px; }
+			&:before 			{ content: ''; display: block; width: 32px; height: 32px; margin: -1px; }
 
 			&.highlight 		{ 
 				&:before 		{ @include jbhighlight(); }
@@ -129,11 +135,11 @@ body.single-parties 			{ overflow: hidden;
 
 		
 		#tool-select 			{ 
-			.tool 				{ cursor: pointer; width: 32px; height: 32px; text-align: center; padding: 0.5rem; 
+			.tool 				{ cursor: pointer; width: 32px; height: 32px; text-align: center; padding: 0.7rem; 
 				&.active,
 				&:hover 		{ background-color: #98c4f3; }
 
-				i 				{ display: block; font-size: 2rem; }
+				i 				{ display: block; font-size: 1.6rem; }
 			}
 		}
 

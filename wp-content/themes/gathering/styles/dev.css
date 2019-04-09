@@ -11759,7 +11759,7 @@ span.right-spacer {
   display: inline-block;
   overflow: hidden;
   background-repeat: no-repeat;
-  background-image: url("/wp-content/themes/gathering/images/terrain_spritesheet.png"); }
+  background-image: url("../images/terrain_spritesheet.png"); }
 
 .dirt01 {
   width: 64px;
@@ -12475,6 +12475,16 @@ body.single-parties {
     overflow: hidden;
     display: flex;
     flex-direction: column; }
+    #party-page #party-gamearea.paint-tool {
+      cursor: url(../images/paint-roller-solid.png), default; }
+    #party-page #party-gamearea.fill-tool {
+      cursor: url(../images/fill-drip-solid.png), default; }
+    #party-page #party-gamearea.erase-tool {
+      cursor: url(../images/eraser-solid.png), default; }
+    #party-page #party-gamearea.highlight-tool {
+      cursor: url(../images/highlighter-solid.png), default; }
+    #party-page #party-gamearea.sample-tool {
+      cursor: url(../images/eye-dropper-solid.png), default; }
     #party-page #party-gamearea #gamearea-map-wrapper {
       background-color: #e5e5e0;
       height: 100%;
@@ -12495,7 +12505,8 @@ body.single-parties {
         content: '';
         display: block;
         width: 32px;
-        height: 32px; }
+        height: 32px;
+        margin: -1px; }
       #party-page #party-gamearea .tile.highlight:before {
         background-color: rgba(255, 0, 0, 0.2);
         background-size: 100% 100%;
@@ -12586,12 +12597,12 @@ body.single-parties {
       width: 32px;
       height: 32px;
       text-align: center;
-      padding: 0.5rem; }
+      padding: 0.7rem; }
       #party-page #dm-tools #tool-select .tool.active, #party-page #dm-tools #tool-select .tool:hover {
         background-color: #98c4f3; }
       #party-page #dm-tools #tool-select .tool i {
         display: block;
-        font-size: 2rem; }
+        font-size: 1.6rem; }
     #party-page #dm-tools #current-tile {
       width: 32px;
       height: 32px;

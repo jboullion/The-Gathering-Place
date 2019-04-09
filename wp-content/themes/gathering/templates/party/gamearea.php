@@ -1,4 +1,4 @@
-<div id="party-gamearea">
+<div id="party-gamearea" class="paint-tool">
 	<div id="gamearea-map-wrapper">
 		<div id="gamearea-map" oncontextmenu="return false;"></div>
 	</div>
@@ -8,8 +8,10 @@
 <script>
 jQuery(document).ready(function($) {
 
+
 	//Get our document elements. Label with $ for reference
-	var $map = document.getElementById("gamearea-map"),
+	var $gameArea = document.getElementById("party-gamearea"),
+		$map = document.getElementById("gamearea-map"),
 		$tileColor = document.getElementById("tile-color"),
 		$textureHolder = document.getElementById("texture-holder"), 
 		$currentTile = document.getElementById("current-tile"),
@@ -112,12 +114,15 @@ jQuery(document).ready(function($) {
 	var throttleHighlight = _.throttle(doTileHighlight, 17);
 	var debounceHighlight = _.debounce(cancelHighlight, 5000);
 	
+	/*
+	document.body.oncontextmenu = function(){
+		console.log('concontextmenu')
+		document.body.setAttribute("style",'cursor:default;');
+	}
+	*/
 
 	//Initialize our game
 	gameInit();
-
-	//Set our tiles into our map
-	$map.appendChild(tileHolder); //.innerHTML= tileHolder;
 
 	$map.onmousedown = function(e){
 		
@@ -139,13 +144,6 @@ jQuery(document).ready(function($) {
 				break;
 		}
 
-		/*
-		$paintTool = document.getElementById("paint-tool"),
-		$fillTool = document.getElementById("fill-tool"),
-		$eraseTool = document.getElementById("erase-tool"),
-		$highlightTool = document.getElementById("highlight-tool"),
-		$sampleTool
-		*/
 	};
 	$map.onmouseup = function(e){
 		board.painting = false;
@@ -170,6 +168,7 @@ jQuery(document).ready(function($) {
 			$activeTool = this;
 			this.classList.add("active");//.setAttribute("class", activeClass);
 
+			$gameArea.setAttribute("class", this.getAttribute('id'));
 		})
 	}
 	
@@ -211,6 +210,8 @@ jQuery(document).ready(function($) {
 
 	/**
 	 * Create all our tiles and stick them to the board
+	 * 
+	 * NOTE: This might be DM only...unless everyone can paint?
 	 */
 	function buildBoard(){
 		//Build our board! //0 or 1 based?
@@ -221,7 +222,6 @@ jQuery(document).ready(function($) {
 				var tmpTile = _.clone(tile);
 
 				tmpTile.id = ++tmpTile.id;
-				
 
 				//Clone our default HTML element
 				tmpTile.element = tileTpl.cloneNode(true);
@@ -259,6 +259,7 @@ jQuery(document).ready(function($) {
 					}
 				};
 
+				//Some tools need to function while moving over
 				tmpTile.element.onmousemove = function(e){
 					if(board.painting){
 						switch($activeTool){
@@ -284,14 +285,33 @@ jQuery(document).ready(function($) {
 				//Put our tile into our state board
 				board.tiles[w][h] = tmpTile;
 
-				//Put our tile on the screen
-				tileHolder.appendChild(board.tiles[w][h].element);
 				
+				
+				//tileHolder.appendChild(board.tiles[w][h].element);
 			}
 		}
 
+		displayBoard(board);
+
 	}
 
+	//Display a board object to the screen
+	function displayBoard(newBoard){
+		tileHolder = document.createDocumentFragment();
+
+		for(var w = 1; w <= newBoard.width; w++){
+			for(var h = 1; h <= newBoard.height; h++){
+				//build our pure JS object before sticking it on the board
+				tileHolder.appendChild(newBoard.tiles[w][h].element);
+			}
+		}
+
+		//Set our tiles into our map
+		//Put our tile on the screen
+		$map.appendChild(tileHolder);
+	}
+
+	//Paint Bucket Fill all similar tiles
 	function fillTiles($element){
 
 		var findTiles = [];
@@ -360,6 +380,8 @@ jQuery(document).ready(function($) {
 		$element.type = defaultTile.type;
 		$element.background = defaultTile.background;
 		$element.style.backgroundColor = defaultTile.background;
+		$element.style.backgroundImage = '';
+		$element.setAttribute("class", tileDefaultCSS);
 	}
 
 	//Set the new tool color

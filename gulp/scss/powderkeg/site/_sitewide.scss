@@ -5,7 +5,9 @@ body 						{ 	background-color: $body-color;
 								overflow-y:scroll; 
 								overflow-x:hidden; 
 								position:relative; 
-								@extend .txt-antialiased; }
+								@extend .txt-antialiased;
+								//cursor: url(#{$img-path}paint-roller-solid.png), default;
+							 }
 
 //need to use mixin because pseudo elements don't play well with @extend
 @mixin selection-styles($color) {
