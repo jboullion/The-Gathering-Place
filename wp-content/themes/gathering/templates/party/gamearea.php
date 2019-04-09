@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
 	textureTpl.setAttribute("class", "dm-tile sprite");
 
 	//Our standard tile
-	var tile = {
+	var defaultTile = {
 		id: 0,
 		x: 0,
 		y: 0,
@@ -53,10 +53,12 @@ jQuery(document).ready(function($) {
 		empty: true,
 		name: '',
 		type: 'color', //color / image
-		background: '#FFFFFF', //hex code or background image
+		background: '', //hex code or background image
 		tileSize: 32,
 		element: null
 	};
+
+	var tile = defaultTile;
 
 	var textures = ['dirt01','dirt02',
 					'grass01','grass02',
@@ -65,10 +67,12 @@ jQuery(document).ready(function($) {
 					'rock01','rock02'];
 
 	//This is the example / current tile that will do the painting
-	var paintTile = {
+	var defaultPaintTile = {
 		type: 'color', //color / image
 		background: '#FF0000', //hex code or background image
 	}
+
+	var paintTile = defaultPaintTile;
 
 	//Our NPCs are basically a type of tile so we need all the same values to start with
 	var npc = {
@@ -106,6 +110,7 @@ jQuery(document).ready(function($) {
 	//Createing a throttled function for painting. Improves FPS steadyness. Set to try and paint at 60fps / 17ms
 	var throttlePaint = _.throttle(doPaintTile, 17);
 	var throttleFill = _.debounce(fillTiles, 250);
+	var throttleErase = _.throttle(doTileErase, 17);
 
 	//Initialize our game
 	gameInit();
@@ -123,7 +128,9 @@ jQuery(document).ready(function($) {
 			case $fillTool:
 				
 				break;
-
+			case $eraseTool:
+				board.painting = true;
+				break;
 		}
 
 		/*
@@ -232,6 +239,9 @@ jQuery(document).ready(function($) {
 						case $fillTool:
 							throttleFill(this);
 							break;
+						case $eraseTool:
+							throttleErase(this);
+							break;
 
 					}
 				};
@@ -245,7 +255,9 @@ jQuery(document).ready(function($) {
 							case $fillTool:
 								
 								break;
-
+							case $eraseTool:
+								throttleErase(this);
+								break;
 						}
 					}
 				};
@@ -294,6 +306,14 @@ jQuery(document).ready(function($) {
 		}
 
 		doPaintTile($currentTile);
+	}
+
+
+	//Reset our tile back to the standard
+	function doTileErase($element){
+		$element.type = defaultTile.type;
+		$element.background = defaultTile.background;
+		$element.style.backgroundColor = defaultTile.background;
 	}
 
 	//Set the new tool color
