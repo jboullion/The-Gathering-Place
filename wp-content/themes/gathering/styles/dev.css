@@ -12383,6 +12383,9 @@ blockquote {
 /**
  * SINGLE PARTY PAGE
  */
+body.single-parties {
+  overflow: hidden; }
+
 #party-page {
   display: flex;
   height: 100vh; }
@@ -12468,15 +12471,19 @@ blockquote {
       background-color: white;
       border-color: #666; }
   #party-page #party-gamearea {
-    width: 640px;
+    width: 50%;
     overflow: hidden;
     display: flex;
     flex-direction: column; }
     #party-page #party-gamearea #gamearea-map-wrapper {
-      overflow-x: scroll; }
+      background-color: #e5e5e0;
+      height: 100%;
+      width: 100%;
+      overflow: auto; }
     #party-page #party-gamearea #gamearea-map {
-      height: 320px;
-      width: 960px;
+      height: 1160px;
+      width: 1160px;
+      padding: 100px;
       display: flex;
       flex-wrap: wrap;
       overflow: hidden; }
@@ -12531,16 +12538,19 @@ blockquote {
         #party-page #dm-tools .dm-tool .form-group input[type=color]::-webkit-color-swatch {
           border: none; }
     #party-page #dm-tools #tool-select .tool {
+      cursor: pointer;
       width: 32px;
       height: 32px;
       text-align: center;
       padding: 0.5rem; }
       #party-page #dm-tools #tool-select .tool.active, #party-page #dm-tools #tool-select .tool:hover {
-        background-color: #fcfcb6; }
+        background-color: #98c4f3; }
       #party-page #dm-tools #tool-select .tool i {
         display: block;
         font-size: 2rem; }
-    #party-page #dm-tools #dm-tile-area #current-tile {
+    #party-page #dm-tools #current-tile {
+      width: 32px;
+      height: 32px;
       display: inline-block; }
 
 /**

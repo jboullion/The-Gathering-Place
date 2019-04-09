@@ -7,58 +7,7 @@
 			<p>Maybe even a "zoom" in / out function?...that can come later</p> -->
 		</div>
 	</div>
-	<div id="dm-tools" class="user-game-actions">
-		<div id="tool-select" class="dm-tool">
-			<h6>Tools</h6>
-			<div id="tool-holder" class="dm-holder">
-				<div id="paint-tool" class="tool active"><i class="fas fa-fw fa-paint-roller"></i></div>
-				<div id="fill-tool" class="tool"><i class="fas fa-fw fa-fill-drip"></i></div>
-				<div id="erase-tool" class="tool"><i class="fas fa-fw fa-eraser"></i></div>
-				<div id="highlight-tool" class="tool"><i class="fas fa-fw fa-highlighter"></i></div>
-				<div id="sample-tool" class="tool"><i class="fas fa-eye-dropper"></i></div>
-				
-			</div>
-		</div>
-		<div id="dm-tile-area" class="dm-tool">
-			<h6>Tiles</h6>
-			
-			<div class="form-group">
-				<label for="current-tile">Current Tile</label><br />
-				<div id="current-tile" class="tile" style="background-color: #ff0000"></div>
-			</div>
-
-			<div class="form-group">
-				<label for="tile-color">Select Color</label>
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<input id="tile-color" type="color" value="#ff0000">
-					</div>
-					<input id="current-color" type="text" class="form-control" value="#ff0000">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="tile-color">Select Texture</label>
-				<div id="texture-holder" class="dm-holder">
-
-				</div>
-			</div>
-		</div>
-		<div id="npc-area" class="dm-tool">
-			<h6>NPCs</h6>
-			<div id="npc-holder" class="dm-holder">
-				<div class="npc dm-tile " id="npc-1">
-					<img src="https://via.placeholder.com/32x32/FF0000/FFFFFF/?text=1" alt="1" width="32" height="32" >
-				</div>
-				<div class="npc dm-tile" id="npc-2">
-					<img src="https://via.placeholder.com/32x32/FF00FF/FFFFFF?text=3" alt="3" width="32" height="32" >
-				</div>
-				<div class="npc dm-tile" id="npc-3">
-					<img src="https://via.placeholder.com/32x32/00FF00/FFFFFF?text=4" alt="4" width="32" height="32" >
-				</div>
-			</div>
-		</div>
-		
-	</div>
+	
 </div>
 
 <script>
@@ -70,6 +19,17 @@ jQuery(document).ready(function($) {
 		$textureHolder = document.getElementById("texture-holder"), 
 		$currentTile = document.getElementById("current-tile"),
 		$currentColor = document.getElementById("current-color");
+
+
+	var $paintTool = document.getElementById("paint-tool"),
+		$fillTool = document.getElementById("fill-tool"),
+		$eraseTool = document.getElementById("erase-tool"),
+		$highlightTool = document.getElementById("highlight-tool"),
+		$sampleTool = document.getElementById("sample-tool"),
+		$toolSelect = document.getElementById("tool-select"),
+		$tools = document.getElementsByClassName("tool"),
+		$activeTool = $paintTool;
+
 
 	//PURE JS elements
 	var tileTpl = document.createElement("div"),
@@ -131,7 +91,7 @@ jQuery(document).ready(function($) {
 
 	//Our main board object that knows it's own state
 	var board = {
-		height: 10,
+		height: 30,
 		width: 30,
 		tiles: [],
 		dragging: false,
@@ -143,68 +103,181 @@ jQuery(document).ready(function($) {
 		maxPosY: (this.height * tile.tileSize)
 	};
 
-	//Build our board! //0 or 1 based?
-	for(var w = 1; w <= board.width; w++){
-		board.tiles[w] = [];
-		for(var h = 1; h <= board.height; h++){
-			tile.id = ++tile.id;
-			tile.x = w;
-			tile.y = h;
+	//Createing a throttled function for painting. Improves FPS steadyness. Set to try and paint at 60fps / 17ms
+	var throttlePaint = _.throttle(doPaintTile, 17);
+	var throttleFill = _.debounce(fillTiles, 250);
 
-			//Clone our default HTML element
-			tile.element = tileTpl.cloneNode(false);
-
-			//Give it a unique ID
-			tile.element.setAttribute("id", 'tile-'+w+'-'+h);
-
-			//Setup a click listener on this tile
-			//tile.element.addEventListener('click', colorTile);
-			tile.element.onmousedown = function(e){
-				doPaintTile(this);
-			};
-
-			tile.element.onmousemove = function(e){
-				if(board.painting){
-					doPaintTile(this);
-				}
-			};
-
-			//Put our tile into our state board
-			board.tiles[w][h] = tile;
-
-			//Put our tile on the screen
-			tileHolder.appendChild(tile.element);
-		}
-	}
-
-	//Setup our painting textures
-	for(var t = 0; t < textures.length; t++){
-		//Clone our default HTML element
-		dmTiles.textures[t] = textureTpl.cloneNode(false);
-
-		//Add our texture class to this element
-		dmTiles.textures[t].classList.add(textures[t]);
-
-		//setup our click event for this texture tool
-		dmTiles.textures[t].onclick = (function(t) {return function() {
-			setPaintTile('texture', t);
-		};})(t);
-
-
-		//console.log(dmTiles.textures[t]);
-
-		$textureHolder.appendChild(dmTiles.textures[t]);
-	}
+	//Initialize our game
+	gameInit();
 
 	//Set our tiles into our map
 	$map.appendChild(tileHolder); //.innerHTML= tileHolder;
 
 	$map.onmousedown = function(e){
-		board.painting = true;
+		board.painting = false;
+
+		switch($activeTool){
+			case $paintTool:
+				board.painting = true;
+				break;
+			case $fillTool:
+				
+				break;
+
+		}
+
+		/*
+		$paintTool = document.getElementById("paint-tool"),
+		$fillTool = document.getElementById("fill-tool"),
+		$eraseTool = document.getElementById("erase-tool"),
+		$highlightTool = document.getElementById("highlight-tool"),
+		$sampleTool
+		*/
 	};
 	$map.onmouseup = function(e){
 		board.painting = false;
 	};
+	$map.onmouseleave = function(e){
+		board.painting = false;
+	};
+
+
+	/**
+	 * Setup Tools
+	 */
+	//ES6
+	var unActiveClass = 'tool';
+	var activeClass = 'tool active';
+	for(let i = 0; i < $tools.length; i++) {
+		$tools[i].addEventListener("click", function() {
+
+			$unActive = $toolSelect.querySelector('.active');
+			$unActive.classList.remove("active");
+
+			$activeTool = this;
+			this.setAttribute("class", activeClass);
+
+		})
+	}
+	
+	/**
+	 * Initialize our game
+	 */
+	function gameInit(){
+
+		//Create our board
+		buildBoard();
+
+		//Layout our tools
+		setupDmTools();
+
+		//setup our currnet tile
+		doPaintTile($currentTile);
+
+	}
+
+	//Setup our DM tool area
+	function setupDmTools(){
+		//Setup our painting textures
+		for(var t = 0; t < textures.length; t++){
+			//Clone our default HTML element
+			dmTiles.textures[t] = textureTpl.cloneNode(false);
+
+			//Add our texture class to this element
+			dmTiles.textures[t].classList.add(textures[t]);
+
+			//On Clikc set our texture as the current paint tool
+			dmTiles.textures[t].onclick = (function(t) {return function() {
+				setPaintTile('texture', t);
+			};})(t);
+
+			//console.log(dmTiles.textures[t]);
+			$textureHolder.appendChild(dmTiles.textures[t]);
+		}
+	}
+
+	/**
+	 * Create all our tiles and stick them to the board
+	 */
+	function buildBoard(){
+		//Build our board! //0 or 1 based?
+		for(var w = 1; w <= board.width; w++){
+			board.tiles[w] = [];
+			for(var h = 1; h <= board.height; h++){
+
+				var tmpTile = _.clone(tile);
+
+				tmpTile.id = ++tmpTile.id;
+				
+
+				//Clone our default HTML element
+				tmpTile.element = tileTpl.cloneNode(true);
+				tmpTile.element.x = w;
+				tmpTile.element.y = h;
+				
+				//Give it a unique ID
+				tmpTile.element.setAttribute("id", 'tile-'+w+'-'+h);
+
+				tmpTile.element.background = tmpTile.background;
+				//tile.element.setAttribute('data-background', tile.background);
+
+				//Setup a click listener on this tile
+				//tile.element.addEventListener('click', colorTile);
+				tmpTile.element.onmousedown = function(e){
+					
+					switch($activeTool){
+						case $paintTool:
+							throttlePaint(this);
+							break;
+						case $fillTool:
+							throttleFill(this);
+							break;
+
+					}
+				};
+
+				tmpTile.element.onmousemove = function(e){
+					if(board.painting){
+						switch($activeTool){
+							case $paintTool:
+								throttlePaint(this);
+								break;
+							case $fillTool:
+								
+								break;
+
+						}
+					}
+				};
+
+				//Put our tile into our state board
+				board.tiles[w][h] = tmpTile;
+
+				//Put our tile on the screen
+				tileHolder.appendChild(board.tiles[w][h].element);
+				
+			}
+		}
+
+	}
+
+	function fillTiles($element){
+
+		var findTiles = [];
+		for(var w = 1; w <= board.width; w++){
+			for(var h = 1; h <= board.height; h++){
+				if($element.background === board.tiles[w][h].element.background){
+					//If we set our background color here we only fill UP TO the location we clicked.
+					findTiles.push(board.tiles[w][h].element);
+				}
+			}
+		}
+
+		//Fille all the tiles we found
+		for(var l = 0; l < findTiles.length; l++){
+			doPaintTile(findTiles[l]);
+		}
+	}
 
 	/**
 	 * Change the paintTile
@@ -212,14 +285,9 @@ jQuery(document).ready(function($) {
 	function setPaintTile(type, value){
 		paintTile.type = type;
 
-		
-
 		if(type === 'color'){
 			paintTile.background = value;
 		}else if(type === 'texture'){
-			console.log('value: '+value);
-			console.log('textures: '+textures);
-			console.log('textures[value]: '+textures[value]);
 			paintTile.background = textures[value];
 		}else if(type === 'image'){
 			paintTile.background = value;
@@ -235,21 +303,25 @@ jQuery(document).ready(function($) {
 		$currentColor.value = this.value;
 	}, false);
 
-	
-
 	/**
 	* Paint our map! Update the background of a tile
 	*/
-	function doPaintTile(element){
+	
+
+	function doPaintTile($element){
+		
 		if(paintTile.type === 'color'){
-			element.style.backgroundColor = paintTile.background;
-			element.setAttribute("class", tileDefaultCSS);
+			$element.style.backgroundColor = paintTile.background;
+			$element.setAttribute("class", tileDefaultCSS);
 		}else if(paintTile.type === 'texture'){
-			element.style.backgroundColor = '#FF00FF';
-			element.setAttribute("class", textureDefaultCSS+paintTile.background);
+			$element.style.backgroundColor = '#FF0000';
+			$element.setAttribute("class", textureDefaultCSS+paintTile.background);
 		}else if(paintTile.type === 'image'){
-			element.style.backgroundImage = 'url('+paintTile.background+')';
+			$element.style.backgroundImage = 'url('+paintTile.background+')';
 		}
+
+		$element.background = paintTile.background;
+
 	}
 });
 </script>

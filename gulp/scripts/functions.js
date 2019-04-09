@@ -110,3 +110,8 @@ function pkRound(value, decimals) {
 	var multiplier = Math.pow(10, decimals || 0);
 	return Math.round(value * multiplier) / multiplier;
 }
+
+
+function elementHasClass(element, className) {
+	return (' ' + element.className + ' ').indexOf(' ' + className+ ' ') > -1;
+}
