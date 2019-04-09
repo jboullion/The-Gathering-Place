@@ -65,6 +65,7 @@ jQuery(document).ready(function($) {
 	var defaultPaintTile = {
 		type: 'color', //color / image
 		background: '#FF0000', //hex code or background image
+		texture: ''
 	}
 
 	var paintTile = defaultPaintTile;
@@ -132,6 +133,9 @@ jQuery(document).ready(function($) {
 			case $eraseTool:
 				break;
 			case $highlightTool:
+				break;
+			case $sampleTool:
+				board.painting = false;
 				break;
 		}
 
@@ -227,6 +231,7 @@ jQuery(document).ready(function($) {
 				//Give it a unique ID
 				tmpTile.element.setAttribute("id", 'tile-'+w+'-'+h);
 				
+				tmpTile.element.type = tmpTile.type;
 				tmpTile.element.background = tmpTile.background;
 				//tile.element.setAttribute('data-background', tile.background);
 
@@ -247,6 +252,9 @@ jQuery(document).ready(function($) {
 						case $highlightTool:
 							throttleHighlight(this);
 							break;
+						case $sampleTool:
+							sampleTile(this);
+							break;
 
 					}
 				};
@@ -265,6 +273,9 @@ jQuery(document).ready(function($) {
 								break;
 							case $highlightTool:
 								throttleHighlight(this);
+								break;
+							case $sampleTool:
+								board.painting = false;
 								break;
 						}
 					}
@@ -307,14 +318,23 @@ jQuery(document).ready(function($) {
 
 		if(type === 'color'){
 			paintTile.background = value;
+			paintTile.texture = '';
 		}else if(type === 'texture'){
-			paintTile.background = textures[value];
+			paintTile.background = value;
+			paintTile.texture = textures[value];
 		}else if(type === 'image'){
 			paintTile.background = value;
+			paintTile.texture = '';
 		}
 
 		doPaintTile($currentTile);
 	}
+
+	//Get a sample of the tile we click and setup our current tile to that tile
+	function sampleTile($element){
+		setPaintTile($element.type, $element.background);
+	}
+
 
 	//Add the highlight class to our tiles
 	function doTileHighlight($element){
@@ -325,6 +345,7 @@ jQuery(document).ready(function($) {
 		debounceHighlight();
 	}
 
+	//Eventually remove the highlight class from highlighted tiles
 	function cancelHighlight(){
 		for(var l = 0; l < highlightTiles.length; l++){
 			highlightTiles[l].classList.remove("highlight");
@@ -352,7 +373,8 @@ jQuery(document).ready(function($) {
 	* Paint our map! Update the background of a tile
 	*/
 	function doPaintTile($element){
-		
+		$element.type = paintTile.type;
+
 		if(paintTile.type === 'color'){
 			$element.style.backgroundColor = paintTile.background;
 			$element.style.backgroundImage = '';
@@ -360,7 +382,7 @@ jQuery(document).ready(function($) {
 		}else if(paintTile.type === 'texture'){
 			$element.style.backgroundColor = '#FF0000';
 			$element.style.backgroundImage = '';
-			$element.setAttribute("class", textureDefaultCSS+paintTile.background);
+			$element.setAttribute("class", textureDefaultCSS+paintTile.texture);
 		}else if(paintTile.type === 'image'){
 			$element.style.backgroundColor = '';
 			$element.style.backgroundImage = 'url('+paintTile.background+')';
