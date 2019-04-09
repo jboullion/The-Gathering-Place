@@ -136,3 +136,30 @@
   margin-bottom: $marginb;
   margin-top: 0;
 }
+
+
+@mixin jbhighlight(){
+  //background: linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,0,0,0.3));
+  background-color: rgba(255,0,0,0.2);
+  background-size: 100% 100%;
+
+  -webkit-animation: AnimationName 0.5s ease infinite;
+  -moz-animation: AnimationName 0.5s ease infinite;
+  animation: AnimationName 0.5s ease infinite;
+
+  @-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%; opacity: 0; }
+    50%{background-position:100% 50%; opacity: 1; }
+    100%{background-position:0% 50%; opacity: 0; }
+  }
+  @-moz-keyframes AnimationName {
+    0%{background-position:0% 50%; opacity: 0; }
+    50%{background-position:100% 50%; opacity: 1; }
+    100%{background-position:0% 50%; opacity: 0; }
+  }
+  @keyframes AnimationName { 
+    0%{background-position:0% 50%; opacity: 0; }
+    50%{background-position:100% 50%; opacity: 1; }
+    100%{background-position:0% 50%; opacity: 0; }
+  }
+}

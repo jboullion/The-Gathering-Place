@@ -12491,6 +12491,50 @@ body.single-parties {
       border: 1px solid #231f20;
       height: 32px;
       width: 32px; }
+      #party-page #party-gamearea .tile:before {
+        content: '';
+        display: block;
+        width: 32px;
+        height: 32px; }
+      #party-page #party-gamearea .tile.highlight:before {
+        background-color: rgba(255, 0, 0, 0.2);
+        background-size: 100% 100%;
+        -webkit-animation: AnimationName 0.5s ease infinite;
+        -moz-animation: AnimationName 0.5s ease infinite;
+        animation: AnimationName 0.5s ease infinite; }
+
+@-webkit-keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0; }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1; }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0; } }
+
+@-moz-keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0; }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1; }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0; } }
+
+@keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0; }
+  50% {
+    background-position: 100% 50%;
+    opacity: 1; }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0; } }
   #party-page #dm-tools {
     flex: 1;
     overflow-y: scroll;

@@ -1,11 +1,6 @@
 <div id="party-gamearea">
 	<div id="gamearea-map-wrapper">
-		<div id="gamearea-map" oncontextmenu="return false;">
-			<!-- <h3>Generate this with JS. Store each cell in a 2d array as it's own object.</h3>
-			<p>Should each square be 32x32 (or 64x64, not sure) pixels in size with a 1px border</p>
-			<p>We will generate more map tiles than will fit in game area and then the user can scroll around if needed</p>
-			<p>Maybe even a "zoom" in / out function?...that can come later</p> -->
-		</div>
+		<div id="gamearea-map" oncontextmenu="return false;"></div>
 	</div>
 	
 </div>
@@ -109,8 +104,13 @@ jQuery(document).ready(function($) {
 
 	//Createing a throttled function for painting. Improves FPS steadyness. Set to try and paint at 60fps / 17ms
 	var throttlePaint = _.throttle(doPaintTile, 17);
-	var throttleFill = _.debounce(fillTiles, 250);
+	var debounceFill = _.debounce(fillTiles, 250);
 	var throttleErase = _.throttle(doTileErase, 17);
+
+	var highlightTiles = [];
+	var throttleHighlight = _.throttle(doTileHighlight, 17);
+	var debounceHighlight = _.debounce(cancelHighlight, 5000);
+	
 
 	//Initialize our game
 	gameInit();
@@ -119,17 +119,19 @@ jQuery(document).ready(function($) {
 	$map.appendChild(tileHolder); //.innerHTML= tileHolder;
 
 	$map.onmousedown = function(e){
-		board.painting = false;
+		
+		//"painting" means any of our single tile tools that have a drag / draw effect
+		board.painting = true;
 
 		switch($activeTool){
 			case $paintTool:
-				board.painting = true;
 				break;
 			case $fillTool:
-				
+				board.painting = false;
 				break;
 			case $eraseTool:
-				board.painting = true;
+				break;
+			case $highlightTool:
 				break;
 		}
 
@@ -162,7 +164,7 @@ jQuery(document).ready(function($) {
 			$unActive.classList.remove("active");
 
 			$activeTool = this;
-			this.setAttribute("class", activeClass);
+			this.classList.add("active");//.setAttribute("class", activeClass);
 
 		})
 	}
@@ -224,7 +226,7 @@ jQuery(document).ready(function($) {
 				
 				//Give it a unique ID
 				tmpTile.element.setAttribute("id", 'tile-'+w+'-'+h);
-
+				
 				tmpTile.element.background = tmpTile.background;
 				//tile.element.setAttribute('data-background', tile.background);
 
@@ -237,10 +239,13 @@ jQuery(document).ready(function($) {
 							throttlePaint(this);
 							break;
 						case $fillTool:
-							throttleFill(this);
+							debounceFill(this);
 							break;
 						case $eraseTool:
 							throttleErase(this);
+							break;
+						case $highlightTool:
+							throttleHighlight(this);
 							break;
 
 					}
@@ -257,6 +262,9 @@ jQuery(document).ready(function($) {
 								break;
 							case $eraseTool:
 								throttleErase(this);
+								break;
+							case $highlightTool:
+								throttleHighlight(this);
 								break;
 						}
 					}
@@ -308,6 +316,23 @@ jQuery(document).ready(function($) {
 		doPaintTile($currentTile);
 	}
 
+	//Add the highlight class to our tiles
+	function doTileHighlight($element){
+		$element.classList.add("highlight");
+		highlightTiles.push($element);
+
+		//this function will run after all of our highlights have been set
+		debounceHighlight();
+	}
+
+	function cancelHighlight(){
+		for(var l = 0; l < highlightTiles.length; l++){
+			highlightTiles[l].classList.remove("highlight");
+		}
+
+		highlightTiles = [];
+	}
+
 
 	//Reset our tile back to the standard
 	function doTileErase($element){
@@ -326,17 +351,18 @@ jQuery(document).ready(function($) {
 	/**
 	* Paint our map! Update the background of a tile
 	*/
-	
-
 	function doPaintTile($element){
 		
 		if(paintTile.type === 'color'){
 			$element.style.backgroundColor = paintTile.background;
+			$element.style.backgroundImage = '';
 			$element.setAttribute("class", tileDefaultCSS);
 		}else if(paintTile.type === 'texture'){
 			$element.style.backgroundColor = '#FF0000';
+			$element.style.backgroundImage = '';
 			$element.setAttribute("class", textureDefaultCSS+paintTile.background);
 		}else if(paintTile.type === 'image'){
+			$element.style.backgroundColor = '';
 			$element.style.backgroundImage = 'url('+paintTile.background+')';
 		}
 
