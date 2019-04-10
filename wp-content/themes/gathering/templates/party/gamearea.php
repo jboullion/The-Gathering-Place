@@ -290,7 +290,7 @@ jQuery(document).ready(function($) {
 
 						//console.log(board.tiles);
 
-						if(path.length){
+						if(path){
 							for(var p = 0; p < path.length; p++){
 								//console.log(board.tiles[path[p].x][path[p].y].element.classList);
 								board.tiles[path[p].x][path[p].y].element.classList.add('highlight')
@@ -364,6 +364,7 @@ jQuery(document).ready(function($) {
 
 					tmpNPC.element.x = w;
 					tmpNPC.element.y = h;
+					tmpNPC.element.movement = tmpNPC.movement;
 
 					//Give it a unique ID
 					tmpNPC.element.setAttribute("id", 'npc-'+w+'-'+h);
@@ -448,12 +449,22 @@ jQuery(document).ready(function($) {
 		buildGraphArray();
 
 		var boardGraph = new Graph(boardGraphArray);
+		
 
 		if(AstarStart && AstarEnd){
+
+			// Get the X and Y distance for these two elements
+			var distanceX = Math.floor(Math.sqrt( AstarStart.x*AstarStart.x + AstarEnd.x*AstarEnd.x ));
+			var distanceY =Math.floor(Math.sqrt( AstarStart.y*AstarStart.y + AstarEnd.y*AstarEnd.y ));
+
+			if(AstarStart.movement < (distanceX + distanceY) ){
+				//Too far away dont try to move there
+				return path;
+			}
+
 			var start = boardGraph.grid[AstarStart.x][AstarStart.y];
 			var end = boardGraph.grid[AstarEnd.x][AstarEnd.y];
-			
-			
+
 			path = astar.search(boardGraph, start, end);
 			
 			//AstarStart = null;
