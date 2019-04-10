@@ -12500,7 +12500,8 @@ body.single-parties {
     #party-page #party-gamearea .tile {
       border: 1px solid #231f20;
       height: 32px;
-      width: 32px; }
+      width: 32px;
+      position: relative; }
       #party-page #party-gamearea .tile:before {
         content: '';
         display: block;
@@ -12508,44 +12509,59 @@ body.single-parties {
         height: 32px;
         margin: -1px; }
       #party-page #party-gamearea .tile.highlight:before {
-        background-color: rgba(255, 0, 0, 0.2);
+        background-color: rgba(255, 0, 0, 0.3);
         background-size: 100% 100%;
-        -webkit-animation: AnimationName 0.5s ease infinite;
-        -moz-animation: AnimationName 0.5s ease infinite;
-        animation: AnimationName 0.5s ease infinite; }
+        -webkit-animation: AnimationName 1s ease infinite;
+        -moz-animation: AnimationName 1s ease infinite;
+        animation: AnimationName 1s ease infinite; }
 
 @-webkit-keyframes AnimationName {
   0% {
     background-position: 0% 50%;
-    opacity: 0; }
+    opacity: 0.5; }
   50% {
     background-position: 100% 50%;
     opacity: 1; }
   100% {
     background-position: 0% 50%;
-    opacity: 0; } }
+    opacity: 0.5; } }
 
 @-moz-keyframes AnimationName {
   0% {
     background-position: 0% 50%;
-    opacity: 0; }
+    opacity: 0.5; }
   50% {
     background-position: 100% 50%;
     opacity: 1; }
   100% {
     background-position: 0% 50%;
-    opacity: 0; } }
+    opacity: 0.5; } }
 
 @keyframes AnimationName {
   0% {
     background-position: 0% 50%;
-    opacity: 0; }
+    opacity: 0.5; }
   50% {
     background-position: 100% 50%;
     opacity: 1; }
   100% {
     background-position: 0% 50%;
-    opacity: 0; } }
+    opacity: 0.5; } }
+    #party-page #party-gamearea .npc {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background-color: #98c4f3;
+      border: 2px dotted #231f20;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px; }
+      #party-page #party-gamearea .npc.movement {
+        display: block;
+        content: ''; }
   #party-page #dm-tools {
     flex: 1;
     overflow-y: scroll;

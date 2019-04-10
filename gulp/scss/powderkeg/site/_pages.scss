@@ -90,12 +90,34 @@ body.single-parties 			{ overflow: hidden;
 
 		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; width: 100%; overflow: auto; }
 		#gamearea-map 			{ height: 1160px; width: 1160px; padding: 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
-		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px;
+		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px; position: relative;
 			&:before 			{ content: ''; display: block; width: 32px; height: 32px; margin: -1px; }
 
 			&.highlight 		{ 
 				&:before 		{ @include jbhighlight(); }
 			}
+		}
+
+		.npc 					{ @include center(); background-color: #98c4f3; border: 2px dotted $almost-black; border-radius: 50%; width: 32px; height: 32px;
+			//&:before 			{ @include center();  border-radius: 50%; display: none; width: 32px; height: 32px; margin: -1px; }
+
+			&.movement 			{ display: block; content: '';
+				&:before 		{ //@include jbhighlight(); 
+				}
+
+				// &.2 			{ width: 64px; height: 64px; }
+				// &.3 			{ width: 64px; height: 64px; }
+				// &.4 			{ width: 64px; height: 64px; }
+				// &.5 			{ width: 64px; height: 64px; }
+				// &.6 			{ width: 64px; height: 64px; }
+				// &.7 			{ width: 64px; height: 64px; }
+			}
+
+			// @for $i from 1 through 10 {
+			// 	&.speed-#{$i} {
+					
+			// 	}
+			// }
 		}
 	}
 

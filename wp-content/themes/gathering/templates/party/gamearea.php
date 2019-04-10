@@ -1,4 +1,4 @@
-<div id="party-gamearea" class="paint-tool">
+<div id="party-gamearea" class="">
 	<div id="gamearea-map-wrapper">
 		<div id="gamearea-map" oncontextmenu="return false;"></div>
 	</div>
@@ -8,7 +8,6 @@
 <script>
 jQuery(document).ready(function($) {
 
-
 	//Get our document elements. Label with $ for reference
 	var $gameArea = document.getElementById("party-gamearea"),
 		$map = document.getElementById("gamearea-map"),
@@ -17,7 +16,6 @@ jQuery(document).ready(function($) {
 		$currentTile = document.getElementById("current-tile"),
 		$currentColor = document.getElementById("current-color");
 
-
 	var $paintTool = document.getElementById("paint-tool"),
 		$fillTool = document.getElementById("fill-tool"),
 		$eraseTool = document.getElementById("erase-tool"),
@@ -25,21 +23,14 @@ jQuery(document).ready(function($) {
 		$sampleTool = document.getElementById("sample-tool"),
 		$toolSelect = document.getElementById("tool-select"),
 		$tools = document.getElementsByClassName("tool"),
-		$activeTool = $paintTool;
-
+		$activeTool = null;
 
 	//PURE JS elements
 	var tileTpl = document.createElement("div"),
+		npcTpl = document.createElement("div"),
 		textureTpl = document.createElement("div")
 		tileHolder =  document.createDocumentFragment(), //'';
 		tileColorVal = $tileColor.value;
-
-	var tileDefaultCSS = "tile ",
-		textureDefaultCSS = "tile sprite ";
-
-	//Setup some basic attributes for our tiles
-	tileTpl.setAttribute("class", tileDefaultCSS);
-	textureTpl.setAttribute("class", "dm-tile sprite");
 
 	//Our standard tile
 	var defaultTile = {
@@ -52,7 +43,9 @@ jQuery(document).ready(function($) {
 		type: 'color', //color / image
 		background: '', //hex code or background image
 		tileSize: 32,
-		element: null
+		element: null,
+		classes: "tile ",
+		textureclass: "tile sprite " //TODO: should probably change this to just sprite and add the this.classes
 	};
 
 	var tile = defaultTile;
@@ -72,15 +65,22 @@ jQuery(document).ready(function($) {
 
 	var paintTile = defaultPaintTile;
 
+	var NPCs = [];
+
 	//Our NPCs are basically a type of tile so we need all the same values to start with
-	var npc = {
+	var defaultNpc = {
 		id: 0,
+		lvl: 1,
+		alignment: 1, //Do a [3][3] array for alignments? (Good Neutral Evil) x (Lawful Neutral Chaotic)
+		faction: 1,
 		x: 0,
 		y: 0,
 		hp: 10,
-		passable: true,
-		name: '',
-		image: 'https://via.placeholder.com/32x32/FF0000/FFFFFF/?text=1', //NPC must always be an image
+		movement: 5,
+		passable: false,
+		classes: "npc speed-5",
+		name: 'npc 1',
+		image: 'https://via.placeholder.com/28x28/FF0000/FFFFFF/?text=NPC 1', //NPC must always be an image
 	}; //_.clone(tile);
 
 	var dmTiles = {
@@ -105,6 +105,12 @@ jQuery(document).ready(function($) {
 		maxPosY: (this.height * tile.tileSize)
 	};
 
+	//Used for AStar Searches
+	var boardGraphArray = [];
+	var currentPath = [];
+	var AstarStart = null;
+	var AstarEnd = null;
+
 	//Createing a throttled function for painting. Improves FPS steadyness. Set to try and paint at 60fps / 17ms
 	var throttlePaint = _.throttle(doPaintTile, 17);
 	var debounceFill = _.debounce(fillTiles, 250);
@@ -113,7 +119,19 @@ jQuery(document).ready(function($) {
 	var highlightTiles = [];
 	var throttleHighlight = _.throttle(doTileHighlight, 17);
 	var debounceHighlight = _.debounce(cancelHighlight, 5000);
+
+	var throttleAstar = _.throttle(doAstar, 1000);
+	var throttleBuildGraph = _.throttle(buildGraphArray, 2000);
+
+	//Setup some basic attributes for our tiles
+	tileTpl.setAttribute("class", defaultTile.classes);
 	
+	textureTpl.setAttribute("class", "dm-tile sprite");
+
+	npcTpl.setAttribute("class", defaultNpc.classes);
+	npcTpl.setAttribute("draggable", "true");
+	
+
 	/*
 	document.body.oncontextmenu = function(){
 		console.log('concontextmenu')
@@ -145,9 +163,11 @@ jQuery(document).ready(function($) {
 		}
 
 	};
+
 	$map.onmouseup = function(e){
 		board.painting = false;
 	};
+
 	$map.onmouseleave = function(e){
 		board.painting = false;
 	};
@@ -163,7 +183,9 @@ jQuery(document).ready(function($) {
 		$tools[i].addEventListener("click", function() {
 
 			$unActive = $toolSelect.querySelector('.active');
-			$unActive.classList.remove("active");
+			if($unActive){
+				$unActive.classList.remove("active");
+			}
 
 			$activeTool = this;
 			this.classList.add("active");//.setAttribute("class", activeClass);
@@ -185,6 +207,7 @@ jQuery(document).ready(function($) {
 
 		//setup our currnet tile
 		doPaintTile($currentTile);
+
 
 	}
 
@@ -215,13 +238,16 @@ jQuery(document).ready(function($) {
 	 */
 	function buildBoard(){
 		//Build our board! //0 or 1 based?
-		for(var w = 1; w <= board.width; w++){
+		for(var w = 0; w < board.width; w++){
 			board.tiles[w] = [];
-			for(var h = 1; h <= board.height; h++){
+			NPCs[w] = [];
+			for(var h = 0; h < board.height; h++){	
 
 				var tmpTile = _.clone(tile);
 
-				tmpTile.id = ++tmpTile.id;
+				tmpTile.id++;
+				tmpTile.x = w;
+				tmpTile.y = h;
 
 				//Clone our default HTML element
 				tmpTile.element = tileTpl.cloneNode(true);
@@ -230,10 +256,51 @@ jQuery(document).ready(function($) {
 				
 				//Give it a unique ID
 				tmpTile.element.setAttribute("id", 'tile-'+w+'-'+h);
-				
+
 				tmpTile.element.type = tmpTile.type;
 				tmpTile.element.background = tmpTile.background;
 				//tile.element.setAttribute('data-background', tile.background);
+
+				tmpTile.element.ondrop = function(e){
+					e.preventDefault();
+
+					//Move whatever was dropped here
+					var data = e.dataTransfer.getData("text");
+					e.target.appendChild(AstarStart);
+
+					//Since our AstarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
+					AstarStart.x = this.x;
+					AstarStart.y = this.y;
+				};
+
+				tmpTile.element.ondragover = function(e){
+					if (this.firstChild) {
+						// tile has a child element
+						// NOT empty
+					}else{
+						//This ALLOWs dropping here
+						//We only drop here when this tile has no children. No two things can occupy the same space
+						e.preventDefault();
+
+						//Move whatever was dropped here
+						//var data = e.dataTransfer.getData("text");
+						//console.log('ondragover');
+						
+						var path = throttleAstar(this);
+
+						//console.log(board.tiles);
+
+						if(path.length){
+							for(var p = 0; p < path.length; p++){
+								//console.log(board.tiles[path[p].x][path[p].y].element.classList);
+								board.tiles[path[p].x][path[p].y].element.classList.add('highlight')
+								currentPath.push(board.tiles[path[p].x][path[p].y].element);
+							}
+						}
+						
+						//e.target.appendChild(document.getElementById(data));
+					}
+				};
 
 				//Setup a click listener on this tile
 				//tile.element.addEventListener('click', colorTile);
@@ -276,7 +343,7 @@ jQuery(document).ready(function($) {
 								throttleHighlight(this);
 								break;
 							case $sampleTool:
-								board.painting = false;
+								
 								break;
 						}
 					}
@@ -284,23 +351,135 @@ jQuery(document).ready(function($) {
 
 				//Put our tile into our state board
 				board.tiles[w][h] = tmpTile;
+				
+				//Displaying a bunch of random NPCs
+				if( (w + h) % 10 == 0){
+					var tmpNPC = _.clone(defaultNpc);
+					tmpNPC.id++;
+					tmpNPC.x = w;
+					tmpNPC.y = h;
 
-				
-				
+					//Clone our default HTML element
+					tmpNPC.element = npcTpl.cloneNode(true);
+
+					tmpNPC.element.x = w;
+					tmpNPC.element.y = h;
+
+					//Give it a unique ID
+					tmpNPC.element.setAttribute("id", 'npc-'+w+'-'+h);
+
+					tmpNPC.element.ondragstart = function(e){
+						//save the id of our NPC for talking to the dropped tile. This NPC will then be moved to that tile if it is available
+						e.dataTransfer.setData("text", e.target.id);
+						this.classList.add("movement");
+
+						AstarStart = this;
+					};
+
+					tmpNPC.element.ondragend = function(e){
+						this.classList.remove("movement");
+					};
+
+					//Setup a click listener on this tile
+					//Might want to change this to onclick
+					tmpNPC.element.onclick = function(e){
+						//e.stopPropagation();
+						//e.preventDefault();
+
+						console.log('click NPC: '+this.x+', '+this.y);
+					};
+
+					//Setup a click listener on this tile
+					//Might want to change this to onclick
+					tmpNPC.element.onmousedown = function(e){
+						//e.stopPropagation();
+						//e.preventDefault();
+
+						//console.log('down NPC: '+this.id);
+					};
+
+					//Some tools need to function while moving over
+					tmpNPC.element.onmousemove = function(e){
+						//e.stopPropagation();
+						//e.preventDefault();
+
+						//console.log('move NPC: '+this.id);
+					};
+
+					NPCs[w][h] = tmpNPC;
+				}
+
 				//tileHolder.appendChild(board.tiles[w][h].element);
 			}
 		}
 
 		displayBoard(board);
+		displayNPCs(NPCs);
 
 	}
+
+	//Build our AStar Graph for fast A* searching through our tiles
+	function buildGraphArray(){
+		//Our grid is read in the oppirite order we built it
+		for(var h = 0; h < board.height; h++){
+			boardGraphArray[h] = [];
+			for(var w = 0; w < board.width; w++){	
+				if (board.tiles[h][w].element.firstChild || ! board.tiles[h][w].passable) {
+					//not passable
+					boardGraphArray[h][w] = 0;
+				}else{
+					//passable
+					boardGraphArray[h][w] = 1;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Build a 0,1 two dimentional array to represent passable tiles. Run an Astar function on it to find the shortest route between two things
+	 */
+	function doAstar($element){
+		
+		var path = [];
+		AstarEnd = $element;
+
+		//This will search our board for passable tiles and turn it into a Grid optimized for path searches
+		//throttleBuildGraph();
+		buildGraphArray();
+
+		var boardGraph = new Graph(boardGraphArray);
+
+		if(AstarStart && AstarEnd){
+			var start = boardGraph.grid[AstarStart.x][AstarStart.y];
+			var end = boardGraph.grid[AstarEnd.x][AstarEnd.y];
+			
+			
+			path = astar.search(boardGraph, start, end);
+			
+			//AstarStart = null;
+			//AstarEnd = null;
+		}
+
+		clearAstarPath();
+
+		return path;
+	}
+
+	//Clear our current Astar Highlighted path
+	function clearAstarPath(){
+		for(var p = 0; p < currentPath.length; p++){
+			currentPath[p].classList.remove('highlight');
+		}
+		currentPath = [];
+	}
+
 
 	//Display a board object to the screen
 	function displayBoard(newBoard){
 		tileHolder = document.createDocumentFragment();
 
-		for(var w = 1; w <= newBoard.width; w++){
-			for(var h = 1; h <= newBoard.height; h++){
+		for(var w = 0; w < newBoard.width; w++){
+			for(var h = 0; h < newBoard.height; h++){
 				//build our pure JS object before sticking it on the board
 				tileHolder.appendChild(newBoard.tiles[w][h].element);
 			}
@@ -311,12 +490,21 @@ jQuery(document).ready(function($) {
 		$map.appendChild(tileHolder);
 	}
 
+	function displayNPCs(npcs){
+		npcs.forEach(function(w) {
+			w.forEach(function(h) {
+				board.tiles[h.x][h.y].element.appendChild(h.element);
+			});
+		});
+
+	}
+
 	//Paint Bucket Fill all similar tiles
 	function fillTiles($element){
 
 		var findTiles = [];
-		for(var w = 1; w <= board.width; w++){
-			for(var h = 1; h <= board.height; h++){
+		for(var w = 0; w < board.width; w++){
+			for(var h = 0; h < board.height; h++){
 				if($element.background === board.tiles[w][h].element.background){
 					//If we set our background color here we only fill UP TO the location we clicked.
 					findTiles.push(board.tiles[w][h].element);
@@ -381,7 +569,7 @@ jQuery(document).ready(function($) {
 		$element.background = defaultTile.background;
 		$element.style.backgroundColor = defaultTile.background;
 		$element.style.backgroundImage = '';
-		$element.setAttribute("class", tileDefaultCSS);
+		$element.setAttribute("class", defaultTile.classes);
 	}
 
 	//Set the new tool color
@@ -400,11 +588,11 @@ jQuery(document).ready(function($) {
 		if(paintTile.type === 'color'){
 			$element.style.backgroundColor = paintTile.background;
 			$element.style.backgroundImage = '';
-			$element.setAttribute("class", tileDefaultCSS);
+			$element.setAttribute("class", defaultTile.classes);
 		}else if(paintTile.type === 'texture'){
 			$element.style.backgroundColor = '#FF0000';
 			$element.style.backgroundImage = '';
-			$element.setAttribute("class", textureDefaultCSS+paintTile.texture);
+			$element.setAttribute("class", defaultTile.textureclass+paintTile.texture);
 		}else if(paintTile.type === 'image'){
 			$element.style.backgroundColor = '';
 			$element.style.backgroundImage = 'url('+paintTile.background+')';

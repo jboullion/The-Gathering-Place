@@ -58,7 +58,7 @@ gulp.task('sass-styles', function() {
 gulp.task('scripts', function() {
     console.log('Scripting...');
 
-    return gulp.src([SRC_PATH+'scripts/lodash.js',SRC_PATH+'scripts/variables.js',SRC_PATH+'scripts/functions.js',SRC_PATH+'scripts/site.js', SCRIPTS_PATH])
+    return gulp.src([SRC_PATH+'scripts/underscore.js',SRC_PATH+'scripts/variables.js',SRC_PATH+'scripts/functions.js',SRC_PATH+'scripts/site.js', SCRIPTS_PATH])
         .pipe(plumber(function(err){
           //this function will run WHEN an error occurs in this task
           console.log('Styles Task Error');
@@ -70,6 +70,25 @@ gulp.task('scripts', function() {
         .pipe(uglify({mangle: false}))
         .pipe(concat('live.js'))
         .pipe(gulp.dest(THEME_PATH + '/js'));
+});
+
+// Party Scripts
+gulp.task('party-scripts', function() {
+  console.log('Scripting...');
+
+  //Add scripts to our party page here
+  return gulp.src([SRC_PATH+'scripts/party/astar.js'])
+      .pipe(plumber(function(err){
+        //this function will run WHEN an error occurs in this task
+        console.log('Styles Task Error');
+        console.log(err);
+        this.emit('end'); //this line will stop this task chain but continue running gulp
+      }))
+      .pipe(concat('dev-party.js'))
+      .pipe(gulp.dest(THEME_PATH + '/js'))
+      .pipe(uglify({mangle: false}))
+      .pipe(concat('live-party.js'))
+      .pipe(gulp.dest(THEME_PATH + '/js'));
 });
 
 gulp.task('browser-sync', function(){
@@ -84,7 +103,7 @@ gulp.task('browser-sync', function(){
 });
 
 // Default task, will run all common tasks at once
-gulp.task('default', ['sass-styles','scripts','browser-sync'], function() { //
+gulp.task('default', ['sass-styles','scripts','party-scripts','browser-sync'], function() { //
     console.log('Gulping...');
 });
 
@@ -92,5 +111,6 @@ gulp.task('default', ['sass-styles','scripts','browser-sync'], function() { //
 gulp.task('watch', ['default'], function() {
     console.log('Watching you...');
     gulp.watch(SCRIPTS_WATCH_PATH, ['scripts']);
+    //gulp.watch(SCRIPTS_WATCH_PATH, ['party-scripts']);
     gulp.watch(SCSS_WATCH_PATH, ['sass-styles']);
 });

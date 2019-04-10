@@ -140,26 +140,26 @@
 
 @mixin jbhighlight(){
   //background: linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,0,0,0.3));
-  background-color: rgba(255,0,0,0.2);
+  background-color: rgba(255,0,0,0.3);
   background-size: 100% 100%;
 
-  -webkit-animation: AnimationName 0.5s ease infinite;
-  -moz-animation: AnimationName 0.5s ease infinite;
-  animation: AnimationName 0.5s ease infinite;
+  -webkit-animation: AnimationName 1s ease infinite;
+  -moz-animation: AnimationName 1s ease infinite;
+  animation: AnimationName 1s ease infinite;
 
   @-webkit-keyframes AnimationName {
-    0%{background-position:0% 50%; opacity: 0; }
+    0%{background-position:0% 50%; opacity: 0.5; }
     50%{background-position:100% 50%; opacity: 1; }
-    100%{background-position:0% 50%; opacity: 0; }
+    100%{background-position:0% 50%; opacity: 0.5; }
   }
   @-moz-keyframes AnimationName {
-    0%{background-position:0% 50%; opacity: 0; }
+    0%{background-position:0% 50%; opacity: 0.5; }
     50%{background-position:100% 50%; opacity: 1; }
-    100%{background-position:0% 50%; opacity: 0; }
+    100%{background-position:0% 50%; opacity: 0.5; }
   }
   @keyframes AnimationName { 
-    0%{background-position:0% 50%; opacity: 0; }
+    0%{background-position:0% 50%; opacity: 0.5; }
     50%{background-position:100% 50%; opacity: 1; }
-    100%{background-position:0% 50%; opacity: 0; }
+    100%{background-position:0% 50%; opacity: 0.5; }
   }
 }

@@ -59,7 +59,7 @@
 		<div id="tool-select" class="dm-tool">
 			<h6>Tools</h6>
 			<div id="tool-holder" class="dm-holder">
-				<div id="paint-tool" class="tool active"><i class="fas fa-fw fa-paint-roller"></i></div>
+				<div id="paint-tool" class="tool"><i class="fas fa-fw fa-paint-roller"></i></div>
 				<div id="fill-tool" class="tool"><i class="fas fa-fw fa-fill-drip"></i></div>
 				<div id="erase-tool" class="tool"><i class="fas fa-fw fa-eraser"></i></div>
 				<div id="highlight-tool" class="tool"><i class="fas fa-fw fa-highlighter"></i></div>
