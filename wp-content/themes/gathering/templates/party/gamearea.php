@@ -450,14 +450,13 @@ jQuery(document).ready(function($) {
 
 		var boardGraph = new Graph(boardGraphArray);
 		
-
+		//Do we have both our points to check?
 		if(AstarStart && AstarEnd){
 
-			// Get the X and Y distance for these two elements
-			var distanceX = Math.floor(Math.sqrt( AstarStart.x*AstarStart.x + AstarEnd.x*AstarEnd.x ));
-			var distanceY =Math.floor(Math.sqrt( AstarStart.y*AstarStart.y + AstarEnd.y*AstarEnd.y ));
+			// Get the distance for these two elements
+			var distance = Math.hypot(AstarEnd.x - AstarStart.x, AstarEnd.y - AstarStart.y);
 
-			if(AstarStart.movement < (distanceX + distanceY) ){
+			if(AstarStart.movement < distance ){
 				//Too far away dont try to move there
 				return path;
 			}
