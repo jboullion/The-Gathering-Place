@@ -12547,6 +12547,8 @@ body.single-parties {
   100% {
     background-position: 0% 50%;
     opacity: 0.5; } }
+      #party-page #party-gamearea .tile.path:before {
+        background-color: rgba(255, 0, 0, 0.5); }
     #party-page #party-gamearea .npc {
       position: absolute;
       top: 50%;

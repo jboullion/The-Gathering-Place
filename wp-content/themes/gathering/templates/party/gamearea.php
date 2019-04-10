@@ -293,7 +293,7 @@ jQuery(document).ready(function($) {
 						if(path){
 							for(var p = 0; p < path.length; p++){
 								//console.log(board.tiles[path[p].x][path[p].y].element.classList);
-								board.tiles[path[p].x][path[p].y].element.classList.add('highlight')
+								board.tiles[path[p].x][path[p].y].element.classList.add('path')
 								currentPath.push(board.tiles[path[p].x][path[p].y].element);
 							}
 						}
@@ -455,7 +455,8 @@ jQuery(document).ready(function($) {
 
 			// Get the distance for these two elements
 			var distance = Math.hypot(AstarEnd.x - AstarStart.x, AstarEnd.y - AstarStart.y);
-
+			
+			//This is not a perfect check but should catch most long
 			if(AstarStart.movement < distance ){
 				//Too far away dont try to move there
 				return path;
@@ -464,10 +465,15 @@ jQuery(document).ready(function($) {
 			var start = boardGraph.grid[AstarStart.x][AstarStart.y];
 			var end = boardGraph.grid[AstarEnd.x][AstarEnd.y];
 
+			//OUR ASTAR SEARCH! This is a super fast search even over long distances.
+			//We are hopefully removing anything TOO distance by only running this when the end target is close enough to be moved to
 			path = astar.search(boardGraph, start, end);
 			
-			//AstarStart = null;
-			//AstarEnd = null;
+			//Don't return a longer path than the user has movement
+			if(path.length > AstarStart.movement){
+				path = path.slice(0, AstarStart.movement);
+			}
+
 		}
 
 		clearAstarPath();
@@ -478,7 +484,7 @@ jQuery(document).ready(function($) {
 	//Clear our current Astar Highlighted path
 	function clearAstarPath(){
 		for(var p = 0; p < currentPath.length; p++){
-			currentPath[p].classList.remove('highlight');
+			currentPath[p].classList.remove('path');
 		}
 		currentPath = [];
 	}
