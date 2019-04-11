@@ -10,8 +10,9 @@
 		wp_enqueue_script('jquery.party', get_stylesheet_directory_uri().'/js/dev-party.js', 'jQuery', time());
 	}
 ?>
+<?php get_template_part('templates/common/header'); ?>
 <div id="party-page" class="page">
-	<?php get_template_part('templates/party/sidebar'); ?>
+	<?php //get_template_part('templates/party/sidebar'); ?>
 	<?php get_template_part('templates/party/chatarea'); ?>
 	<?php get_template_part('templates/party/gamearea'); ?>
 </div>

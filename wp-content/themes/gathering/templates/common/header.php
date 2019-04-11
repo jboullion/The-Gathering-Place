@@ -4,12 +4,12 @@
 <section id="header" class="">
 	<div class="logo">
 		<a href="/">
-			<img class="desktop" src="<?php echo $options['logo']['url']; ?>" data-rjs="2" alt="<?php bloginfo('name'); ?>" />
+			<img class="" src="<?php echo $options['logo']['url']; ?>" alt="<?php bloginfo('name'); ?>" />
 		</a>
 	</div>
 	<div class="tagline">
 		<?php echo '<p>'.get_bloginfo('name').'</p>'; ?>
-		<?php echo '<span>'.get_bloginfo('description').'</span>'; ?>
+		<?php //echo '<span>'.get_bloginfo('description').'</span>'; ?>
 	</div>
 	<nav id="main-navigation" role="navigation">
 		<ul id="menu-main-navigation-menu" class="navbar-nav navbar-expand">

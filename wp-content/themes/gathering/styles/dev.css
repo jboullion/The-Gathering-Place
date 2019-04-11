@@ -12147,6 +12147,7 @@ div.checkbox				{ margin-bottom: 15px; }
 /* SITE WIDE */
 html, body {
   width: 100%;
+  height: 100%;
   display: block;
   margin: 0; }
 
@@ -12287,26 +12288,26 @@ blockquote {
     background-color: #6b613d;
     color: white; }
 
-.logo {
-  float: left;
-  width: 50px;
-  height: 50px; }
-
-.tagline {
-  float: left;
-  margin-left: 20px; }
-  .tagline p {
-    font-weight: bold;
-    margin: 0;
-    line-height: 1; }
-  .tagline span {
-    font-size: 1.4rem; }
-
 /**
  * FOOTER
  */
 #footer .container {
   padding: 50px 15px 20px; }
+
+#footer .logo {
+  float: left;
+  width: 50px;
+  height: 50px; }
+
+#footer .tagline {
+  float: left;
+  margin-left: 20px; }
+  #footer .tagline p {
+    font-weight: bold;
+    margin: 0;
+    line-height: 1; }
+  #footer .tagline span {
+    font-size: 1.4rem; }
 
 #footer .social {
   text-align: right; }
@@ -12322,17 +12323,37 @@ blockquote {
 
 #header {
   background-color: #0d3c4c;
-  padding: 15px; }
-  #header .tagline p {
-    color: white; }
-  #header .tagline span {
-    color: white; }
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100; }
+  #header .logo {
+    display: inline-block;
+    width: 32px;
+    height: 32px; }
+    #header .logo a {
+      display: block;
+      line-height: 1; }
+  #header .tagline {
+    display: inline-block;
+    margin-left: 20px; }
+    #header .tagline p {
+      color: white;
+      font-weight: bold;
+      margin: 0;
+      font-size: 1.8rem;
+      line-height: 1; }
+    #header .tagline span {
+      color: white;
+      font-size: 1.4rem; }
   #header #main-navigation {
-    float: right;
-    padding-top: 10px; }
+    float: right; }
     #header #main-navigation li a {
       color: white;
-      padding: 15px;
+      font-size: 1.6rem;
+      padding: 10px 15px;
       text-decoration: none; }
 
 .navbar {
@@ -12388,7 +12409,7 @@ body.single-parties {
 
 #party-page {
   display: flex;
-  height: 100vh; }
+  height: 100%; }
   #party-page #party-sidebar {
     background-color: #231f20;
     color: #aaa;
@@ -12451,6 +12472,7 @@ body.single-parties {
         display: flex;
         margin-bottom: 10px; }
         #party-page #party-chat #chat-message-area .chat-message .chat-image {
+          cursor: pointer;
           width: 32px; }
           #party-page #party-chat #chat-message-area .chat-message .chat-image i {
             font-size: 3rem; }
@@ -12471,7 +12493,7 @@ body.single-parties {
       background-color: white;
       border-color: #666; }
   #party-page #party-gamearea {
-    width: 50%;
+    width: 70%;
     overflow: hidden;
     display: flex;
     flex-direction: column; }
@@ -12488,12 +12510,13 @@ body.single-parties {
     #party-page #party-gamearea #gamearea-map-wrapper {
       background-color: #e5e5e0;
       height: 100%;
+      max-height: 100%;
       width: 100%;
       overflow: auto; }
     #party-page #party-gamearea #gamearea-map {
-      height: 1160px;
+      height: 1210px;
       width: 1160px;
-      padding: 100px;
+      padding: 150px 100px 100px;
       display: flex;
       flex-wrap: wrap;
       overflow: hidden; }
@@ -12565,6 +12588,7 @@ body.single-parties {
         display: block;
         content: ''; }
   #party-page #dm-tools {
+    display: none;
     flex: 1;
     overflow-y: scroll;
     padding: 30px 0; }

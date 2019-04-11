@@ -1,4 +1,6 @@
 <div id="party-gamearea" class="">
+	<?php get_template_part('templates/party/tools', 'dm'); ?>
+
 	<div id="gamearea-map-wrapper">
 		<div id="gamearea-map" oncontextmenu="return false;"></div>
 	</div>
@@ -76,7 +78,7 @@ jQuery(document).ready(function($) {
 		x: 0,
 		y: 0,
 		hp: 10,
-		movement: 5,
+		movement: 10,
 		passable: false,
 		classes: "npc speed-5",
 		name: 'npc 1',
@@ -120,7 +122,7 @@ jQuery(document).ready(function($) {
 	var throttleHighlight = _.throttle(doTileHighlight, 17);
 	var debounceHighlight = _.debounce(cancelHighlight, 5000);
 
-	var throttleAstar = _.throttle(doAstar, 1000);
+	var throttleAstar = _.throttle(doAstar, 500);
 	var throttleBuildGraph = _.throttle(buildGraphArray, 2000);
 
 	//Setup some basic attributes for our tiles
@@ -267,10 +269,14 @@ jQuery(document).ready(function($) {
 					//Move whatever was dropped here
 					var data = e.dataTransfer.getData("text");
 					e.target.appendChild(AstarStart);
-
+					
 					//Since our AstarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
 					AstarStart.x = this.x;
 					AstarStart.y = this.y;
+
+					//After we drop something we need to update our graph for aStar searches
+					buildGraphArray();
+					clearAstarPath();
 				};
 
 				tmpTile.element.ondragover = function(e){
@@ -417,6 +423,8 @@ jQuery(document).ready(function($) {
 		displayBoard(board);
 		displayNPCs(NPCs);
 
+		//we need to build our graph array AFTER npcs have been added so we know if the tiles are passable
+		buildGraphArray();
 	}
 
 	//Build our AStar Graph for fast A* searching through our tiles
@@ -441,15 +449,18 @@ jQuery(document).ready(function($) {
 	 */
 	function doAstar($element){
 		
+		//If we already have this as our AstarEnd then we already are showing it's path
+		if(AstarEnd == $element) return;
+
 		var path = [];
 		AstarEnd = $element;
 
 		//This will search our board for passable tiles and turn it into a Grid optimized for path searches
 		//throttleBuildGraph();
-		buildGraphArray();
+		//buildGraphArray();
 
 		var boardGraph = new Graph(boardGraphArray);
-		
+
 		//Do we have both our points to check?
 		if(AstarStart && AstarEnd){
 
@@ -459,7 +470,8 @@ jQuery(document).ready(function($) {
 			//This is not a perfect check but should catch most long
 			if(AstarStart.movement < distance ){
 				//Too far away dont try to move there
-				return path;
+				clearAstarPath();
+				return [];
 			}
 
 			var start = boardGraph.grid[AstarStart.x][AstarStart.y];
@@ -477,7 +489,6 @@ jQuery(document).ready(function($) {
 		}
 
 		clearAstarPath();
-
 		return path;
 	}
 

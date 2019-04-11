@@ -1,16 +1,20 @@
 $menu_break_one: 1600px;
 $menu_mobile_break: 1200px;
 
-#header 						{ background-color: $dark-blue; padding: 15px;
-
-	.tagline 					{ 
-		p 						{ color: $white; }
-		span 					{ color: $white; }
+#header 						{ background-color: $dark-blue; padding: 10px 15px; position: absolute; top: 0; left: 0; width: 100%; z-index: 100;
+	
+	.logo 						{ display: inline-block; width: 32px; height: 32px;
+		a 						{ display: block; line-height: 1; }
 	}
 
-	#main-navigation 			{ float: right; padding-top: 10px;
+	.tagline 					{ display: inline-block; margin-left: 20px;
+		p 						{ color: $white; font-weight: bold; margin: 0; font-size: 1.8rem; line-height: 1; }
+		span 					{ color: $white; font-size: 1.4rem; }
+	}
+
+	#main-navigation 			{ float: right; 
 		li 						{ 
-			a 					{ color: $white; padding: 15px; text-decoration: none;
+			a 					{ color: $white; font-size: 1.6rem; padding: 10px 15px; text-decoration: none;
 				&:hover 		{  }
 			}
 		}
@@ -21,4 +25,3 @@ $menu_mobile_break: 1200px;
 
 .navbar 						{ padding: 0; }
 .navbar-nav 					{ flex-direction: row;  }
-

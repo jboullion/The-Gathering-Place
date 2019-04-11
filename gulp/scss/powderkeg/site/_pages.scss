@@ -30,7 +30,7 @@ body.single-parties 			{ overflow: hidden;
 
 }
 
-#party-page 					{ display: flex; height: 100vh;
+#party-page 					{ display: flex; height: 100%;
 
 	#party-sidebar 				{ background-color: $almost-black; color: $graaay; padding: 15px; height: 100vh; overflow: auto; width: 220px;
 		#party-nav 				{ 
@@ -59,7 +59,7 @@ body.single-parties 			{ overflow: hidden;
 			}
 
 			.chat-message 		{ display: flex; margin-bottom: 10px;
-				.chat-image 	{ width: 32px;
+				.chat-image 	{ cursor: pointer; width: 32px;
 					i 			{ font-size: 3rem; }
 				}
 
@@ -80,7 +80,7 @@ body.single-parties 			{ overflow: hidden;
 		}
 	}
 
-	#party-gamearea 			{ width: 50%; overflow: hidden; display: flex; flex-direction: column;
+	#party-gamearea 			{ width: 70%; overflow: hidden; display: flex; flex-direction: column;
 		
 		&.paint-tool 			{ cursor: url(#{$img-path}paint-roller-solid.png), default; }
 		&.fill-tool 			{ cursor: url(#{$img-path}fill-drip-solid.png), default; }
@@ -88,8 +88,8 @@ body.single-parties 			{ overflow: hidden;
 		&.highlight-tool 		{ cursor: url(#{$img-path}highlighter-solid.png), default; }
 		&.sample-tool 			{ cursor: url(#{$img-path}eye-dropper-solid.png), default; }
 
-		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; width: 100%; overflow: auto; }
-		#gamearea-map 			{ height: 1160px; width: 1160px; padding: 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
+		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; max-height: 100%; width: 100%; overflow: auto; }
+		#gamearea-map 			{ height: 1210px; width: 1160px; padding: 150px 100px 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
 		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px; position: relative;
 			&:before 			{ content: ''; display: block; width: 32px; height: 32px; margin: -1px; }
 
@@ -125,7 +125,7 @@ body.single-parties 			{ overflow: hidden;
 		}
 	}
 
-	#dm-tools 					{ flex: 1; overflow-y: scroll; padding: 30px 0;
+	#dm-tools 					{ display: none; flex: 1; overflow-y: scroll; padding: 30px 0;
 		
 		.dm-tool 				{ margin-bottom: 30px;
 			h6 					{ font-size: 2rem; font-weight: bold; margin-bottom: 10px; line-height: 1.2; }
