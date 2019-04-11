@@ -67,6 +67,7 @@ function JBTemplateEngine(tpl, data) {
 	return tpl;
 }
 
+
 /**
  * Clean all non numeric characters. Also keeping "."
  * usage: str.pkCleanNumber()
@@ -120,6 +121,22 @@ function pkRound(value, decimals) {
 function elementHasClass(element, className) {
 	return (' ' + element.className + ' ').indexOf(' ' + className+ ' ') > -1;
 }
+
+//Attempt to detect mobile devices
+function isMobileDevice() {
+	if( navigator.userAgent.match(/Android/i)
+		|| navigator.userAgent.match(/webOS/i)
+		|| navigator.userAgent.match(/iPhone/i)
+		|| navigator.userAgent.match(/iPad/i)
+		|| navigator.userAgent.match(/iPod/i)
+		|| navigator.userAgent.match(/BlackBerry/i)
+		|| navigator.userAgent.match(/Windows Phone/i)
+		&& 'ontouchstart' in document.documentElement ) return true;
+
+	return false;
+
+    //return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
 //allow all scripts to use jQuery with the $ handle
 var $ = jQuery;
 

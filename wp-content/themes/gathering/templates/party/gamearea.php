@@ -125,7 +125,7 @@ jQuery(document).ready(function($) {
 	var throttleHighlight = _.throttle(doTileHighlight, 17);
 	var debounceHighlight = _.debounce(cancelHighlight, 5000);
 
-	var throttleAstar = _.throttle(doAstar, 250);
+	var throttleAstar = _.throttle(doAstar, 100);
 	var throttleBuildGraph = _.throttle(buildGraphArray, 1000);
 
 	//Setup some basic attributes for our tiles
@@ -138,7 +138,7 @@ jQuery(document).ready(function($) {
 	
 
 	//If someone is attempting to 
-	document.body.oncontextmenu = function(){
+	document.body.oncontextmenu = function(e){
 		//gameAreaContext(); this could disable the context menu on the whole site. Probably not wanted
 		setActiveTool($handTool);
 	}
@@ -153,6 +153,13 @@ jQuery(document).ready(function($) {
 	//Initialize our game
 	gameInit();
 
+	/*
+	if(isMobileDevice()){
+		$map.ontouchstart = function(e){
+	}else{
+		$map.onmousedown = function(e){
+	}
+	*/
 	$map.onmousedown = function(e){
 		
 		//"painting" means any of our single tile tools that have a drag / draw effect
@@ -269,182 +276,14 @@ jQuery(document).ready(function($) {
 			NPCs[w] = [];
 			for(var h = 0; h < board.height; h++){	
 
-				var tmpTile = _.clone(tile);
-
-				tmpTile.id++;
-				tmpTile.x = w;
-				tmpTile.y = h;
-
-				//Clone our default HTML element
-				tmpTile.element = tileTpl.cloneNode(true);
-				tmpTile.element.x = w;
-				tmpTile.element.y = h;
 				
-				//Give it a unique ID
-				tmpTile.element.setAttribute("id", 'tile-'+w+'-'+h);
-
-				tmpTile.element.type = tmpTile.type;
-				tmpTile.element.background = tmpTile.background;
-				//tile.element.setAttribute('data-background', tile.background);
-
-				tmpTile.element.ondrop = function(e){
-					e.preventDefault();
-
-					//Move whatever was dropped here
-					var data = e.dataTransfer.getData("text");
-					e.target.appendChild(aStarStart);
-					
-					//Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
-					aStarStart.x = this.x;
-					aStarStart.y = this.y;
-
-					//After we drop something we need to update our graph for aStar searches
-					buildGraphArray();
-					clearAstarPath();
-				};
-
-				tmpTile.element.ondragover = function(e){
-					if (this.firstChild) {
-						// tile has a child element
-						// NOT empty
-					}else{
-						//This ALLOWs dropping here
-						//We only drop here when this tile has no children. No two things can occupy the same space
-						e.preventDefault();
-
-						//Move whatever was dropped here
-						//var data = e.dataTransfer.getData("text");
-						//console.log('ondragover');
-						
-						var path = throttleAstar(this);
-
-						//console.log(board.tiles);
-
-						if(path){
-							for(var p = 0; p < path.length; p++){
-								//console.log(board.tiles[path[p].x][path[p].y].element.classList);
-								board.tiles[path[p].x][path[p].y].element.classList.add('path')
-								currentPath.push(board.tiles[path[p].x][path[p].y].element);
-							}
-						}
-						
-						//e.target.appendChild(document.getElementById(data));
-					}
-				};
-
-				//Setup a click listener on this tile
-				//tile.element.addEventListener('click', colorTile);
-				tmpTile.element.onmousedown = function(e){
-					
-					//What tool are we tring to use?
-					if($activeTool !== $handTool){
-						switch($activeTool){
-							case $paintTool:
-								throttlePaint(this);
-								break;
-							case $fillTool:
-								debounceFill(this);
-								break;
-							case $eraseTool:
-								throttleErase(this);
-								break;
-							case $highlightTool:
-								throttleHighlight(this);
-								break;
-							case $sampleTool:
-								sampleTile(this);
-								break;
-
-						}
-					}
-				};
-
-				//Some tools need to function while moving over
-				tmpTile.element.onmousemove = function(e){
-					if(board.painting){
-						switch($activeTool){
-							case $paintTool:
-								throttlePaint(this);
-								break;
-							case $fillTool:
-								
-								break;
-							case $eraseTool:
-								throttleErase(this);
-								break;
-							case $highlightTool:
-								throttleHighlight(this);
-								break;
-							case $sampleTool:
-								
-								break;
-						}
-					}
-				};
 
 				//Put our tile into our state board
-				board.tiles[w][h] = tmpTile;
+				board.tiles[w][h] = createTile(w,h);
 				
-				//Displaying a bunch of random NPCs
+				//Creating a bunch of random NPCs
 				if( (w + h) % 10 == 0){
-					var tmpNPC = _.clone(defaultNpc);
-					tmpNPC.id++;
-					tmpNPC.x = w;
-					tmpNPC.y = h;
-
-					//Clone our default HTML element
-					tmpNPC.element = npcTpl.cloneNode(true);
-
-					tmpNPC.element.x = w;
-					tmpNPC.element.y = h;
-					tmpNPC.element.movement = tmpNPC.movement;
-
-					//Give it a unique ID
-					tmpNPC.element.setAttribute("id", 'npc-'+w+'-'+h);
-
-					tmpNPC.element.ondragstart = function(e){
-						//save the id of our NPC for talking to the dropped tile. This NPC will then be moved to that tile if it is available
-						e.dataTransfer.setData("text", e.target.id);
-						this.classList.add("movement");
-
-						//This is the new start point for aStar
-						aStarStart = this;
-
-						//Set our active tool to the hand tool
-						setActiveTool($handTool);
-					};
-
-					tmpNPC.element.ondragend = function(e){
-						this.classList.remove("movement");
-					};
-
-					//Setup a click listener on this tile
-					//Might want to change this to onclick
-					tmpNPC.element.onclick = function(e){
-						//e.stopPropagation();
-						//e.preventDefault();
-
-						console.log('click NPC: '+this.x+', '+this.y);
-					};
-
-					//Setup a click listener on this tile
-					//Might want to change this to onclick
-					tmpNPC.element.onmousedown = function(e){
-						e.stopPropagation();
-						//e.preventDefault();
-
-						//console.log('down NPC: '+this.id);
-					};
-
-					//Some tools need to function while moving over
-					tmpNPC.element.onmousemove = function(e){
-						e.stopPropagation();
-						//e.preventDefault();
-
-						//console.log('move NPC: '+this.id);
-					};
-
-					NPCs[w][h] = tmpNPC;
+					NPCs[w][h] = createNPC(w,h);
 				}
 
 				//tileHolder.appendChild(board.tiles[w][h].element);
@@ -456,6 +295,203 @@ jQuery(document).ready(function($) {
 
 		//we need to build our graph array AFTER npcs have been added so we know if the tiles are passable
 		buildGraphArray();
+	}
+
+	//Create a tile a a specific location
+	function createTile(x,y){
+		var tmpTile = _.clone(tile);
+
+			tmpTile.id++;
+			tmpTile.x = x;
+			tmpTile.y = y;
+
+			//Clone our default HTML element
+			tmpTile.element = tileTpl.cloneNode(true);
+			tmpTile.element.x = x;
+			tmpTile.element.y = y;
+
+			//Give it a unique ID
+			tmpTile.element.setAttribute("id", 'tile-'+x+'-'+y);
+
+			tmpTile.element.type = tmpTile.type;
+			tmpTile.element.background = tmpTile.background;
+			//tile.element.setAttribute('data-background', tile.background);
+
+			tmpTile.element.ondrop = function(e){
+				e.preventDefault();
+
+				//Move whatever was dropped here
+				var data = e.dataTransfer.getData("text");
+				e.target.appendChild(aStarStart);
+				
+				//Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
+				aStarStart.x = this.x;
+				aStarStart.y = this.y;
+
+				//After we drop something we need to update our graph for aStar searches
+				buildGraphArray();
+				clearAstarPath();
+			};
+
+			tmpTile.element.ondragover = function(e){
+				if (this.firstChild) {
+					// tile has a child element
+					// NOT empty
+				}else{
+					//This ALLOWs dropping here
+					//We only drop here when this tile has no children. No two things can occupy the same space
+					e.preventDefault();
+
+					throttleAstar(this);
+
+				}
+			};
+
+			//Setup a click listener on this tile
+			//tile.element.addEventListener('click', colorTile);
+			/*
+			if(isMobileDevice()){
+				//&& (e.which === 1 || ev.touches)
+				tmpTile.element.ontouchstart  = function(e){
+					tileMouseMove(e, this);
+				};
+
+				tmpTile.element.ontouchmove  = function(e){
+					tileMouseMove(e, this);
+				};
+			}else{
+				tmpTile.element.onmousedown = function(e){
+					tileMouseDown(e, this);
+				};
+				tmpTile.element.onmousemove = function(e){
+					tileMouseMove(e, this);
+				};
+			}
+			*/
+
+			tmpTile.element.onmousedown = function(e){
+				tileMouseDown(e, this);
+			};
+			tmpTile.element.onmousemove = function(e){
+				tileMouseMove(e, this);
+			};
+			
+
+		return tmpTile;
+	}
+
+	//Take action when moving your mouse accross the tile
+	function tileMouseMove(e, $element){
+		//&& (e.which === 1 || ev.touches)
+		if(board.painting  ){
+
+			switch($activeTool){
+				case $paintTool:
+					throttlePaint($element);
+					break;
+				case $fillTool:
+					
+					break;
+				case $eraseTool:
+					throttleErase($element);
+					break;
+				case $highlightTool:
+					throttleHighlight($element);
+					break;
+				case $sampleTool:
+					
+					break;
+			}
+		}
+	}
+
+	//Take action when our onmousedown and on touchstart events
+	function tileMouseDown(e, $element){
+		//What tool are we tring to use?
+		//&& (e.which === 1 || ev.touches)
+		if($activeTool !== $handTool  ){
+
+			switch($activeTool){
+				case $paintTool:
+					throttlePaint($element);
+					break;
+				case $fillTool:
+					debounceFill($element);
+					break;
+				case $eraseTool:
+					throttleErase($element);
+					break;
+				case $highlightTool:
+					throttleHighlight($element);
+					break;
+				case $sampleTool:
+					sampleTile($element);
+					break;
+
+			}
+		}
+	}
+
+	//Create an NPC that can stick on our board
+	function createNPC(x,y){
+		var tmpNPC = _.clone(defaultNpc);
+			tmpNPC.id++;
+			tmpNPC.x = x;
+			tmpNPC.y = y;
+
+			//Clone our default HTML element
+			tmpNPC.element = npcTpl.cloneNode(true);
+
+			tmpNPC.element.x = x;
+			tmpNPC.element.y = y;
+			tmpNPC.element.movement = tmpNPC.movement;
+
+			//Give it a unique ID
+			tmpNPC.element.setAttribute("id", 'npc-'+x+'-'+y);
+
+			tmpNPC.element.ondragstart = function(e){
+				//save the id of our NPC for talking to the dropped tile. This NPC will then be moved to that tile if it is available
+				e.dataTransfer.setData("text", e.target.id);
+				this.classList.add("movement");
+
+				//This is the new start point for aStar
+				aStarStart = this;
+
+				//Set our active tool to the hand tool
+				setActiveTool($handTool);
+			};
+
+			tmpNPC.element.ondragend = function(e){
+				this.classList.remove("movement");
+			};
+
+			//Setup a click listener on this tile
+			//Might want to change this to onclick
+			tmpNPC.element.onclick = function(e){
+				//e.stopPropagation();
+				//e.preventDefault();
+
+				console.log('click NPC: '+this.x+', '+this.y);
+			};
+
+			//Setup a click listener on this tile
+			//Might want to change this to onclick
+			tmpNPC.element.onmousedown = function(e){
+				e.stopPropagation();
+				//e.preventDefault();
+
+				//console.log('down NPC: '+this.id);
+			};
+
+			//Some tools need to function while moving over
+			tmpNPC.element.onmousemove = function(e){
+				e.stopPropagation();
+				//e.preventDefault();
+
+				//console.log('move NPC: '+this.id);
+			};
+
+		return tmpNPC;
 	}
 
 	//Build our AStar Graph for fast A* searching through our tiles
@@ -475,6 +511,18 @@ jQuery(document).ready(function($) {
 		}
 	}
 
+	//Use a parth of elements returned from the aStar function and draw a path on the tiles
+	function drawPath(path){
+		//If we already 
+		if(path){
+			for(var p = 0; p < path.length; p++){
+				//console.log(board.tiles[path[p].x][path[p].y].element.classList);
+				board.tiles[path[p].x][path[p].y].element.classList.add('path');
+				currentPath.push(board.tiles[path[p].x][path[p].y].element);
+			}
+		}
+	}
+
 	/**
 	 * Build a 0,1 two dimentional array to represent passable tiles. Run an Astar function on it to find the shortest route between two things
 	 */
@@ -486,10 +534,8 @@ jQuery(document).ready(function($) {
 		var path = [];
 		aStarEnd = $element;
 
-		//This will search our board for passable tiles and turn it into a Grid optimized for path searches
-		//throttleBuildGraph();
-		//buildGraphArray();
-
+		//We are using a Graph class that is bundled with our astar.js This Graph class allows us to use a heap to search the map space.
+		//https://briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated/
 		var boardGraph = new Graph(boardGraphArray);
 
 		//Do we have both our points to check?
@@ -520,7 +566,9 @@ jQuery(document).ready(function($) {
 		}
 
 		clearAstarPath();
-		return path;
+		drawPath(path);
+
+		//return path;
 	}
 
 	//Clear our current Astar Highlighted path
@@ -548,6 +596,7 @@ jQuery(document).ready(function($) {
 		$map.appendChild(tileHolder);
 	}
 
+	//Draw all of the NPCs in our NPCs array
 	function displayNPCs(npcs){
 		npcs.forEach(function(w) {
 			w.forEach(function(h) {
