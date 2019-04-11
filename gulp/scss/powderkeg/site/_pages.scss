@@ -26,7 +26,7 @@
 /**
  * SINGLE PARTY PAGE
  */
-body.single-parties 			{ overflow: hidden;
+body.single-parties 			{ overflow: hidden; padding-top: 54px;
 
 }
 
@@ -80,17 +80,20 @@ body.single-parties 			{ overflow: hidden;
 		}
 	}
 
-	#party-gamearea 			{ width: 70%; overflow: hidden; display: flex; flex-direction: column;
+	#party-gamearea 			{ max-width: 1180px; width: 70%; position: relative;
 		
 		&.paint-tool 			{ cursor: url(#{$img-path}paint-roller-solid.png), default; }
 		&.fill-tool 			{ cursor: url(#{$img-path}fill-drip-solid.png), default; }
 		&.erase-tool 			{ cursor: url(#{$img-path}eraser-solid.png), default; }
 		&.highlight-tool 		{ cursor: url(#{$img-path}highlighter-solid.png), default; }
 		&.sample-tool 			{ cursor: url(#{$img-path}eye-dropper-solid.png), default; }
+		&.hand-tool 			{ 
+			//cursor: url(#{$img-path}hand-paper-solid.png), default; 
+		}
 
 		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; max-height: 100%; width: 100%; overflow: auto; }
-		#gamearea-map 			{ height: 1210px; width: 1160px; padding: 150px 100px 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
-		.tile 					{ border: 1px solid $almost-black; height: 32px; width: 32px; position: relative;
+		#gamearea-map 			{ height: 1160px; width: 1160px; padding: 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
+		.tile 					{ border: 1px solid $light-gray; border-top:0; border-right:0; background-color: #FFFFFF; height: 32px; width: 32px; position: relative;
 			&:before 			{ content: ''; display: block; width: 32px; height: 32px; margin: -1px; }
 
 			&.highlight 		{ 
@@ -102,7 +105,7 @@ body.single-parties 			{ overflow: hidden;
 			}
 		}
 
-		.npc 					{ @include center(); background-color: #98c4f3; border: 2px dotted $almost-black; border-radius: 50%; width: 32px; height: 32px;
+		.npc 					{ @include center(); background-color: #98c4f3; border: 2px dotted $almost-black; border-radius: 50%; cursor:grab; width: 28px; height: 28px;
 			//&:before 			{ @include center();  border-radius: 50%; display: none; width: 32px; height: 32px; margin: -1px; }
 
 			&.movement 			{ display: block; content: '';
@@ -125,48 +128,27 @@ body.single-parties 			{ overflow: hidden;
 		}
 	}
 
-	#dm-tools 					{ display: none; flex: 1; overflow-y: scroll; padding: 30px 0;
+	#dm-tools 					{ position: absolute; top: 0; left: 0; overflow-y: hidden; z-index: 10;
 		
-		.dm-tool 				{ margin-bottom: 30px;
-			h6 					{ font-size: 2rem; font-weight: bold; margin-bottom: 10px; line-height: 1.2; }
+		.dm-tool 				{ padding: 15px;
 			.dm-holder 			{ display: flex;
 
-				.dm-tile		{ cursor: pointer; width: 32px; height: 32px; margin: 5px 5px 5px 0;
-					img,
-					input 		{ max-width: 100%; height: 32px; width: 32px; }
-
-					&.active 	{ box-shadow: 0px 0px 6px rgba(0,0,0,0.8); }
-				}
 			}
 
-			.form-group 		{ 
-				label 				{ font-size: 1.5rem; font-weight: bold; }
-				input 				{ border: 0; font-size: 1.5rem; font-weight: bold; line-height: 2; padding: 0; }
-
-				input[type=text] 	{ padding-left: 10px;}
-
-				input[type=color] 	{ border: none; cursor: pointer; width: 32px; height: 32px; 
-					-webkit-appearance: none;
-
-					&::-webkit-color-swatch-wrapper {
-						padding: 0;
-					}
-
-					&::-webkit-color-swatch {
-						border: none;
-					}
-				}
-			}
 		}
 
 		
 		#tool-select 			{ 
-			.tool 				{ cursor: pointer; width: 32px; height: 32px; text-align: center; padding: 0.7rem; 
+			.tool,
+			.visual-tool 		{ cursor: pointer; width: 32px; height: 32px; text-align: center; padding: 0.7rem; position: relative;
 				&.active,
 				&:hover 		{ background-color: #98c4f3; }
 
 				i 				{ display: block; font-size: 1.6rem; }
+
+				input[type=color] { background-color: transparent; border: 0; cursor: pointer; position: absolute; top: 1px; left: 1px; font-size: 1.6rem; padding: 6px; height: 30px; width: 30px; }
 			}
+			.tool-spacer 		{ height: 32px; width: 10px; }
 		}
 
 		#current-tile 			{ width: 32px; height: 32px; display: inline-block;
@@ -184,7 +166,17 @@ body.single-parties 			{ overflow: hidden;
 
 	}
 
-	
+	#texture-modal 				{ 
+		.dm-holder 				{ display: flex; margin: 15px 0; flex-wrap: wrap;
+
+			.dm-tile			{ cursor: pointer; width: 32px; height: 32px; margin: 5px 5px 5px 0;
+				img,
+				input 			{ max-width: 100%; height: 32px; width: 32px; }
+
+				&.active 		{ box-shadow: 0px 0px 6px rgba(0,0,0,0.8); }
+			}
+		}
+	}
 }
 
 

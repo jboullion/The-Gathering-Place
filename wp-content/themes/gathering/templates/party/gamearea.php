@@ -1,4 +1,4 @@
-<div id="party-gamearea" class="">
+<div id="party-gamearea" class="hand-tool">
 	<?php get_template_part('templates/party/tools', 'dm'); ?>
 
 	<div id="gamearea-map-wrapper">
@@ -23,6 +23,7 @@ jQuery(document).ready(function($) {
 		$eraseTool = document.getElementById("erase-tool"),
 		$highlightTool = document.getElementById("highlight-tool"),
 		$sampleTool = document.getElementById("sample-tool"),
+		$handTool = document.getElementById("hand-tool"),
 		$toolSelect = document.getElementById("tool-select"),
 		$tools = document.getElementsByClassName("tool"),
 		$activeTool = null;
@@ -58,10 +59,12 @@ jQuery(document).ready(function($) {
 					'wall01','wall02','wall03',
 					'rock01','rock02'];
 
+	var defaultColor = '#526F35';
+
 	//This is the example / current tile that will do the painting
 	var defaultPaintTile = {
 		type: 'color', //color / image
-		background: '#FF0000', //hex code or background image
+		background: defaultColor, //hex code or background image
 		texture: ''
 	}
 
@@ -89,7 +92,7 @@ jQuery(document).ready(function($) {
 		id: 0,
 		passable: true,
 		type: 'color', //color / image
-		background: '#FF0000', //hex code or background image
+		background: defaultColor, //hex code or background image
 		textures: []
 	};
 
@@ -110,8 +113,8 @@ jQuery(document).ready(function($) {
 	//Used for AStar Searches
 	var boardGraphArray = [];
 	var currentPath = [];
-	var AstarStart = null;
-	var AstarEnd = null;
+	var aStarStart = null;
+	var aStarEnd = null;
 
 	//Createing a throttled function for painting. Improves FPS steadyness. Set to try and paint at 60fps / 17ms
 	var throttlePaint = _.throttle(doPaintTile, 17);
@@ -122,8 +125,8 @@ jQuery(document).ready(function($) {
 	var throttleHighlight = _.throttle(doTileHighlight, 17);
 	var debounceHighlight = _.debounce(cancelHighlight, 5000);
 
-	var throttleAstar = _.throttle(doAstar, 500);
-	var throttleBuildGraph = _.throttle(buildGraphArray, 2000);
+	var throttleAstar = _.throttle(doAstar, 250);
+	var throttleBuildGraph = _.throttle(buildGraphArray, 1000);
 
 	//Setup some basic attributes for our tiles
 	tileTpl.setAttribute("class", defaultTile.classes);
@@ -134,12 +137,18 @@ jQuery(document).ready(function($) {
 	npcTpl.setAttribute("draggable", "true");
 	
 
-	/*
+	//If someone is attempting to 
 	document.body.oncontextmenu = function(){
-		console.log('concontextmenu')
-		document.body.setAttribute("style",'cursor:default;');
+		//gameAreaContext(); this could disable the context menu on the whole site. Probably not wanted
+		setActiveTool($handTool);
 	}
-	*/
+
+
+	//What to do when the user attempts to right click on the game area
+	function gameAreaContext(){
+		//setActiveTool($handTool);
+	}
+
 
 	//Initialize our game
 	gameInit();
@@ -147,19 +156,23 @@ jQuery(document).ready(function($) {
 	$map.onmousedown = function(e){
 		
 		//"painting" means any of our single tile tools that have a drag / draw effect
-		board.painting = true;
-
 		switch($activeTool){
 			case $paintTool:
+				board.painting = true;
 				break;
 			case $fillTool:
 				board.painting = false;
 				break;
 			case $eraseTool:
+				board.painting = true;
 				break;
 			case $highlightTool:
+				board.painting = true;
 				break;
 			case $sampleTool:
+				board.painting = false;
+				break;
+			case $handTool:
 				board.painting = false;
 				break;
 		}
@@ -184,16 +197,27 @@ jQuery(document).ready(function($) {
 	for(let i = 0; i < $tools.length; i++) {
 		$tools[i].addEventListener("click", function() {
 
-			$unActive = $toolSelect.querySelector('.active');
-			if($unActive){
-				$unActive.classList.remove("active");
-			}
+			//Set ourselves as the active tool
+			setActiveTool(this);
 
-			$activeTool = this;
-			this.classList.add("active");//.setAttribute("class", activeClass);
-
-			$gameArea.setAttribute("class", this.getAttribute('id'));
 		})
+	}
+
+	//Setup a new active tool
+	function setActiveTool($newTool){
+		//If we are changing our tool let's not be actively painting
+		board.painting = false;
+
+		$unActive = $toolSelect.querySelector('.active');
+		if($unActive){
+			$unActive.classList.remove("active");
+		}
+		
+		$activeTool = $newTool;
+
+		$activeTool.classList.add("active");//.setAttribute("class", activeClass);
+
+		$gameArea.setAttribute("class", $activeTool.getAttribute('id'));
 	}
 	
 	/**
@@ -268,11 +292,11 @@ jQuery(document).ready(function($) {
 
 					//Move whatever was dropped here
 					var data = e.dataTransfer.getData("text");
-					e.target.appendChild(AstarStart);
+					e.target.appendChild(aStarStart);
 					
-					//Since our AstarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
-					AstarStart.x = this.x;
-					AstarStart.y = this.y;
+					//Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
+					aStarStart.x = this.x;
+					aStarStart.y = this.y;
 
 					//After we drop something we need to update our graph for aStar searches
 					buildGraphArray();
@@ -312,23 +336,26 @@ jQuery(document).ready(function($) {
 				//tile.element.addEventListener('click', colorTile);
 				tmpTile.element.onmousedown = function(e){
 					
-					switch($activeTool){
-						case $paintTool:
-							throttlePaint(this);
-							break;
-						case $fillTool:
-							debounceFill(this);
-							break;
-						case $eraseTool:
-							throttleErase(this);
-							break;
-						case $highlightTool:
-							throttleHighlight(this);
-							break;
-						case $sampleTool:
-							sampleTile(this);
-							break;
+					//What tool are we tring to use?
+					if($activeTool !== $handTool){
+						switch($activeTool){
+							case $paintTool:
+								throttlePaint(this);
+								break;
+							case $fillTool:
+								debounceFill(this);
+								break;
+							case $eraseTool:
+								throttleErase(this);
+								break;
+							case $highlightTool:
+								throttleHighlight(this);
+								break;
+							case $sampleTool:
+								sampleTile(this);
+								break;
 
+						}
 					}
 				};
 
@@ -380,7 +407,11 @@ jQuery(document).ready(function($) {
 						e.dataTransfer.setData("text", e.target.id);
 						this.classList.add("movement");
 
-						AstarStart = this;
+						//This is the new start point for aStar
+						aStarStart = this;
+
+						//Set our active tool to the hand tool
+						setActiveTool($handTool);
 					};
 
 					tmpNPC.element.ondragend = function(e){
@@ -399,7 +430,7 @@ jQuery(document).ready(function($) {
 					//Setup a click listener on this tile
 					//Might want to change this to onclick
 					tmpNPC.element.onmousedown = function(e){
-						//e.stopPropagation();
+						e.stopPropagation();
 						//e.preventDefault();
 
 						//console.log('down NPC: '+this.id);
@@ -407,7 +438,7 @@ jQuery(document).ready(function($) {
 
 					//Some tools need to function while moving over
 					tmpNPC.element.onmousemove = function(e){
-						//e.stopPropagation();
+						e.stopPropagation();
 						//e.preventDefault();
 
 						//console.log('move NPC: '+this.id);
@@ -449,11 +480,11 @@ jQuery(document).ready(function($) {
 	 */
 	function doAstar($element){
 		
-		//If we already have this as our AstarEnd then we already are showing it's path
-		if(AstarEnd == $element) return;
+		//If we already have this as our aStarEnd then we already are showing it's path
+		if(aStarEnd == $element) return;
 
 		var path = [];
-		AstarEnd = $element;
+		aStarEnd = $element;
 
 		//This will search our board for passable tiles and turn it into a Grid optimized for path searches
 		//throttleBuildGraph();
@@ -462,28 +493,28 @@ jQuery(document).ready(function($) {
 		var boardGraph = new Graph(boardGraphArray);
 
 		//Do we have both our points to check?
-		if(AstarStart && AstarEnd){
+		if(aStarStart && aStarEnd){
 
 			// Get the distance for these two elements
-			var distance = Math.hypot(AstarEnd.x - AstarStart.x, AstarEnd.y - AstarStart.y);
+			var distance = Math.hypot(aStarEnd.x - aStarStart.x, aStarEnd.y - aStarStart.y);
 			
 			//This is not a perfect check but should catch most long
-			if(AstarStart.movement < distance ){
+			if(aStarStart.movement < distance ){
 				//Too far away dont try to move there
 				clearAstarPath();
 				return [];
 			}
 
-			var start = boardGraph.grid[AstarStart.x][AstarStart.y];
-			var end = boardGraph.grid[AstarEnd.x][AstarEnd.y];
+			var start = boardGraph.grid[aStarStart.x][aStarStart.y];
+			var end = boardGraph.grid[aStarEnd.x][aStarEnd.y];
 
 			//OUR ASTAR SEARCH! This is a super fast search even over long distances.
 			//We are hopefully removing anything TOO distance by only running this when the end target is close enough to be moved to
 			path = astar.search(boardGraph, start, end);
 			
 			//Don't return a longer path than the user has movement
-			if(path.length > AstarStart.movement){
-				path = path.slice(0, AstarStart.movement);
+			if(path.length > aStarStart.movement){
+				path = path.slice(0, aStarStart.movement);
 			}
 
 		}
@@ -617,7 +648,7 @@ jQuery(document).ready(function($) {
 			$element.style.backgroundImage = '';
 			$element.setAttribute("class", defaultTile.classes);
 		}else if(paintTile.type === 'texture'){
-			$element.style.backgroundColor = '#FF0000';
+			$element.style.backgroundColor = defaultColor;
 			$element.style.backgroundImage = '';
 			$element.setAttribute("class", defaultTile.textureclass+paintTile.texture);
 		}else if(paintTile.type === 'image'){

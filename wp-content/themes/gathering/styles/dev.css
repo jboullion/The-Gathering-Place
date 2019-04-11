@@ -12321,6 +12321,12 @@ blockquote {
   #footer .copyright p {
     font-size: 1.4rem; }
 
+/**
+ * Bootstrap overrides
+ */
+.modal .modal-dialog {
+  margin: 100px auto 0; }
+
 #header {
   background-color: #0d3c4c;
   padding: 10px 15px;
@@ -12405,7 +12411,8 @@ blockquote {
  * SINGLE PARTY PAGE
  */
 body.single-parties {
-  overflow: hidden; }
+  overflow: hidden;
+  padding-top: 54px; }
 
 #party-page {
   display: flex;
@@ -12493,10 +12500,9 @@ body.single-parties {
       background-color: white;
       border-color: #666; }
   #party-page #party-gamearea {
+    max-width: 1180px;
     width: 70%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column; }
+    position: relative; }
     #party-page #party-gamearea.paint-tool {
       cursor: url(../images/paint-roller-solid.png), default; }
     #party-page #party-gamearea.fill-tool {
@@ -12514,14 +12520,17 @@ body.single-parties {
       width: 100%;
       overflow: auto; }
     #party-page #party-gamearea #gamearea-map {
-      height: 1210px;
+      height: 1160px;
       width: 1160px;
-      padding: 150px 100px 100px;
+      padding: 100px;
       display: flex;
       flex-wrap: wrap;
       overflow: hidden; }
     #party-page #party-gamearea .tile {
-      border: 1px solid #231f20;
+      border: 1px solid #e5e5e0;
+      border-top: 0;
+      border-right: 0;
+      background-color: #FFFFFF;
       height: 32px;
       width: 32px;
       position: relative; }
@@ -12582,73 +12591,73 @@ body.single-parties {
       background-color: #98c4f3;
       border: 2px dotted #231f20;
       border-radius: 50%;
-      width: 32px;
-      height: 32px; }
+      cursor: grab;
+      width: 28px;
+      height: 28px; }
       #party-page #party-gamearea .npc.movement {
         display: block;
         content: ''; }
   #party-page #dm-tools {
-    display: none;
-    flex: 1;
-    overflow-y: scroll;
-    padding: 30px 0; }
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-y: hidden;
+    z-index: 10; }
     #party-page #dm-tools .dm-tool {
-      margin-bottom: 30px; }
-      #party-page #dm-tools .dm-tool h6 {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        line-height: 1.2; }
+      padding: 15px; }
       #party-page #dm-tools .dm-tool .dm-holder {
         display: flex; }
-        #party-page #dm-tools .dm-tool .dm-holder .dm-tile {
-          cursor: pointer;
-          width: 32px;
-          height: 32px;
-          margin: 5px 5px 5px 0; }
-          #party-page #dm-tools .dm-tool .dm-holder .dm-tile img,
-          #party-page #dm-tools .dm-tool .dm-holder .dm-tile input {
-            max-width: 100%;
-            height: 32px;
-            width: 32px; }
-          #party-page #dm-tools .dm-tool .dm-holder .dm-tile.active {
-            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.8); }
-      #party-page #dm-tools .dm-tool .form-group label {
-        font-size: 1.5rem;
-        font-weight: bold; }
-      #party-page #dm-tools .dm-tool .form-group input {
-        border: 0;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 2;
-        padding: 0; }
-      #party-page #dm-tools .dm-tool .form-group input[type=text] {
-        padding-left: 10px; }
-      #party-page #dm-tools .dm-tool .form-group input[type=color] {
-        border: none;
-        cursor: pointer;
-        width: 32px;
-        height: 32px;
-        -webkit-appearance: none; }
-        #party-page #dm-tools .dm-tool .form-group input[type=color]::-webkit-color-swatch-wrapper {
-          padding: 0; }
-        #party-page #dm-tools .dm-tool .form-group input[type=color]::-webkit-color-swatch {
-          border: none; }
-    #party-page #dm-tools #tool-select .tool {
+    #party-page #dm-tools #tool-select .tool,
+    #party-page #dm-tools #tool-select .visual-tool {
       cursor: pointer;
       width: 32px;
       height: 32px;
       text-align: center;
-      padding: 0.7rem; }
-      #party-page #dm-tools #tool-select .tool.active, #party-page #dm-tools #tool-select .tool:hover {
+      padding: 0.7rem;
+      position: relative; }
+      #party-page #dm-tools #tool-select .tool.active, #party-page #dm-tools #tool-select .tool:hover,
+      #party-page #dm-tools #tool-select .visual-tool.active,
+      #party-page #dm-tools #tool-select .visual-tool:hover {
         background-color: #98c4f3; }
-      #party-page #dm-tools #tool-select .tool i {
+      #party-page #dm-tools #tool-select .tool i,
+      #party-page #dm-tools #tool-select .visual-tool i {
         display: block;
         font-size: 1.6rem; }
+      #party-page #dm-tools #tool-select .tool input[type=color],
+      #party-page #dm-tools #tool-select .visual-tool input[type=color] {
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        font-size: 1.6rem;
+        padding: 6px;
+        height: 30px;
+        width: 30px; }
+    #party-page #dm-tools #tool-select .tool-spacer {
+      height: 32px;
+      width: 10px; }
     #party-page #dm-tools #current-tile {
       width: 32px;
       height: 32px;
       display: inline-block; }
+  #party-page #texture-modal .dm-holder {
+    display: flex;
+    margin: 15px 0;
+    flex-wrap: wrap; }
+    #party-page #texture-modal .dm-holder .dm-tile {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      margin: 5px 5px 5px 0; }
+      #party-page #texture-modal .dm-holder .dm-tile img,
+      #party-page #texture-modal .dm-holder .dm-tile input {
+        max-width: 100%;
+        height: 32px;
+        width: 32px; }
+      #party-page #texture-modal .dm-holder .dm-tile.active {
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.8); }
 
 /**
  * DEFAULT PAGES

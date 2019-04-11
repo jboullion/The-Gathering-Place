@@ -139,3 +139,13 @@ blockquote 					{ background: #f1f1f1; border-left: 10px solid $upgrayddd; margi
 		p 					{ font-size: 1.4rem; }
 	}
 }
+
+
+/**
+ * Bootstrap overrides
+ */
+.modal 						{ 
+	.modal-dialog 			{ margin: 100px auto 0;
+		
+	}
+}
