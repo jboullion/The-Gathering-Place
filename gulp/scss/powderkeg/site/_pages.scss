@@ -45,7 +45,9 @@ body.single-parties 			{ overflow: hidden; padding-top: 54px;
 	}
 	
 
-	#party-chat 				{ flex: 1; padding: 15px; display: flex; flex-direction: column;
+	#party-chat 				{ /* width: 320px; */ flex:1; padding: 15px; display: flex; flex-direction: column; position: relative;
+		#toggle-menu 			{ cursor: pointer; position: absolute; top: 0; right: 0; padding: 15px; border: 0; background-color: transparent; z-index: 1; }
+
 		#chat-message-area 		{ height: 100%; overflow: auto; flex: 1; position: relative;
 			.chat-message-align	{ position: absolute; bottom: 0; width: 100%; }
 
@@ -80,16 +82,14 @@ body.single-parties 			{ overflow: hidden; padding-top: 54px;
 		}
 	}
 
-	#party-gamearea 			{ max-width: 1180px; width: 70%; position: relative;
+	#party-gamearea 			{ position: relative; max-width: 1180px; width: 75%; overflow: hidden; /*flex: 1;*/
 		
 		&.paint-tool 			{ cursor: url(#{$img-path}paint-roller-solid.png), default; }
 		&.fill-tool 			{ cursor: url(#{$img-path}fill-drip-solid.png), default; }
 		&.erase-tool 			{ cursor: url(#{$img-path}eraser-solid.png), default; }
 		&.highlight-tool 		{ cursor: url(#{$img-path}highlighter-solid.png), default; }
 		&.sample-tool 			{ cursor: url(#{$img-path}eye-dropper-solid.png), default; }
-		&.hand-tool 			{ 
-			//cursor: url(#{$img-path}hand-paper-solid.png), default; 
-		}
+		&.hand-tool 			{ }
 
 		#gamearea-map-wrapper 	{ background-color: $light-gray; height: 100%; max-height: 100%; width: 100%; overflow: auto; }
 		#gamearea-map 			{ height: 1160px; width: 1160px; padding: 100px; display: flex; flex-wrap: wrap; overflow: hidden; }
@@ -106,25 +106,12 @@ body.single-parties 			{ overflow: hidden; padding-top: 54px;
 		}
 
 		.npc 					{ @include center(); background-color: #98c4f3; border: 2px dotted $almost-black; border-radius: 50%; cursor:grab; width: 28px; height: 28px;
-			//&:before 			{ @include center();  border-radius: 50%; display: none; width: 32px; height: 32px; margin: -1px; }
 
 			&.movement 			{ display: block; content: '';
-				&:before 		{ //@include jbhighlight(); 
-				}
+				&:before 		{ }
 
-				// &.2 			{ width: 64px; height: 64px; }
-				// &.3 			{ width: 64px; height: 64px; }
-				// &.4 			{ width: 64px; height: 64px; }
-				// &.5 			{ width: 64px; height: 64px; }
-				// &.6 			{ width: 64px; height: 64px; }
-				// &.7 			{ width: 64px; height: 64px; }
 			}
 
-			// @for $i from 1 through 10 {
-			// 	&.speed-#{$i} {
-					
-			// 	}
-			// }
 		}
 	}
 

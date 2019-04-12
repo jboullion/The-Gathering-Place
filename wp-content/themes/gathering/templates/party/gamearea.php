@@ -8,7 +8,7 @@
 </div>
 
 <script>
-jQuery(document).ready(function($) {
+window.onload = function(){
 
 	//Get our document elements. Label with $ for reference
 	var $gameArea = document.getElementById("party-gamearea"),
@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
 		movement: 10,
 		passable: false,
 		classes: "npc speed-5",
-		name: 'npc 1',
+		name: 'NPC',
 		image: 'https://via.placeholder.com/28x28/FF0000/FFFFFF/?text=NPC 1', //NPC must always be an image
 	}; //_.clone(tile);
 
@@ -98,6 +98,7 @@ jQuery(document).ready(function($) {
 
 	//Our main board object that knows it's own state
 	var board = {
+		id: 0,
 		height: 30,
 		width: 30,
 		tiles: [],
@@ -375,7 +376,6 @@ jQuery(document).ready(function($) {
 			tmpTile.element.onmousemove = function(e){
 				tileMouseMove(e, this);
 			};
-			
 
 		return tmpTile;
 	}
@@ -383,7 +383,7 @@ jQuery(document).ready(function($) {
 	//Take action when moving your mouse accross the tile
 	function tileMouseMove(e, $element){
 		//&& (e.which === 1 || ev.touches)
-		if(board.painting  ){
+		if( board.painting ){
 
 			switch($activeTool){
 				case $paintTool:
@@ -409,7 +409,7 @@ jQuery(document).ready(function($) {
 	function tileMouseDown(e, $element){
 		//What tool are we tring to use?
 		//&& (e.which === 1 || ev.touches)
-		if($activeTool !== $handTool  ){
+		if( $activeTool !== $handTool ){
 
 			switch($activeTool){
 				case $paintTool:
@@ -433,9 +433,16 @@ jQuery(document).ready(function($) {
 	}
 
 	//Create an NPC that can stick on our board
-	function createNPC(x,y){
+	function createNPC(x, y, name){
+
 		var tmpNPC = _.clone(defaultNpc);
+
 			tmpNPC.id++;
+
+			if(! name){
+				name = tmpNPC.name+' ('+x+','+y+')';
+			}
+
 			tmpNPC.x = x;
 			tmpNPC.y = y;
 
@@ -445,6 +452,8 @@ jQuery(document).ready(function($) {
 			tmpNPC.element.x = x;
 			tmpNPC.element.y = y;
 			tmpNPC.element.movement = tmpNPC.movement;
+			//TODO need
+			tmpNPC.element.title = name;
 
 			//Give it a unique ID
 			tmpNPC.element.setAttribute("id", 'npc-'+x+'-'+y);
@@ -708,5 +717,5 @@ jQuery(document).ready(function($) {
 		$element.background = paintTile.background;
 
 	}
-});
+};
 </script>

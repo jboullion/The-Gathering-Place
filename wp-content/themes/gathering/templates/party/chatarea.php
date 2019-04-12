@@ -1,5 +1,8 @@
 <div id="party-chat">
+	<button id="toggle-menu" class=""><i class="fas fa-fw fa-chevron-left"></i></button>
+
 	<div id="chat-message-area">
+
 		<div class="chat-message-align">
 			<div class="chat-date-hr" data-content="Today"></div>
 			

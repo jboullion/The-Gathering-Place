@@ -12435,10 +12435,21 @@ body.single-parties {
       margin-top: 20px;
       margin-bottom: 6px; }
   #party-page #party-chat {
+    /* width: 320px; */
     flex: 1;
     padding: 15px;
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    position: relative; }
+    #party-page #party-chat #toggle-menu {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 15px;
+      border: 0;
+      background-color: transparent;
+      z-index: 1; }
     #party-page #party-chat #chat-message-area {
       height: 100%;
       overflow: auto;
@@ -12500,9 +12511,11 @@ body.single-parties {
       background-color: white;
       border-color: #666; }
   #party-page #party-gamearea {
+    position: relative;
     max-width: 1180px;
-    width: 70%;
-    position: relative; }
+    width: 75%;
+    overflow: hidden;
+    /*flex: 1;*/ }
     #party-page #party-gamearea.paint-tool {
       cursor: url(../images/paint-roller-solid.png), default; }
     #party-page #party-gamearea.fill-tool {
