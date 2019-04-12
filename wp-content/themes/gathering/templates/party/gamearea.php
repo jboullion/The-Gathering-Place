@@ -11,22 +11,31 @@
 window.onload = function(){
 
 	//Get our document elements. Label with $ for reference
-	var $gameArea = document.getElementById("party-gamearea"),
+	var $gamearea = document.getElementById("party-gamearea"),
 		$map = document.getElementById("gamearea-map"),
 		$tileColor = document.getElementById("tile-color"),
 		$textureHolder = document.getElementById("texture-holder"), 
 		$currentTile = document.getElementById("current-tile"),
 		$currentColor = document.getElementById("current-color");
 
+	//Tools
 	var $paintTool = document.getElementById("paint-tool"),
 		$fillTool = document.getElementById("fill-tool"),
 		$eraseTool = document.getElementById("erase-tool"),
 		$highlightTool = document.getElementById("highlight-tool"),
 		$sampleTool = document.getElementById("sample-tool"),
 		$handTool = document.getElementById("hand-tool"),
+		$saveTool = document.getElementById("save-tool"),
+		$openTool = document.getElementById("open-tool"),
+		$newBoardTool = document.getElementById("new-tool"),
+		$copyTool = document.getElementById("copy-tool"),
+		$importTool = document.getElementById("import-tool"),
 		$toolSelect = document.getElementById("tool-select"),
 		$tools = document.getElementsByClassName("tool"),
 		$activeTool = null;
+	
+	//Forms
+	var $saveForm = document.getElementById("save-form");
 
 	//PURE JS elements
 	var tileTpl = document.createElement("div"),
@@ -34,6 +43,7 @@ window.onload = function(){
 		textureTpl = document.createElement("div")
 		tileHolder =  document.createDocumentFragment(), //'';
 		tileColorVal = $tileColor.value;
+
 
 	//Our standard tile
 	var defaultTile = {
@@ -70,8 +80,6 @@ window.onload = function(){
 
 	var paintTile = defaultPaintTile;
 
-	var NPCs = [];
-
 	//Our NPCs are basically a type of tile so we need all the same values to start with
 	var defaultNpc = {
 		id: 0,
@@ -96,11 +104,18 @@ window.onload = function(){
 		textures: []
 	};
 
+	//Our GAME Object will be the store of the GAME's state.
+	//If something exists in our game it should be in our GAME object
+	var GAME = {};
+
+	GAME.NPCs = [];
+
 	//Our main board object that knows it's own state
-	var board = {
+	GAME.board = {
 		id: 0,
-		height: 30,
-		width: 30,
+		name: 'New Board',
+		height: 20,
+		width: 20,
 		tiles: [],
 		dragging: false,
 		painting: false,
@@ -111,8 +126,10 @@ window.onload = function(){
 		maxPosY: (this.height * tile.tileSize)
 	};
 
+	
 	//Used for AStar Searches
-	var boardGraphArray = [];
+	GAME.boardGraphArray = [];
+
 	var currentPath = [];
 	var aStarStart = null;
 	var aStarEnd = null;
@@ -131,9 +148,7 @@ window.onload = function(){
 
 	//Setup some basic attributes for our tiles
 	tileTpl.setAttribute("class", defaultTile.classes);
-	
 	textureTpl.setAttribute("class", "dm-tile sprite");
-
 	npcTpl.setAttribute("class", defaultNpc.classes);
 	npcTpl.setAttribute("draggable", "true");
 	
@@ -166,33 +181,33 @@ window.onload = function(){
 		//"painting" means any of our single tile tools that have a drag / draw effect
 		switch($activeTool){
 			case $paintTool:
-				board.painting = true;
+				GAME.board.painting = true;
 				break;
 			case $fillTool:
-				board.painting = false;
+				GAME.board.painting = false;
 				break;
 			case $eraseTool:
-				board.painting = true;
+				GAME.board.painting = true;
 				break;
 			case $highlightTool:
-				board.painting = true;
+				GAME.board.painting = true;
 				break;
 			case $sampleTool:
-				board.painting = false;
+				GAME.board.painting = false;
 				break;
 			case $handTool:
-				board.painting = false;
+				GAME.board.painting = false;
 				break;
 		}
 
 	};
 
 	$map.onmouseup = function(e){
-		board.painting = false;
+		GAME.board.painting = false;
 	};
 
 	$map.onmouseleave = function(e){
-		board.painting = false;
+		GAME.board.painting = false;
 	};
 
 
@@ -214,18 +229,44 @@ window.onload = function(){
 	//Setup a new active tool
 	function setActiveTool($newTool){
 		//If we are changing our tool let's not be actively painting
-		board.painting = false;
+		GAME.board.painting = false;
 
-		$unActive = $toolSelect.querySelector('.active');
-		if($unActive){
-			$unActive.classList.remove("active");
+		//File Tools
+		switch($newTool){
+			case $saveTool:
+				saveBoard();
+			break;
+			case $openTool:
+
+			break;
+			case $newBoardTool:
+				
+					// var confirm = confirm('Are you sure?');
+					// board = defaultBoard;
+					// if(confirm){
+					// 	buildBoard();
+					// }
+				
+			break;
+			case $copyTool:
+
+			break;
+			case $importTool:
+
+			break;
+			default:
+				$unActive = $toolSelect.querySelector('.active');
+				if($unActive){
+					$unActive.classList.remove("active");
+				}
+				
+				$activeTool = $newTool;
+
+				$activeTool.classList.add("active");//.setAttribute("class", activeClass);
+
+				$gamearea.setAttribute("class", $activeTool.getAttribute('id'));
 		}
-		
-		$activeTool = $newTool;
 
-		$activeTool.classList.add("active");//.setAttribute("class", activeClass);
-
-		$gameArea.setAttribute("class", $activeTool.getAttribute('id'));
 	}
 	
 	/**
@@ -235,6 +276,7 @@ window.onload = function(){
 
 		//Create our board
 		buildBoard();
+		//loadBoard(7);
 
 		//Layout our tools
 		setupDmTools();
@@ -271,28 +313,33 @@ window.onload = function(){
 	 * NOTE: This might be DM only...unless everyone can paint?
 	 */
 	function buildBoard(){
-		//Build our board! //0 or 1 based?
-		for(var w = 0; w < board.width; w++){
-			board.tiles[w] = [];
-			NPCs[w] = [];
-			for(var h = 0; h < board.height; h++){	
 
-				
+		var boardSize = (GAME.board.width * defaultTile.tileSize) + 200; //padding
+
+		$gamearea.style.maxWidth = (boardSize + 20) +'px'; //extra space for scroll bar
+		$map.style.height = boardSize +'px';
+		$map.style.width = boardSize +'px';
+		
+		//Build our board! //0 or 1 based?
+		for(var w = 0; w < GAME.board.width; w++){
+			GAME.board.tiles[w] = [];
+			GAME.NPCs[w] = [];
+			for(var h = 0; h < GAME.board.height; h++){	
 
 				//Put our tile into our state board
-				board.tiles[w][h] = createTile(w,h);
+				GAME.board.tiles[w][h] = createTile(w,h);
 				
-				//Creating a bunch of random NPCs
+				//Creating a bunch of random GAME.NPCs
 				if( (w + h) % 10 == 0){
-					NPCs[w][h] = createNPC(w,h);
+					GAME.NPCs[w][h] = createNPC(w,h);
 				}
 
 				//tileHolder.appendChild(board.tiles[w][h].element);
 			}
 		}
 
-		displayBoard(board);
-		displayNPCs(NPCs);
+		displayBoard(GAME.board);
+		displayNPCs(GAME.NPCs);
 
 		//we need to build our graph array AFTER npcs have been added so we know if the tiles are passable
 		buildGraphArray();
@@ -383,7 +430,7 @@ window.onload = function(){
 	//Take action when moving your mouse accross the tile
 	function tileMouseMove(e, $element){
 		//&& (e.which === 1 || ev.touches)
-		if( board.painting ){
+		if( GAME.board.painting ){
 
 			switch($activeTool){
 				case $paintTool:
@@ -506,15 +553,15 @@ window.onload = function(){
 	//Build our AStar Graph for fast A* searching through our tiles
 	function buildGraphArray(){
 		//Our grid is read in the oppirite order we built it
-		for(var h = 0; h < board.height; h++){
-			boardGraphArray[h] = [];
-			for(var w = 0; w < board.width; w++){	
-				if (board.tiles[h][w].element.firstChild || ! board.tiles[h][w].passable) {
+		for(var h = 0; h < GAME.board.height; h++){
+			GAME.boardGraphArray[h] = [];
+			for(var w = 0; w < GAME.board.width; w++){	
+				if (GAME.board.tiles[h][w].element.firstChild || ! GAME.board.tiles[h][w].passable) {
 					//not passable
-					boardGraphArray[h][w] = 0;
+					GAME.boardGraphArray[h][w] = 0;
 				}else{
 					//passable
-					boardGraphArray[h][w] = 1;
+					GAME.boardGraphArray[h][w] = 1;
 				}
 			}
 		}
@@ -526,8 +573,8 @@ window.onload = function(){
 		if(path){
 			for(var p = 0; p < path.length; p++){
 				//console.log(board.tiles[path[p].x][path[p].y].element.classList);
-				board.tiles[path[p].x][path[p].y].element.classList.add('path');
-				currentPath.push(board.tiles[path[p].x][path[p].y].element);
+				GAME.board.tiles[path[p].x][path[p].y].element.classList.add('path');
+				currentPath.push(GAME.board.tiles[path[p].x][path[p].y].element);
 			}
 		}
 	}
@@ -545,7 +592,7 @@ window.onload = function(){
 
 		//We are using a Graph class that is bundled with our astar.js This Graph class allows us to use a heap to search the map space.
 		//https://briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated/
-		var boardGraph = new Graph(boardGraphArray);
+		var boardGraph = new Graph(GAME.boardGraphArray);
 
 		//Do we have both our points to check?
 		if(aStarStart && aStarEnd){
@@ -609,7 +656,7 @@ window.onload = function(){
 	function displayNPCs(npcs){
 		npcs.forEach(function(w) {
 			w.forEach(function(h) {
-				board.tiles[h.x][h.y].element.appendChild(h.element);
+				GAME.board.tiles[h.x][h.y].element.appendChild(h.element);
 			});
 		});
 
@@ -619,11 +666,11 @@ window.onload = function(){
 	function fillTiles($element){
 
 		var findTiles = [];
-		for(var w = 0; w < board.width; w++){
-			for(var h = 0; h < board.height; h++){
-				if($element.background === board.tiles[w][h].element.background){
+		for(var w = 0; w < GAME.board.width; w++){
+			for(var h = 0; h < GAME.board.height; h++){
+				if($element.background === GAME.board.tiles[w][h].element.background){
 					//If we set our background color here we only fill UP TO the location we clicked.
-					findTiles.push(board.tiles[w][h].element);
+					findTiles.push(GAME.board.tiles[w][h].element);
 				}
 			}
 		}
@@ -717,5 +764,64 @@ window.onload = function(){
 		$element.background = paintTile.background;
 
 	}
+
+
+	/**
+	 * TALK TO SERVER
+	 * 
+	 * 
+	 * 
+	 */
+/*
+	//Handle our board submission
+	$saveForm.onsubmit = function(e){
+		e.preventDefault();
+
+		var $boardName = document.getElementById("board-name");
+			$autoSave = document.getElementById("auto-save");
+
+		if($boardName.value && $boardName.value.length < 100){
+			GAME.board.name = $boardName.value;
+		}else if($boardName.value.length > 100){
+			GAME.board.name = $boardName.value.slice(0, 100);
+		}
+
+		saveBoard($autoSave.checked);
+
+		return false;
+	};
+
+	//Save our board for later retrival
+	function saveBoard(autosave){
+
+		//console.log(GAME.board);
+		$.post( WPURLS.templateUrl+"/external/save-board.php", {board: GAME.board.tiles, autosave: autosave}, function( data ) {
+			//console.log(data);
+			if(data.success){
+				//success
+				GAME.board.id = data.success;
+			}else{
+				//error
+			}
+		},'json');
+
+	}
+
+	//Save our board for later retrival
+	function loadBoard(board_id){
+		
+		$.get( WPURLS.templateUrl+"/external/get-board.php?board_id="+board_id, function( data ) {
+			//console.log(data);
+			if(data.success){
+				//success
+				//GAME.board = JSON.parse(data.success);
+				//console.log(data.success);
+				//buildBoard();
+			}else{
+				//error
+			}
+		},'json');
+	}
+	*/
 };
 </script>

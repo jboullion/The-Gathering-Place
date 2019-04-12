@@ -73,6 +73,11 @@
 			wp_enqueue_script('jquery.site', get_stylesheet_directory_uri().'/js/dev.js', 'jQuery', time(), true);
 		}
 
+		//Setup our templateUrl as a local variable
+		$translation_array = array( 'templateUrl' => get_stylesheet_directory_uri() );
+		//after wp_enqueue_script
+		wp_localize_script( 'jquery', 'WPURLS', $translation_array );
+
 	}
 
 	//putting Googlt Fonts in the footer improves pagespeed rankings
