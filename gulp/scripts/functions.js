@@ -132,3 +132,7 @@ function isMobileDevice() {
 
     //return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
+
+function isElement(element) {
+    return element instanceof Element || element instanceof HTMLDocument;  
+}

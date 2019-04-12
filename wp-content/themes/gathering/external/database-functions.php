@@ -48,5 +48,5 @@ function json_validate($string){
     }
 
     // everything is OK
-    return false;
+    return $result;
 }

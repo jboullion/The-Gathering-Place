@@ -12,9 +12,10 @@
 			<div class="tool-spacer"></div>
 			<div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" value="#526F35" class="fas fa-palette" /></div>
 			<div id="texture-tool" class="visual-tool" title="Texture" data-toggle="modal" data-target="#texture-modal"><i class="fas fa-images"></i></div>
+			<div class="tool-spacer"></div>
+			<div id="save-tool" class="visual-tool" title="Save" data-toggle="modal" data-target="#save-modal"><i class="fas fa-save"></i></div>
+				
 			<!--
-				<div class="tool-spacer"></div>
-				<div id="save-tool" class="visual-tool" title="Save" data-toggle="modal" data-target="#save-modal"><i class="fas fa-save"></i></div>
 				<div id="load-tool" class="visual-tool" title="Open"><i class="fas fa-folder-open"></i></div>
 				<div id="new-tool" class="visual-tool" title="New"><i class="fas fa-file-plus"></i></div>
 				<div id="copy-tool" class="visual-tool" title="Duplicate"><i class="fas fa-files-medical"></i></div>

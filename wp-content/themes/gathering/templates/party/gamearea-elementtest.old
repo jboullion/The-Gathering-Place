@@ -126,7 +126,8 @@ window.onload = function(){
 		maxPosY: (this.height * tile.tileSize)
 	};
 
-	
+	GAME.elements = [];
+
 	//Used for AStar Searches
 	GAME.boardGraphArray = [];
 
@@ -276,7 +277,7 @@ window.onload = function(){
 
 		//Create our board
 		buildBoard();
-		//loadBoard(27);
+		//loadBoard(26);
 
 		//Layout our tools
 		setupDmTools();
@@ -313,12 +314,6 @@ window.onload = function(){
 	 * NOTE: This might be DM only...unless everyone can paint?
 	 */
 	function buildBoard(){
-
-		var boardSize = (GAME.board.width * defaultTile.tileSize) + 200; //padding
-
-		$gamearea.style.maxWidth = (boardSize + 20) +'px'; //extra space for scroll bar
-		$map.style.height = boardSize +'px';
-		$map.style.width = boardSize +'px';
 		
 		//Build our board! //0 or 1 based?
 		for(var w = 0; w < GAME.board.width; w++){
@@ -328,6 +323,8 @@ window.onload = function(){
 
 				//Put our tile into our state board
 				GAME.board.tiles[w][h] = createTile(w,h);
+
+				createElement(GAME.board.tiles[w][h]);
 				
 				//Creating a bunch of random GAME.NPCs
 				if( (w + h) % 10 == 0){
@@ -338,6 +335,8 @@ window.onload = function(){
 			}
 		}
 
+		
+
 		displayBoard(GAME.board);
 		displayNPCs(GAME.NPCs);
 
@@ -345,84 +344,92 @@ window.onload = function(){
 		buildGraphArray();
 	}
 
+	//Create elements for our game board. Used when updating the board all at once. Like in loading
+	function createBoard(board){
+		//Build our board! //0 or 1 based?
+		for(var w = 0; w < board.width; w++){
+			for(var h = 0; h < board.height; h++){	
+
+				createElement(board.tiles[w][h]);
+
+			}
+		}
+
+		GAME.board = board;
+
+		displayBoard(GAME.board);
+
+		//we need to build our graph array AFTER npcs have been added so we know if the tiles are passable
+		buildGraphArray();
+	}
+
+	function createElement(tile){
+		if(! GAME.elements[tile.x]){
+			GAME.elements[tile.x] = [];
+		}
+
+		var tmpElement = tileTpl.cloneNode(true);
+
+		//Clone our default HTML element
+		tmpElement.x = tile.x;
+		tmpElement.y = tile.y;
+
+		//Give it a unique ID
+		tmpElement.setAttribute("id", 'tile-'+tile.x+'-'+tile.y);
+
+		tmpElement.type = tile.type;
+		tmpElement.background = tile.background;
+		//tile.element.setAttribute('data-background', tile.background);
+
+		tmpElement.ondrop = function(e){
+			e.preventDefault();
+
+			//Move whatever was dropped here
+			var data = e.dataTransfer.getData("text");
+			if(isElement(aStarStart)){
+				e.target.appendChild(aStarStart);
+			}
+			
+			//Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
+			aStarStart.x = this.x;
+			aStarStart.y = this.y;
+
+			//After we drop something we need to update our graph for aStar searches
+			buildGraphArray();
+			//clearAstarPath();
+		};
+
+		tmpElement.ondragover = function(e){
+			if (this.firstChild) {
+				// tile has a child element
+				// NOT empty
+			}else{
+				//This ALLOWs dropping here
+				//We only drop here when this tile has no children. No two things can occupy the same space
+				e.preventDefault();
+
+				throttleAstar(this);
+
+			}
+		};
+
+		tmpElement.onmousedown = function(e){
+			tileMouseDown(e, this);
+		};
+		tmpElement.onmousemove = function(e){
+			tileMouseMove(e, this);
+		};
+
+		GAME.elements[tile.x][tile.y] = tmpElement;
+	}
+
 	//Create a tile a a specific location
 	function createTile(x,y){
 		var tmpTile = _.clone(tile);
-
-			tmpTile.id++;
-			tmpTile.x = x;
-			tmpTile.y = y;
-
-			//Clone our default HTML element
-			tmpTile.element = tileTpl.cloneNode(true);
-			tmpTile.element.x = x;
-			tmpTile.element.y = y;
-
-			//Give it a unique ID
-			tmpTile.element.setAttribute("id", 'tile-'+x+'-'+y);
-
-			tmpTile.element.type = tmpTile.type;
-			tmpTile.element.background = tmpTile.background;
-			//tile.element.setAttribute('data-background', tile.background);
-
-			tmpTile.element.ondrop = function(e){
-				e.preventDefault();
-
-				//Move whatever was dropped here
-				var data = e.dataTransfer.getData("text");
-				e.target.appendChild(aStarStart);
-				
-				//Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
-				aStarStart.x = this.x;
-				aStarStart.y = this.y;
-
-				//After we drop something we need to update our graph for aStar searches
-				buildGraphArray();
-				clearAstarPath();
-			};
-
-			tmpTile.element.ondragover = function(e){
-				if (this.firstChild) {
-					// tile has a child element
-					// NOT empty
-				}else{
-					//This ALLOWs dropping here
-					//We only drop here when this tile has no children. No two things can occupy the same space
-					e.preventDefault();
-
-					throttleAstar(this);
-
-				}
-			};
-
-			//Setup a click listener on this tile
-			//tile.element.addEventListener('click', colorTile);
-			/*
-			if(isMobileDevice()){
-				//&& (e.which === 1 || ev.touches)
-				tmpTile.element.ontouchstart  = function(e){
-					tileMouseMove(e, this);
-				};
-
-				tmpTile.element.ontouchmove  = function(e){
-					tileMouseMove(e, this);
-				};
-			}else{
-				tmpTile.element.onmousedown = function(e){
-					tileMouseDown(e, this);
-				};
-				tmpTile.element.onmousemove = function(e){
-					tileMouseMove(e, this);
-				};
-			}
-			*/
-
-			tmpTile.element.onmousedown = function(e){
-				tileMouseDown(e, this);
-			};
-			tmpTile.element.onmousemove = function(e){
-				tileMouseMove(e, this);
-			};
+	
+		tmpTile.id++;
+		tmpTile.x = x;
+		tmpTile.y = y;
 
 		return tmpTile;
 	}
@@ -519,6 +526,7 @@ window.onload = function(){
 
 			tmpNPC.element.ondragend = function(e){
 				this.classList.remove("movement");
+				clearAstarPath();
 			};
 
 			//Setup a click listener on this tile
@@ -552,11 +560,11 @@ window.onload = function(){
 
 	//Build our AStar Graph for fast A* searching through our tiles
 	function buildGraphArray(){
-		//Our grid is read in the oppirite order we built it
+		//Our grid is read in the oppirite order we built it so HEIGHT first
 		for(var h = 0; h < GAME.board.height; h++){
 			GAME.boardGraphArray[h] = [];
 			for(var w = 0; w < GAME.board.width; w++){	
-				if (GAME.board.tiles[h][w].element.firstChild || ! GAME.board.tiles[h][w].passable) {
+				if (GAME.elements[h][w].firstChild || ! GAME.board.tiles[h][w].passable) {
 					//not passable
 					GAME.boardGraphArray[h][w] = 0;
 				}else{
@@ -573,8 +581,8 @@ window.onload = function(){
 		if(path){
 			for(var p = 0; p < path.length; p++){
 				//console.log(board.tiles[path[p].x][path[p].y].element.classList);
-				GAME.board.tiles[path[p].x][path[p].y].element.classList.add('path');
-				currentPath.push(GAME.board.tiles[path[p].x][path[p].y].element);
+				GAME.elements[path[p].x][path[p].y].classList.add('path');
+				currentPath.push(GAME.elements[path[p].x][path[p].y]);
 			}
 		}
 	}
@@ -590,6 +598,9 @@ window.onload = function(){
 		var path = [];
 		aStarEnd = $element;
 
+		//console.log('aStarEnd.x: '+aStarEnd.x);
+		//console.log('aStarEnd.y: '+aStarEnd.y);
+	
 		//We are using a Graph class that is bundled with our astar.js This Graph class allows us to use a heap to search the map space.
 		//https://briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated/
 		var boardGraph = new Graph(GAME.boardGraphArray);
@@ -638,12 +649,18 @@ window.onload = function(){
 
 	//Display a board object to the screen
 	function displayBoard(newBoard){
+		var boardSize = (GAME.board.width * defaultTile.tileSize) + 200; //padding
+
+		$gamearea.style.maxWidth = (boardSize + 20) +'px'; //extra space for scroll bar
+		$map.style.height = boardSize +'px';
+		$map.style.width = boardSize +'px';
+
 		tileHolder = document.createDocumentFragment();
 
 		for(var w = 0; w < newBoard.width; w++){
 			for(var h = 0; h < newBoard.height; h++){
 				//build our pure JS object before sticking it on the board
-				tileHolder.appendChild(newBoard.tiles[w][h].element);
+				tileHolder.appendChild(GAME.elements[w][h]);
 			}
 		}
 
@@ -656,7 +673,8 @@ window.onload = function(){
 	function displayNPCs(npcs){
 		npcs.forEach(function(w) {
 			w.forEach(function(h) {
-				GAME.board.tiles[h.x][h.y].element.appendChild(h.element);
+				GAME.elements[h.x][h.y].appendChild(h.element);
+				//GAME.board.tiles[h.x][h.y].element.appendChild(h.element);
 			});
 		});
 
@@ -668,9 +686,9 @@ window.onload = function(){
 		var findTiles = [];
 		for(var w = 0; w < GAME.board.width; w++){
 			for(var h = 0; h < GAME.board.height; h++){
-				if($element.background === GAME.board.tiles[w][h].element.background){
+				if($element.background === GAME.elements[w][h].background){
 					//If we set our background color here we only fill UP TO the location we clicked.
-					findTiles.push(board.tiles[w][h].element);
+					findTiles.push(GAME.elements[w][h]);
 				}
 			}
 		}
@@ -762,18 +780,16 @@ window.onload = function(){
 		}
 
 		$element.background = paintTile.background;
+		
+		if($element !== $currentTile){
+			GAME.board.tiles[$element.x][$element.y].type = $element.type;
+			GAME.board.tiles[$element.x][$element.y].background = $element.background;
+		}
 
 	}
 
 
 	/**
-	 * TALK TO SERVER
-	 * 
-	 * 
-	 * 
-	 */
-
-	 /**
 	 * TALK TO SERVER
 	 * 
 	 * 
@@ -800,6 +816,8 @@ window.onload = function(){
 
 	//Save our board for later retrival
 	function saveBoard(autosave){
+
+		console.log(GAME.board);
 
 		//console.log(GAME.board);
 		$.post( WPURLS.templateUrl+"/external/save-board.php", {autosave, board: JSON.stringify(GAME.board) }, function( data ) {
@@ -818,68 +836,17 @@ window.onload = function(){
 	function loadBoard(board_id){
 
 		$.post( WPURLS.templateUrl+"/external/get-board.php", {board_id}, function( data ) {
-			//console.log(data);
+			console.log(data);
 			if(! data.error){
 				//success
-				GAME.board = JSON.parse(data);
+				//GAME.board = data;
 				//console.log(data.success);
-				buildBoard();
+				createBoard(data);
 			}else{
 				//error
 			}
 		},'json');
 	}
-	
-/*
-	//Handle our board submission
-	$saveForm.onsubmit = function(e){
-		e.preventDefault();
 
-		var $boardName = document.getElementById("board-name");
-			$autoSave = document.getElementById("auto-save");
-
-		if($boardName.value && $boardName.value.length < 100){
-			GAME.board.name = $boardName.value;
-		}else if($boardName.value.length > 100){
-			GAME.board.name = $boardName.value.slice(0, 100);
-		}
-
-		saveBoard($autoSave.checked);
-
-		return false;
-	};
-
-	//Save our board for later retrival
-	function saveBoard(autosave){
-
-		//console.log(GAME.board);
-		$.post( WPURLS.templateUrl+"/external/save-board.php", {board: GAME.board.tiles, autosave: autosave}, function( data ) {
-			//console.log(data);
-			if(data.success){
-				//success
-				GAME.board.id = data.success;
-			}else{
-				//error
-			}
-		},'json');
-
-	}
-
-	//Save our board for later retrival
-	function loadBoard(board_id){
-		
-		$.get( WPURLS.templateUrl+"/external/get-board.php?board_id="+board_id, function( data ) {
-			//console.log(data);
-			if(data.success){
-				//success
-				//GAME.board = JSON.parse(data.success);
-				//console.log(data.success);
-				//buildBoard();
-			}else{
-				//error
-			}
-		},'json');
-	}
-	*/
 };
 </script>
