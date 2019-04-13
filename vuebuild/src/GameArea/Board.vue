@@ -1,11 +1,7 @@
 <template>
-  <div id="board-wrapper" oncontextmenu="return false;">
-    <h1>Board Name: {{ boardName }}</h1>
-    <hr />
-    <button @click="changeName">Change Name</button>
-    <hr />
-
-    <Tile></Tile>
+  <div id="board" oncontextmenu="return false;">
+    
+    <Tile v-for="id in tiles" v-bind:key="id" v-bind:count="id"></Tile>
   </div>
 </template>
 
@@ -15,7 +11,10 @@ import Tile from "./Tile.vue";
 export default {
   data () {
     return {
-      boardName: 'First Board'
+      boardName: 'First Board',
+      tiles: (10 * 10),
+      width: 10,
+      height: 10
     }
   },
   methods: {
@@ -30,6 +29,12 @@ export default {
 </script>
 
 <style>
-
+  #board { 
+    width: 320px;
+    padding: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
 
 </style>

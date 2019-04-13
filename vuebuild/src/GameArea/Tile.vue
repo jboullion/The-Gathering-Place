@@ -1,11 +1,12 @@
 <template>
-  <div class="tile" :id="id" @click="changeColor" v-bind:style="{ backgroundColor: color }"></div>
+  <div class="tile" :id="id" @click="changeColor" v-bind:style="{ backgroundColor: color }" v-bind:title="count"></div>
 </template>
 
 <script>
 import Tile from "./Tile.vue";
 
 export default {
+  props: ['count'],
   data () {
     return {
       x: 0,
@@ -39,6 +40,7 @@ export default {
   height: 32px;
   width: 32px;
   position: relative;
+  box-sizing: border-box;
 }
 
 .tile:before {
