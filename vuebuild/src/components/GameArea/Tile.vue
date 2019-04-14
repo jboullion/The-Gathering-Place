@@ -1,12 +1,12 @@
 <template>
-  <div class="tile" :id="id" @click="changeColor" v-bind:style="{ backgroundColor: color }" v-bind:title="count"></div>
+  <div class="tile" :id="id" @mousedown="updateColor" :style="{ backgroundColor: color }" v-bind:title="count"></div>
 </template>
 
 <script>
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['count', 'defaults'],
+  props: ['count', 'defaults', 'currentColor'],
   data () {
     return {
       x: 0,
@@ -15,15 +15,16 @@ export default {
       passable: true,
       empty: true,
       type: 'color', //color / texture
-      color: '#526F35', //hex code
+      color: '', //hex code
       background: '', //background texture
       tileSize: 32,
       textureclass: "sprite"
     }
   },
   methods: {
-    changeColor(){
-      this.color = '#FF0000';
+    updateColor(e){
+      //console.log(e);
+      this.color = this.currentColor;//'#FF0000';
     }
   },
   components: {

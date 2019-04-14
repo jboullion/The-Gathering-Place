@@ -1,7 +1,7 @@
 <template>
   <div id="board" oncontextmenu="return false;">
-    <div id="current-tile" class="tile" :style="{ backgroundColor: defaults.color }"></div>
-    <Tile v-for="id in numTiles" :key="id" :count="id"></Tile>
+    <div id="current-tile" class="tile" ></div>
+    <Tile v-for="id in numTiles" :key="id" :count="id" :currentColor="currentColor"></Tile>
   </div>
 </template>
 
@@ -9,7 +9,23 @@
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['defaults'],
+  props: {
+    defaults: {
+      type: Object,
+      required: true,
+      // default:function(){
+      //   return {
+
+      //   }
+      // }
+    },
+    currentColor: {
+      type: String,
+      required: true,
+      default: '#FFFFFF'
+    }
+
+  },
   data () {
     return {
       boardName: 'First Board',
@@ -17,6 +33,7 @@ export default {
       width: 10,
       height: 10,
       tiles: []
+
     }
   },
   methods: {

@@ -1,8 +1,8 @@
 <template>
   <div id="gamearea" class="hand-tool">
     <div id="gamearea-map-wrapper">
-      <Tools :defaults="defaults"></Tools>
-      <Board :defaults="defaults"></Board>
+      <Tools :defaults="defaults" :currentColor="currentColor" @updateCurrentColor="currentColor = $event"></Tools>
+      <Board :defaults="defaults" :currentColor="currentColor"></Board>
       
     </div>
   </div>
@@ -18,7 +18,7 @@ export default {
       defaults: {
         color: '#526F35'
       }, 
-
+      currentColor: '#526F35'
     }
   },
   components: {

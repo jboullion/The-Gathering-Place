@@ -423,6 +423,19 @@ window.onload = function(){
 				tileMouseMove(e, this);
 			};
 
+			/*
+			tmpTile.element.touchstart = function(e){
+				GAME.board.painting = true;
+			};
+			tmpTile.element.ontouchmove = function(e){
+				tileMouseMove(e, this);
+			};
+			tmpTile.element.touchend = function(e){
+				GAME.board.painting = false;
+			};
+			*/
+			
+
 		return tmpTile;
 	}
 

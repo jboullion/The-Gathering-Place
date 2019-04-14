@@ -2,7 +2,7 @@
 <div id="dm-tools" class="user-game-actions">
     <div id="tool-select" class="dm-tool">
         <div id="tool-holder" class="dm-holder">
-            <div id="current-tile" class="tile" style="background-color: #526F35"></div>
+            <div id="current-tile" class="tile" :style="{ backgroundColor: currentColor }"></div>
 
             <div class="tool-spacer"></div>
             
@@ -15,7 +15,7 @@
             
             <div class="tool-spacer"></div>
            
-            <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" value="#526F35" class="fas fa-palette" /></div>
+            <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" @change="updateCurrentColor" v-model="currentColor" class="fas fa-palette" /></div>
             <div id="texture-tool" class="visual-tool" title="Texture" data-toggle="modal" data-target="#texture-modal"><i class="fas fa-images"></i></div>
            
             <div class="tool-spacer"></div>
@@ -41,16 +41,19 @@
 //import Tile from "./Tile.vue";
 
 export default {
-  props: ['defaults'],
+  props: ['defaults', 'currentColor'],
   data () {
     return {
 
     }
   },
   methods: {
-
+      updateCurrentColor({ type, target }){
+          this.$emit('updateCurrentColor', target.value);
+      }
   },
   components: {
+
   }
 }
 </script>
