@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { eventBus } from '../../main.js'
+
 import Tile from "./Tile.vue";
 
 export default {

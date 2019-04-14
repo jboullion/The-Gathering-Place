@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { eventBus } from '../../main.js'
+
 import Tile from "./Tile.vue";
 
 export default {
@@ -27,6 +29,7 @@ export default {
       this.color = this.currentColor;//'#FF0000';
     }
   },
+  
   components: {
   }
 }

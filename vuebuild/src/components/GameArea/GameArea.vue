@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { eventBus } from '../../main.js'
+
 import Board from "./Board.vue";
 import Tools from "./Tools.vue";
 
@@ -29,6 +31,12 @@ export default {
   components: {
     Board,
     'Tools': Tools
+  },
+  created(){
+    eventBus.$on('activateTool', (activeTool) => {
+      console.log(activeTool);
+      this.activeTool = activeTool;
+    });
   },
   methods: {
     changeColor(){

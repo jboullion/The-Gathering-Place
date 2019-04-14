@@ -5,8 +5,14 @@
             <div id="current-tile" class="tile" :style="{ backgroundColor: currentColor }"></div>
 
             <div class="tool-spacer"></div>
+<!--
+            <HandTool :activeTool="activeTool"></HandTool>
+            <PaintTool :activeTool="activeTool"></PaintTool>
+-->
+     
+            <Tool v-for="(tool, key) in tools" :key="key" :activeTool="activeTool" :tool="tool"></Tool>
 
-            <Tool v-for="(tool, key) in tools" :key="key" :tool="tool"></Tool>
+
             <!--
             <div id="hand-tool" class="tool active" title="Normal"><i class="fas fa-hand-paper"></i></div>
             <div id="paint-tool" class="tool" title="Paint"><i class="fas fa-fw fa-paint-roller"></i></div>
@@ -41,19 +47,44 @@
 </template>
 
 <script>
+/**
+ * TODO: I might need to setup a different component for EACH tool
+ * 
+ *  
+ */
+
 import Tool from "./Tool.vue";
+
+/*
+import HandTool from "./Tools/HandTool.vue";
+import PaintTool from "./Tools/PaintTool.vue";
+*/
 
 export default {
   props: ['defaults', 'currentColor', 'activeTool'],
   data () {
     return {
+
         tools: [
             {
                 name: 'hand',
                 title: 'Normal',
                 icon: 'hand-paper',
                 visual: 0,
-                active: 1
+                active: 1,
+                toolFunction(){
+                    console.log('hand function');
+                }
+            },
+            {
+                name: 'paint',
+                title: 'Paint',
+                icon: 'paint-roller',
+                visual: 0,
+                active: 0,
+                toolFunction(){
+                    console.log('paint function');
+                }
             }
         ]
     }
@@ -64,7 +95,9 @@ export default {
       }
   },
   components: {
-
+        Tool,
+    //   HandTool,
+    //   PaintTool
   }
 }
 </script>
@@ -97,8 +130,9 @@ export default {
 	width: 32px;
 	height: 32px;
 	text-align: center;
-	padding: 0.7rem;
-	position: relative;
+	padding: 5px;
+    position: relative;
+    font-size: 16px;
 }
 
 #tool-select .tool.active, 
@@ -111,7 +145,7 @@ export default {
 #tool-select .tool i, 
 .visual-tool i {
 	display: block;
-	font-size: 1.6rem;
+	
 }
 
 .tool input[type=color],
@@ -132,4 +166,5 @@ export default {
 	height: 32px;
 	width: 10px;
 }
+
 </style>

@@ -1,67 +1,40 @@
 <template>
-    <div :id="tool.name+'-tool'" :class="{ active: tool.active, 'tool': !tool.visual, 'visual-tool': tool.visual }" :title="tool.title"><i :class="['fas fa-' + tool.icon]"></i></div>
+   <div 
+		:id="tool.name+'-tool'" 
+		class="tool"
+		:class="{ active: (activeTool==tool.name)}" 
+		:title="tool.name"
+		@click="setActive">
+			<i :class="setClass"></i>
+		</div>
 </template>
 
 <script>
-import Tool from "./Tool.vue";
+import { eventBus } from '../../main.js'
 
 export default {
-  props: ['tool'],
+  props: ['activeTool', 'tool', 'toolFunction'],
   data () {
     return {
+        name: 'paint',
+        isActive: false
     }
   },
   methods: {
-      updateCurrentColor({ type, target }){
-          this.$emit('updateCurrentColor', target.value);
-      }
+    setActive(){
+        this.isActive = true;
+				eventBus.$emit('activateTool', this.tool.name);
+				this.tool.toolFunction();
+		}
   },
-  components: {
-
+  computed: {
+		setClass(){
+			return "fas fa-fw fa-"+this.tool.icon;
+		}
   }
 }
 </script>
 
 <style scoped>
-#tool-select .tool, 
- #tool-select .visual-tool {
-	cursor: pointer;
-	width: 32px;
-	height: 32px;
-	text-align: center;
-	padding: 0.7rem;
-	position: relative;
-}
 
-#tool-select .tool.active, 
-#tool-select .tool:hover, 
-#tool-select .visual-tool.active,
-#tool-select .visual-tool:hover {
-	background-color: #98c4f3;
-}
-
-#tool-select .tool i, 
-.visual-tool i {
-	display: block;
-	font-size: 1.6rem;
-}
-
-.tool input[type=color],
-.visual-tool input[type=color] {
-	background-color: transparent;
-	border: 0;
-	cursor: pointer;
-	position: absolute;
-	top: 1px;
-	left: 1px;
-	font-size: 1.6rem;
-	padding: 6px;
-	height: 30px;
-	width: 30px;
-}
-
- #tool-select .tool-spacer {
-	height: 32px;
-	width: 10px;
-}
 </style>
