@@ -1221,3 +1221,9 @@ FileETag None
 #     RewriteCond %{REQUEST_FILENAME} !-f
 #     RewriteRule ^(.+)\.(\w+)\.(bmp|css|cur|gif|ico|jpe?g|m?js|png|svgz?|webp|webmanifest)$ $1.$3 [L]
 # </IfModule>
+
+
+
+
+# When passing our board we can send more than 1000 (default) posts
+# php_value max_input_vars 3000

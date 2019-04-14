@@ -1,26 +1,39 @@
 <template>
   <div id="gamearea" class="hand-tool">
     <div id="gamearea-map-wrapper">
-      <Board></Board>
+      <Tools :defaults="defaults"></Tools>
+      <Board :defaults="defaults"></Board>
+      
     </div>
   </div>
 </template>
 
 <script>
 import Board from "./Board.vue";
+import Tools from "./Tools.vue";
 
 export default {
   data () {
     return {
+      defaults: {
+        color: '#526F35'
+      }, 
+
     }
   },
   components: {
-    'Board': Board
+    Board,
+    'Tools': Tools
+  },
+  methods: {
+    changeColor(){
+      //this.defaults.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+    }
   }
 }
 </script>
 
-<style>
+<style scoped>
 #gamearea {
   position: relative;
 	max-width: none; 

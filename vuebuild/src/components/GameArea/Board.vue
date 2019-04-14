@@ -1,7 +1,7 @@
 <template>
   <div id="board" oncontextmenu="return false;">
-    
-    <Tile v-for="id in tiles" v-bind:key="id" v-bind:count="id"></Tile>
+    <div id="current-tile" class="tile" :style="{ backgroundColor: defaults.color }"></div>
+    <Tile v-for="id in numTiles" :key="id" :count="id"></Tile>
   </div>
 </template>
 
@@ -9,12 +9,14 @@
 import Tile from "./Tile.vue";
 
 export default {
+  props: ['defaults'],
   data () {
     return {
       boardName: 'First Board',
-      tiles: (10 * 10),
+      numTiles: (10 * 10),
       width: 10,
-      height: 10
+      height: 10,
+      tiles: []
     }
   },
   methods: {
@@ -28,13 +30,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
   #board { 
     width: 320px;
     padding: 100px;
     display: flex;
     flex-wrap: wrap;
     overflow: hidden;
+    box-sizing: content-box;
   }
 
 </style>
