@@ -6,7 +6,10 @@
       :currentColor="currentColor" 
       :activeTool="activeTool"
       @updateCurrentColor="currentColor = $event"></Tools>
-      <Board :defaults="defaults" :currentColor="currentColor"></Board>
+      <Board 
+      :defaults="defaults" 
+      :currentColor="currentColor"
+      :activeTool="activeTool"></Board>
       
     </div>
   </div>
@@ -34,7 +37,6 @@ export default {
   },
   created(){
     eventBus.$on('activateTool', (activeTool) => {
-      console.log(activeTool);
       this.activeTool = activeTool;
     });
   },

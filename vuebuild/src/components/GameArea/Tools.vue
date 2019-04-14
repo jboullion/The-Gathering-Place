@@ -73,7 +73,7 @@ export default {
                 visual: 0,
                 active: 1,
                 toolFunction(){
-                    console.log('hand function');
+                    //console.log('hand function');
                 }
             },
             {
@@ -83,7 +83,7 @@ export default {
                 visual: 0,
                 active: 0,
                 toolFunction(){
-                    console.log('paint function');
+                    //console.log('paint function');
                 }
             }
         ]

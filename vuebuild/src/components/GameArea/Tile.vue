@@ -1,14 +1,20 @@
 <template>
-  <div class="tile" :id="id" @mousedown="updateColor" :style="{ backgroundColor: color }" v-bind:title="count"></div>
+  <div class="tile" 
+  @mousedown="mouseDown" 
+  @mousemove="mouseMove" 
+  :style="{ backgroundColor: color }" 
+ ></div>
 </template>
 
 <script>
+import _ from 'lodash'
+
 import { eventBus } from '../../main.js'
 
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['count', 'defaults', 'currentColor'],
+  props: ['currentColor', 'activeTool', 'painting'],
   data () {
     return {
       x: 0,
@@ -16,17 +22,57 @@ export default {
       id: 'tile-'+this.x+'-'+this.y,
       passable: true,
       empty: true,
+      name: 'Empty',
+      mutablePainting: this.painting,
       type: 'color', //color / texture
       color: '', //hex code
       background: '', //background texture
       tileSize: 32,
-      textureclass: "sprite"
+      textureclass: "sprite",
+      //throttlePaint: _.throttle(this.paint, 107),
+      throttlePaint: _.throttle( function (color) {
+        this.paint(color);
+      },1000)
+
     }
   },
   methods: {
-    updateColor(e){
-      //console.log(e);
-      this.color = this.currentColor;//'#FF0000';
+    mouseDown(e){
+
+      switch(this.activeTool){
+        case 'hand':
+
+          break;
+        case 'paint':
+          //console.log(e);
+          this.mutablePainting = true;
+          eventBus.$emit('isPainting', this.mutablePainting);
+          //this.paint(this.currentColor)
+          this.throttlePaint(this.currentColor);
+          break;
+      }
+      
+    },
+    mouseMove(e){
+      switch(this.activeTool){
+        case 'hand':
+
+          break;
+        case 'paint':
+          //console.log(e);
+          if(this.painting){
+            //this.paint(this.currentColor)
+            this.throttlePaint(this.currentColor);
+          }
+          break;
+      }
+    },
+    mouseUp(e){
+      this.mutablePainting = false;
+      eventBus.$emit('isPainting', this.mutablePainting);
+    },
+    paint(color){
+      this.color = color;
     }
   },
   
