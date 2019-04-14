@@ -1,7 +1,11 @@
 <template>
   <div id="gamearea" class="hand-tool">
     <div id="gamearea-map-wrapper">
-      <Tools :defaults="defaults" :currentColor="currentColor" @updateCurrentColor="currentColor = $event"></Tools>
+      <Tools 
+      :defaults="defaults" 
+      :currentColor="currentColor" 
+      :activeTool="activeTool"
+      @updateCurrentColor="currentColor = $event"></Tools>
       <Board :defaults="defaults" :currentColor="currentColor"></Board>
       
     </div>
@@ -18,7 +22,8 @@ export default {
       defaults: {
         color: '#526F35'
       }, 
-      currentColor: '#526F35'
+      currentColor: '#526F35',
+      activeTool: 'hand'
     }
   },
   components: {
@@ -28,7 +33,7 @@ export default {
   methods: {
     changeColor(){
       //this.defaults.color = '#'+Math.floor(Math.random()*16777215).toString(16);
-    }
+    },
   }
 }
 </script>

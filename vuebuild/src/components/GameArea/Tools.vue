@@ -5,7 +5,9 @@
             <div id="current-tile" class="tile" :style="{ backgroundColor: currentColor }"></div>
 
             <div class="tool-spacer"></div>
-            
+
+            <Tool v-for="(tool, key) in tools" :key="key" :tool="tool"></Tool>
+            <!--
             <div id="hand-tool" class="tool active" title="Normal"><i class="fas fa-hand-paper"></i></div>
             <div id="paint-tool" class="tool" title="Paint"><i class="fas fa-fw fa-paint-roller"></i></div>
             <div id="fill-tool" class="tool" title="Fill"><i class="fas fa-fw fa-fill-drip"></i></div>
@@ -21,6 +23,7 @@
             <div class="tool-spacer"></div>
             
             <div id="new-tool" class="tool" title="New"><i class="fas fa-file-plus"></i></div>
+            -->
             <!--
                 <div class="tool-spacer"></div>
                 <div id="save-tool" class="visual-tool" title="Save" data-toggle="modal" data-target="#save-modal"><i class="fas fa-save"></i></div>
@@ -38,13 +41,21 @@
 </template>
 
 <script>
-//import Tile from "./Tile.vue";
+import Tool from "./Tool.vue";
 
 export default {
-  props: ['defaults', 'currentColor'],
+  props: ['defaults', 'currentColor', 'activeTool'],
   data () {
     return {
-
+        tools: [
+            {
+                name: 'hand',
+                title: 'Normal',
+                icon: 'hand-paper',
+                visual: 0,
+                active: 1
+            }
+        ]
     }
   },
   methods: {
