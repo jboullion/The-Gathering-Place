@@ -105,6 +105,16 @@ export default {
                 toolFunction(){
                     //console.log('erase function');
                 }
+            },
+            {
+                name: 'highlight',
+                title: 'Highlight',
+                icon: 'highlighter',
+                visual: 0,
+                active: 0,
+                toolFunction(){
+                    //console.log('erase function');
+                }
             }
         ]
     }

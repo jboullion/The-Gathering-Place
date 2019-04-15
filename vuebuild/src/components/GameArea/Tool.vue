@@ -3,7 +3,7 @@
 		:id="tool.name+'-tool'" 
 		class="tool"
 		:class="{ active: (activeTool==tool.name)}" 
-		:title="tool.name"
+		:title="tool.title"
 		@click="setActive">
 			<i :class="setClass"></i>
 		</div>
