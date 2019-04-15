@@ -115,6 +115,16 @@ export default {
                 toolFunction(){
                     //console.log('erase function');
                 }
+            },
+            {
+                name: 'sample',
+                title: 'Sample',
+                icon: 'eye-dropper',
+                visual: 0,
+                active: 0,
+                toolFunction(){
+                    //console.log('erase function');
+                }
             }
         ]
     }

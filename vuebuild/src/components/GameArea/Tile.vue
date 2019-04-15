@@ -83,6 +83,9 @@ export default {
           eventBus.$emit('isPainting', this.mutablePainting);
           this.throttleHighlight();
           break;
+        case 'sample':
+          eventBus.$emit('newSample', {type: this.type, color:this.color});
+          break;
       }
       
     },

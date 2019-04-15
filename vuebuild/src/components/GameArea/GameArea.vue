@@ -39,6 +39,12 @@ export default {
     eventBus.$on('activateTool', (activeTool) => {
       this.activeTool = activeTool;
     });
+
+    eventBus.$on('newSample', (sample) => {
+      if('color' == sample.type){
+        this.currentColor = sample.color;
+      }
+    });
   },
   methods: {
     changeColor(){
