@@ -14,7 +14,7 @@ import { eventBus } from '../../main.js'
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['currentColor', 'activeTool', 'painting'],
+  props: ['currentColor', 'activeTool', 'painting', 'fill'],
   data () {
     return {
       x: 0,
@@ -44,11 +44,14 @@ export default {
 
           break;
         case 'paint':
-          //console.log(e);
+          console.log('down fill');
           this.mutablePainting = true;
           eventBus.$emit('isPainting', this.mutablePainting);
           //this.paint(this.currentColor)
           this.throttlePaint(this.currentColor);
+          break;
+        case 'fill':
+          eventBus.$emit('fill', {type: this.type, color:this.color});
           break;
       }
       
@@ -75,7 +78,14 @@ export default {
       this.color = color;
     }
   },
-  
+  created(){
+    //Fill every tile that matches the tile being filled
+    eventBus.$on('fill', (fill) => {
+      if('color' == fill.type && this.color == fill.color){
+        this.paint(this.currentColor);
+      }
+    });
+  },
   components: {
   }
 }

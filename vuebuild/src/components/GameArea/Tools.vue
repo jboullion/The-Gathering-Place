@@ -85,6 +85,16 @@ export default {
                 toolFunction(){
                     //console.log('paint function');
                 }
+            },
+            {
+                name: 'fill',
+                title: 'Fill',
+                icon: 'fill-drip',
+                visual: 0,
+                active: 0,
+                toolFunction(){
+                    console.log('fill function');
+                }
             }
         ]
     }

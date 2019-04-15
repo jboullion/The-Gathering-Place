@@ -7,7 +7,8 @@
     <Tile v-for="id in numTiles" :key="id" 
     :currentColor="currentColor" 
     :activeTool="activeTool"
-    :painting="painting"></Tile>
+    :painting="painting"
+    ></Tile>
   </div>
 </template>
 
