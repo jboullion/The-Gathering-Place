@@ -29,7 +29,6 @@ export default {
       background: '', //background texture
       tileSize: 32,
       textureclass: "sprite",
-      //throttlePaint: _.throttle(this.paint, 107),
       throttlePaint: _.throttle( function (color) {
         this.paint(color);
       },1000)
@@ -44,14 +43,17 @@ export default {
 
           break;
         case 'paint':
-          console.log('down fill');
           this.mutablePainting = true;
           eventBus.$emit('isPainting', this.mutablePainting);
-          //this.paint(this.currentColor)
           this.throttlePaint(this.currentColor);
           break;
         case 'fill':
           eventBus.$emit('fill', {type: this.type, color:this.color});
+          break;
+        case 'erase':
+          this.mutablePainting = true;
+          eventBus.$emit('isPainting', this.mutablePainting);
+          this.paint('');
           break;
       }
       
@@ -62,10 +64,13 @@ export default {
 
           break;
         case 'paint':
-          //console.log(e);
           if(this.painting){
-            //this.paint(this.currentColor)
             this.throttlePaint(this.currentColor);
+          }
+          break;
+        case 'erase':
+          if(this.painting){
+            this.throttlePaint('');
           }
           break;
       }

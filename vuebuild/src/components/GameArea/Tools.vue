@@ -93,7 +93,17 @@ export default {
                 visual: 0,
                 active: 0,
                 toolFunction(){
-                    console.log('fill function');
+                    //console.log('fill function');
+                }
+            },
+            {
+                name: 'erase',
+                title: 'Erase',
+                icon: 'eraser',
+                visual: 0,
+                active: 0,
+                toolFunction(){
+                    //console.log('erase function');
                 }
             }
         ]
