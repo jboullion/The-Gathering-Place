@@ -14,7 +14,7 @@
 
             <div class="tool-spacer"></div>
 
-            <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" @change="updateCurrentColor" v-model="currentColor" class="fas fa-palette" /></div>
+            <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" @change="updateCurrentColor" v-model="mutatedCurrentColor" class="fas fa-palette" /></div>
             <div id="texture-tool" class="visual-tool" title="Texture" data-toggle="modal" data-target="#texture-modal"><i class="fas fa-images"></i></div>
            
             <!--
@@ -68,6 +68,7 @@ export default {
   props: ['defaults', 'currentColor', 'activeTool'],
   data () {
     return {
+        mutatedCurrentColor: this.currentColor,
         tools: [
             {
                 name: 'hand',
