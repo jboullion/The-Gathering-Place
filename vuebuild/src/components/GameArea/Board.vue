@@ -4,11 +4,8 @@
   @mouseup="mouseUp"
   @mouseleave="mouseLeave">
     <Tile v-for="id in numTiles" :key="id" 
-    :currentColor="currentColor" 
     :activeTool="activeTool"
-    :painting="painting"
-    :backgroundType="backgroundType"
-    :activeTexture="activeTexture"
+    :paint="paint"
     ></Tile>
   </div>
 </template>
@@ -29,26 +26,20 @@ export default {
       //   }
       // }
     },
-    currentColor: {
-      type: String,
+    paint: {
+      type: Object,
       required: true,
-      default: '#FFFFFF'
+      // default:function(){
+      //   return {
+
+      //   }
+      // }
     },
     activeTool: {
       type: String,
       required: true,
       default: 'hand'
     },
-    backgroundType: {
-      type: String,
-      required: true,
-      default: 'color'
-    },
-    activeTexture: {
-      type: String,
-      required: true,
-      default: ''
-    }
   },
   data () {
     return {
@@ -57,7 +48,6 @@ export default {
       width: 10,
       height: 10,
       tiles: [],
-      painting: false
     }
   },
   methods: {
@@ -65,16 +55,14 @@ export default {
       this.boardName = 'Board of Awesome';
     },
     mouseUp(e){
-      this.painting = false;
+      eventBus.$emit('isPainting', false);
     },
     mouseLeave(e){
-      this.painting = false;
+      eventBus.$emit('isPainting', false);
     }
   }, 
   created(){
-    eventBus.$on('isPainting', (painting) => {
-      this.painting = painting;
-    });
+    
   },
   components: {
     'Tile': Tile

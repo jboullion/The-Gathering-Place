@@ -3,17 +3,13 @@
     <div id="gamearea-map-wrapper">
       <Tools 
       :defaults="defaults" 
-      :currentColor="currentColor" 
       :activeTool="activeTool"
-      :activeTexture="activeTexture"
-      :backgroundType="backgroundType"
+      :paint="paint"
       @updateCurrentColor="updateCurrentColor"></Tools>
       <Board 
       :defaults="defaults" 
-      :currentColor="currentColor"
       :activeTool="activeTool"
-      :backgroundType="backgroundType"
-      :activeTexture="activeTexture"></Board>
+      :paint="paint"></Board>
       
     </div>
     <Textures></Textures>
@@ -33,10 +29,13 @@ export default {
       defaults: {
         color: '#526F35'
       }, 
-      backgroundType: 'color', // texture
-      currentColor: '#526F35',
-      activeTexture: '',
       activeTool: 'hand',
+      paint: {
+        backgroundType: 'color', // texture
+        currentColor: '#526F35',
+        activeTexture: '',
+        painting: false
+      }
     }
   },
   components: {
@@ -50,21 +49,25 @@ export default {
     });
 
     eventBus.$on('activateTexture', (activeTexture) => {
-      this.activeTexture = activeTexture;
-      this.backgroundType = 'texture';
+      this.paint.activeTexture = activeTexture;
+      this.paint.backgroundType = 'texture';
     });
 
     eventBus.$on('newSample', (sample) => {
       if('color' == sample.type){
-        this.currentColor = sample.color;
-        this.backgroundType = 'color';
+        this.paint.currentColor = sample.color;
+        this.paint.backgroundType = 'color';
       }
+    });
+
+    eventBus.$on('isPainting', (painting) => {
+      this.paint.painting = painting;
     });
   },
   methods: {
     updateCurrentColor(color){
-      this.currentColor = color;
-      this.backgroundType = 'color';
+      this.paint.currentColor = color;
+      this.paint.backgroundType = 'color';
     },
   }
 }

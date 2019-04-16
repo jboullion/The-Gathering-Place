@@ -17,7 +17,7 @@ import { eventBus } from '../../main.js'
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['currentColor', 'activeTool', 'painting', 'fill', 'backgroundType', 'activeTexture'],
+  props: ['activeTool', 'paint'],
   data () {
     return {
       x: 0,
@@ -26,14 +26,14 @@ export default {
       passable: true,
       empty: true,
       name: 'Empty',
-      mutablePainting: this.painting,
+      mutablePainting: this.paint.painting,
       type: 'color', //color / texture
       color: '', //hex code
       texture: '', //background texture
       highlighted: false,
       tileSize: 32,
       throttlePaint: _.throttle( function (color) {
-        this.paint(color);
+        this.tilePaint(color);
       },1000),
       throttleHighlight: _.throttle( function () {
         this.highlight();
@@ -69,7 +69,7 @@ export default {
         case 'paint':
           this.mutablePainting = true;
           eventBus.$emit('isPainting', this.mutablePainting);
-          this.throttlePaint(this.currentColor);
+          this.throttlePaint(this.paint.currentColor);
           break;
         case 'fill':
           eventBus.$emit('fill', {type: this.type, color:this.color, texture:this.texture});
@@ -77,7 +77,7 @@ export default {
         case 'erase':
           this.mutablePainting = true;
           eventBus.$emit('isPainting', this.mutablePainting);
-          this.paint('');
+          this.tilePaint('erase');
           break;
         case 'highlight':
           this.mutablePainting = true;
@@ -96,17 +96,17 @@ export default {
 
           break;
         case 'paint':
-          if(this.painting){
-            this.throttlePaint(this.currentColor);
+          if(this.paint.painting){
+            this.throttlePaint(this.paint.currentColor);
           }
           break;
         case 'erase':
-          if(this.painting){
-            this.throttlePaint('');
+          if(this.paint.painting){
+            this.throttlePaint('erase');
           }
           break;
         case 'highlight':
-          if(this.painting){
+          if(this.paint.painting){
             this.throttleHighlight();
           }
           break;
@@ -116,15 +116,21 @@ export default {
       this.mutablePainting = false;
       eventBus.$emit('isPainting', this.mutablePainting);
     },
-    paint(color){
-      if(this.backgroundType == 'color'){
+    tilePaint(color){
+      if(color === 'erase'){
+        this.color = '';
+        this.texture = ''
+        this.type = 'color';
+      }else if(this.paint.backgroundType === 'color'){
         this.color = color;
         this.texture = ''
+        this.type = this.paint.backgroundType;
       }else{
         this.color = '';
-        this.texture = this.activeTexture;
+        this.texture = this.paint.activeTexture;
+        this.type = this.paint.backgroundType;
       }
-      this.type = this.backgroundType;
+      
     },
     highlight(){
     
@@ -139,9 +145,9 @@ export default {
     //Fill every tile that matches the tile being filled
     eventBus.$on('fill', (fill) => {
       if(this.type == fill.type && 'color' == this.type && this.color == fill.color ){
-        this.paint(this.currentColor);
+        this.tilePaint(this.paint.currentColor);
       }else if(this.type == fill.type && 'texture' == this.type && this.texture == fill.texture){
-        this.paint(this.currentColor);
+        this.tilePaint(this.paint.currentColor);
       }
     });
   },

@@ -2,7 +2,7 @@
 <div id="dm-tools" class="user-game-actions">
     <div id="tool-select" class="dm-tool">
         <div id="tool-holder" class="dm-holder">
-            <div id="current-tile" class="tile" :class="[backgroundType, activeTexture]" :style="{ backgroundColor: currentColor }"></div>
+            <div id="current-tile" class="tile" :class="[paint.backgroundType, paint.activeTexture]" :style="{ backgroundColor: paint.currentColor }"></div>
 
             <div class="tool-spacer"></div>
 <!--
@@ -18,18 +18,6 @@
             <div id="texture-tool" class="visual-tool" title="Texture" v-b-modal.modal-textures><i class="fas fa-images"></i></div>
 
             <!--
-            <div id="hand-tool" class="tool active" title="Normal"><i class="fas fa-hand-paper"></i></div>
-            <div id="paint-tool" class="tool" title="Paint"><i class="fas fa-fw fa-paint-roller"></i></div>
-            <div id="fill-tool" class="tool" title="Fill"><i class="fas fa-fw fa-fill-drip"></i></div>
-            <div id="erase-tool" class="tool" title="Erase"><i class="fas fa-fw fa-eraser"></i></div>
-            <div id="highlight-tool" class="tool" title="Highlight"><i class="fas fa-fw fa-highlighter"></i></div>
-            <div id="sample-tool" class="tool" title="Sample"><i class="fas fa-eye-dropper"></i></div>
-            
-            <div class="tool-spacer"></div>
-           
-            <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" @change="updateCurrentColor" v-model="currentColor" class="fas fa-palette" /></div>
-            <div id="texture-tool" class="visual-tool" title="Texture" data-toggle="modal" data-target="#texture-modal"><i class="fas fa-images"></i></div>
-           
             <div class="tool-spacer"></div>
             
             <div id="new-tool" class="tool" title="New"><i class="fas fa-file-plus"></i></div>
@@ -65,10 +53,10 @@ import PaintTool from "./Tools/PaintTool.vue";
 */
 
 export default {
-  props: ['defaults', 'currentColor', 'activeTool', 'activeTexture', 'backgroundType'],
+  props: ['defaults', 'activeTool', 'paint'],
   data () {
     return {
-        mutatedCurrentColor: this.currentColor,
+        mutatedCurrentColor: this.paint.currentColor,
         tools: [
             {
                 name: 'hand',
