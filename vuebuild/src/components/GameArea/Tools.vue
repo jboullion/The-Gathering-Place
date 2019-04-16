@@ -2,7 +2,7 @@
 <div id="dm-tools" class="user-game-actions">
     <div id="tool-select" class="dm-tool">
         <div id="tool-holder" class="dm-holder">
-            <div id="current-tile" class="tile" :style="{ backgroundColor: currentColor }"></div>
+            <div id="current-tile" class="tile" :class="[backgroundType, activeTexture]" :style="{ backgroundColor: currentColor }"></div>
 
             <div class="tool-spacer"></div>
 <!--
@@ -15,8 +15,8 @@
             <div class="tool-spacer"></div>
 
             <div id="color-tool" class="visual-tool" title="Color"><input id="tile-color" type="color" @change="updateCurrentColor" v-model="mutatedCurrentColor" class="fas fa-palette" /></div>
-            <div id="texture-tool" class="visual-tool" title="Texture" data-toggle="modal" data-target="#texture-modal"><i class="fas fa-images"></i></div>
-           
+            <div id="texture-tool" class="visual-tool" title="Texture" v-b-modal.modal-textures><i class="fas fa-images"></i></div>
+
             <!--
             <div id="hand-tool" class="tool active" title="Normal"><i class="fas fa-hand-paper"></i></div>
             <div id="paint-tool" class="tool" title="Paint"><i class="fas fa-fw fa-paint-roller"></i></div>
@@ -65,7 +65,7 @@ import PaintTool from "./Tools/PaintTool.vue";
 */
 
 export default {
-  props: ['defaults', 'currentColor', 'activeTool'],
+  props: ['defaults', 'currentColor', 'activeTool', 'activeTexture', 'backgroundType'],
   data () {
     return {
         mutatedCurrentColor: this.currentColor,
@@ -200,7 +200,6 @@ export default {
 	position: absolute;
 	top: 1px;
 	left: 1px;
-	font-size: 1.6rem;
 	padding: 6px;
 	height: 30px;
 	width: 30px;

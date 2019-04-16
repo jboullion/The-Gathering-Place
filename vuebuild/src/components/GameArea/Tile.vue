@@ -1,6 +1,7 @@
 <template>
   <div class="tile" 
-  :class="{highlight: highlighted}"
+  :class="[ type, texture ]"
+  
   @mousedown="mouseDown" 
   @mousemove="mouseMove" 
   :style="{ backgroundColor: color }" 
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+// :class="[backgroundType, activeTexture]"
 import _ from 'lodash'
 
 import { eventBus } from '../../main.js'
@@ -15,7 +17,7 @@ import { eventBus } from '../../main.js'
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['currentColor', 'activeTool', 'painting', 'fill'],
+  props: ['currentColor', 'activeTool', 'painting', 'fill', 'backgroundType', 'activeTexture'],
   data () {
     return {
       x: 0,
@@ -27,10 +29,9 @@ export default {
       mutablePainting: this.painting,
       type: 'color', //color / texture
       color: '', //hex code
-      background: '', //background texture
+      texture: '', //background texture
       highlighted: false,
       tileSize: 32,
-      textureclass: "sprite",
       throttlePaint: _.throttle( function (color) {
         this.paint(color);
       },1000),
@@ -116,7 +117,15 @@ export default {
       eventBus.$emit('isPainting', this.mutablePainting);
     },
     paint(color){
-      this.color = color;
+      if(this.backgroundType == 'color'){
+        this.color = color;
+        this.texture = ''
+      }else{
+        this.color = '';
+        this.texture = this.activeTexture;
+      }
+      this.type = this.backgroundType;
+      
     },
     highlight(){
     

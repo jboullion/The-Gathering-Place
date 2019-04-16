@@ -21,23 +21,12 @@ export default {
 </script>
 
 <style>
-html {
-  
-}
-
-body {
-
-}
 
 body,
 html { 
   min-height: 100%;
   background-color: #e5e5e0;
-  font-size: 10px;
-}
-
-* {
-
+  font-size: 16px;
 }
 
 #app {

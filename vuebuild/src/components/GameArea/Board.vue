@@ -3,11 +3,12 @@
   oncontextmenu="return false;"
   @mouseup="mouseUp"
   @mouseleave="mouseLeave">
-    <div id="current-tile" class="tile" ></div>
     <Tile v-for="id in numTiles" :key="id" 
     :currentColor="currentColor" 
     :activeTool="activeTool"
     :painting="painting"
+    :backgroundType="backgroundType"
+    :activeTexture="activeTexture"
     ></Tile>
   </div>
 </template>
@@ -37,8 +38,17 @@ export default {
       type: String,
       required: true,
       default: 'hand'
+    },
+    backgroundType: {
+      type: String,
+      required: true,
+      default: 'color'
+    },
+    activeTexture: {
+      type: String,
+      required: true,
+      default: ''
     }
-
   },
   data () {
     return {
