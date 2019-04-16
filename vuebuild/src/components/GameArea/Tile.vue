@@ -72,7 +72,7 @@ export default {
           this.throttlePaint(this.currentColor);
           break;
         case 'fill':
-          eventBus.$emit('fill', {type: this.type, color:this.color});
+          eventBus.$emit('fill', {type: this.type, color:this.color, texture:this.texture});
           break;
         case 'erase':
           this.mutablePainting = true;
@@ -125,7 +125,6 @@ export default {
         this.texture = this.activeTexture;
       }
       this.type = this.backgroundType;
-      
     },
     highlight(){
     
@@ -139,7 +138,9 @@ export default {
   created(){
     //Fill every tile that matches the tile being filled
     eventBus.$on('fill', (fill) => {
-      if('color' == fill.type && this.color == fill.color){
+      if(this.type == fill.type && 'color' == this.type && this.color == fill.color ){
+        this.paint(this.currentColor);
+      }else if(this.type == fill.type && 'texture' == this.type && this.texture == fill.texture){
         this.paint(this.currentColor);
       }
     });
