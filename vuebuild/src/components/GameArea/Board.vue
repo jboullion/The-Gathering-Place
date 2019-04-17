@@ -8,7 +8,7 @@
     :activeTool="activeTool"
     :paint="paint"
     :tile="tile"
-    ></Tile>
+    ><NPC v-if="tile.npc" :npc="npc"></NPC></Tile>
   </div>
 </template>
 
@@ -31,6 +31,7 @@ import _ from 'lodash'
 import { eventBus } from '../../main.js'
 
 import Tile from "./Tile.vue";
+import NPC from "./Tokens/NPC.vue";
 
 export default {
   props: {
@@ -71,7 +72,7 @@ export default {
         y: 0,
         id: '', //'tile-'+this.x+'-'+this.y,
         passable: true,
-        empty: true,
+        npc: false,
         name: 'Empty',
         type: 'color', //color / texture
         color: '', //hex code
@@ -104,6 +105,11 @@ export default {
 
           //Put our tile into our state board
           this.tiles[w][h] = tile;
+
+          if( (w + h) % 10 == 0){
+             //GAME.NPCs[w][h] = createNPC(w,h);
+             tile.npc = tile;
+          }
 
           this.displayTiles.push(this.tiles[w][h]);
 
@@ -152,7 +158,8 @@ export default {
     this.buildBoard();
   },
   components: {
-    'Tile': Tile
+    Tile,
+    NPC
   },
 }
 </script>

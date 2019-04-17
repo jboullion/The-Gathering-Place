@@ -25,7 +25,7 @@ import { eventBus } from '../../main.js'
 
 import Board from "./Board.vue";
 import Tools from "./Tools.vue";
-import NPC from "./Tokens/NPC.vue";
+
 
 import Textures from "./Modals/Textures.vue";
 
@@ -48,7 +48,6 @@ export default {
   components: {
     Board,
     Tools,
-    NPC,
     Textures
   },
   created(){

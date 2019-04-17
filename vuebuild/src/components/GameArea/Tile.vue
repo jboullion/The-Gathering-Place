@@ -8,6 +8,7 @@
   @drop="drop"
   :style="{ backgroundColor: colorMute }" 
  >
+  <slot></slot>
  </div>
 </template>
 
