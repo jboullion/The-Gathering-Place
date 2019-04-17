@@ -158,6 +158,7 @@ export default {
 
 #tool-select .tool, 
  #tool-select .visual-tool {
+    color: #1c1c1c;
 	cursor: pointer;
 	width: 32px;
 	height: 32px;

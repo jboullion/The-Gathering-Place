@@ -216,6 +216,8 @@ Graph.prototype.neighbors = function(node) {
   }
 
   if (this.diagonal) {
+
+    //TODO: In order to get D&D diagonals working right every other push must be worth 2
     // Southwest
     if (grid[x - 1] && grid[x - 1][y - 1]) {
       ret.push(grid[x - 1][y - 1]);

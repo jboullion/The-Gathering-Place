@@ -1,10 +1,10 @@
 <template>
   <div class="tile" 
-  :class="[ type, texture ]"
+  :class="[ typeMute, textureMute ]"
   
   @mousedown="mouseDown" 
   @mousemove="mouseMove" 
-  :style="{ backgroundColor: color }" 
+  :style="{ backgroundColor: colorMute }" 
  ></div>
 </template>
 
@@ -17,21 +17,21 @@ import { eventBus } from '../../main.js'
 import Tile from "./Tile.vue";
 
 export default {
-  props: ['activeTool', 'paint'],
+  props: ['activeTool', 'paint', 'tile'],
   data () {
     return {
-      x: 0,
-      y: 0,
-      id: 'tile-'+this.x+'-'+this.y,
-      passable: true,
-      empty: true,
-      name: 'Empty',
-      mutablePainting: this.paint.painting,
-      type: 'color', //color / texture
-      color: '', //hex code
-      texture: '', //background texture
-      highlighted: false,
-      tileSize: 32,
+      xMute: this.tile.x,
+      yMute: this.tile.y,
+      idMute: 'tile-'+this.tile.x+'-'+this.tile.y,
+      passableMute: this.tile.passable,
+      emptyMute: this.tile.empty,
+      nameMute: this.tile.name,
+      paintingMute: this.paint.painting,
+      typeMute: this.tile.type, //color / texture
+      colorMute: this.tile.color, //hex code
+      textureMute: this.tile.texture, //background texture
+      highlightedMute: this.tile.highlighted,
+
       throttlePaint: _.throttle( function (color) {
         this.tilePaint(color);
       },1000),
@@ -67,25 +67,25 @@ export default {
 
           break;
         case 'paint':
-          this.mutablePainting = true;
-          eventBus.$emit('isPainting', this.mutablePainting);
+          this.paintingMute = true;
+          eventBus.$emit('isPainting', this.paintingMute);
           this.throttlePaint(this.paint.currentColor);
           break;
         case 'fill':
-          eventBus.$emit('fill', {type: this.type, color:this.color, texture:this.texture});
+          eventBus.$emit('fill', {type: this.typeMute, color:this.colorMute, texture:this.textureMute});
           break;
         case 'erase':
-          this.mutablePainting = true;
-          eventBus.$emit('isPainting', this.mutablePainting);
+          this.paintingMute = true;
+          eventBus.$emit('isPainting', this.paintingMute);
           this.tilePaint('erase');
           break;
         case 'highlight':
-          this.mutablePainting = true;
-          eventBus.$emit('isPainting', this.mutablePainting);
+          this.paintingMute = true;
+          eventBus.$emit('isPainting', this.paintingMute);
           this.throttleHighlight();
           break;
         case 'sample':
-          eventBus.$emit('newSample', {type: this.type, color:this.color});
+          eventBus.$emit('newSample', {type: this.typeMute, color:this.colorMute});
           break;
       }
       
@@ -118,17 +118,17 @@ export default {
     },
     tilePaint(color){
       if(color === 'erase'){
-        this.color = '';
-        this.texture = ''
-        this.type = 'color';
+        this.colorMute = '';
+        this.textureMute = ''
+        this.typeMute = 'color';
       }else if(this.paint.backgroundType === 'color'){
-        this.color = color;
-        this.texture = ''
-        this.type = this.paint.backgroundType;
+        this.colorMute = color;
+        this.textureMute = ''
+        this.typeMute = this.paint.backgroundType;
       }else{
-        this.color = '';
-        this.texture = this.paint.activeTexture;
-        this.type = this.paint.backgroundType;
+        this.colorMute = '';
+        this.textureMute = this.paint.activeTexture;
+        this.typeMute = this.paint.backgroundType;
       }
       
     },
@@ -144,9 +144,9 @@ export default {
   created(){
     //Fill every tile that matches the tile being filled
     eventBus.$on('fill', (fill) => {
-      if(this.type == fill.type && 'color' == this.type && this.color == fill.color ){
+      if(this.typeMute == fill.type && 'color' == this.typeMute && this.colorMute == fill.color ){
         this.tilePaint(this.paint.currentColor);
-      }else if(this.type == fill.type && 'texture' == this.type && this.texture == fill.texture){
+      }else if(this.typeMute == fill.type && 'texture' == this.typeMute && this.textureMute == fill.texture){
         this.tilePaint(this.paint.currentColor);
       }
     });

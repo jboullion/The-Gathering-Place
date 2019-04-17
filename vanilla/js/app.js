@@ -604,7 +604,7 @@ window.onload = function(){
 
 		//We are using a Graph class that is bundled with our astar.js This Graph class allows us to use a heap to search the map space.
 		//https://briangrinstead.com/blog/astar-search-algorithm-in-javascript-updated/
-		var boardGraph = new Graph(GAME.boardGraphArray);
+		var boardGraph = new Graph(GAME.boardGraphArray); //, {diagonal:true}
 
 		//Do we have both our points to check?
 		if(aStarStart && aStarEnd){
