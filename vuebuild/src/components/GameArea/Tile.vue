@@ -4,8 +4,11 @@
   
   @mousedown="mouseDown" 
   @mousemove="mouseMove" 
+  @dragover="dragover"
+  @drop="drop"
   :style="{ backgroundColor: colorMute }" 
- ></div>
+ >
+ </div>
 </template>
 
 <script>
@@ -13,8 +16,6 @@
 import _ from 'lodash'
 
 import { eventBus } from '../../main.js'
-
-import Tile from "./Tile.vue";
 
 export default {
   props: ['activeTool', 'paint', 'tile'],
@@ -42,24 +43,6 @@ export default {
     }
   },
   methods: {
-    interval(func, wait, times){
-        var interv = function(w, t){
-            return function(){
-                if(typeof t === "undefined" || t-- > 0){
-                    setTimeout(interv, w);
-                    try{
-                        func.call(null);
-                    }
-                    catch(e){
-                        t = 0;
-                        throw e.toString();
-                    }
-                }
-            };
-        }(wait, times);
-
-        setTimeout(interv, wait);
-    },
     mouseDown(e){
 
       switch(this.activeTool){
@@ -136,9 +119,27 @@ export default {
     
       this.highlighted = true;
     
-      this.interval(()=>{
+      interval(()=>{
         this.highlighted = false;
       }, 5000, 1);
+    },
+    dragover(e){
+      e.preventDefault();
+    },
+    drop(e){
+      console.log(e);
+      //Move whatever was dropped here
+      //var data = e.dataTransfer.getData("text");
+
+      //e.target.appendChild('<div style="background-color: red;">test</div>');
+      
+      //Since our aStarStart is a reference to an actual NPC we can update it's XY so we know where to start our next Astar path for this NPC
+     // aStarStart.x = this.x;
+     // aStarStart.y = this.y;
+
+      //After we drop something we need to update our graph for aStar searches
+    //  buildGraphArray();
+     // clearAstarPath();
     }
   },
   created(){

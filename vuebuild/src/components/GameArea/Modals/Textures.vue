@@ -1,6 +1,6 @@
 <template>
     <!-- Modal Component -->
-    <b-modal id="modal-textures" title="Select Texture" hide-footer>
+    <b-modal id="modal-textures" title="Select Texture" ref="modal-textures" hide-footer>
         <div id="texture-holder" data-dismiss="modal" class="dm-holder">
             <div class="dm-tile texture" v-for="(texture, key) in textures" :key="key" :class="texture" @click="setActive(texture)"></div>
         </div>
@@ -24,7 +24,8 @@ export default {
   methods: {
     setActive(texture){
         eventBus.$emit('activateTexture', texture);
-	}
+        this.$refs['modal-textures'].hide();
+	  }
   },
   computed: {
   }

@@ -6,10 +6,14 @@
       :activeTool="activeTool"
       :paint="paint"
       @updateCurrentColor="updateCurrentColor"></Tools>
+
+    
+
       <Board 
       :defaults="defaults" 
       :activeTool="activeTool"
-      :paint="paint"></Board>
+      :paint="paint"
+      heldNPC></Board>
       
     </div>
     <Textures></Textures>
@@ -21,6 +25,8 @@ import { eventBus } from '../../main.js'
 
 import Board from "./Board.vue";
 import Tools from "./Tools.vue";
+import NPC from "./Tokens/NPC.vue";
+
 import Textures from "./Modals/Textures.vue";
 
 export default {
@@ -35,12 +41,14 @@ export default {
         currentColor: '#526F35',
         activeTexture: '',
         painting: false
-      }
+      },
+      heldNPC: null
     }
   },
   components: {
     Board,
     Tools,
+    NPC,
     Textures
   },
   created(){

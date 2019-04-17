@@ -64,8 +64,8 @@ export default {
       boardWidthPixels: 0,
       boardheightPixels: 0,
       numTiles: (10 * 10),
-      width: 20,
-      height: 20,
+      width: 30,
+      height: 30,
       defaultTile: {
         x: 0,
         y: 0,
@@ -108,7 +108,7 @@ export default {
           this.displayTiles.push(this.tiles[w][h]);
 
           //Creating a bunch of random GAME.NPCs
-          // if( (w + h) % 10 == 0){
+          //if( (w + h) % 10 == 0){
           //   GAME.NPCs[w][h] = createNPC(w,h);
           // }
 
