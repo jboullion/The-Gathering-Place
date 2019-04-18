@@ -19,7 +19,7 @@ import _ from 'lodash'
 import { eventBus } from '../../main.js'
 
 export default {
-  props: ['activeTool', 'paint', 'tile'],
+  props: ['activeTool', 'paint', 'tile', 'heldNPC'],
   data () {
     return {
       xMute: this.tile.x,
@@ -129,6 +129,9 @@ export default {
     },
     drop(e){
       console.log(e);
+      
+      eventBus.$emit('attachNPC', this);
+
       //Move whatever was dropped here
       //var data = e.dataTransfer.getData("text");
 

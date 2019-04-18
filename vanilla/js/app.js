@@ -109,8 +109,8 @@ window.onload = function(){
 	GAME.board = {
 		id: 0,
 		name: 'New Board',
-		height: 30,
-		width: 30,
+		height: 100,
+		width: 100,
 		tiles: [],
 		dragging: false,
 		painting: false,

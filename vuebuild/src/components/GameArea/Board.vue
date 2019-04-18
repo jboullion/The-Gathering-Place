@@ -8,18 +8,22 @@
     :activeTool="activeTool"
     :paint="paint"
     :tile="tile"
-    ><NPC v-if="tile.npc" :npc="npc"></NPC></Tile>
+    :heldNPC="heldNPC"
+    ><NPC v-if="tile.npc" :npc="npc"></NPC>
+    </Tile>
   </div>
 </template>
+
+
 
 <script>
 /**
  * 
  * NEXT STEPS:
- * Resize Board
- * Create NPCs
- * Add NPCs
- * Drag NPCs
+ * Resize Board * (Add inputs, sliders?, to dynamically edit the board size)
+ * Create NPCs * (Create Tool to Drag NPCs onto board)
+ * Add NPCs * 
+ * Drag and Drop NPCs
  * aStar NPCs
  * Info Box NPC
  * 
@@ -65,14 +69,14 @@ export default {
       boardWidthPixels: 0,
       boardheightPixels: 0,
       numTiles: (10 * 10),
-      width: 30,
-      height: 30,
+      width: 100,
+      height: 100,
       defaultTile: {
         x: 0,
         y: 0,
         id: '', //'tile-'+this.x+'-'+this.y,
         passable: true,
-        npc: false,
+        npc: null,
         name: 'Empty',
         type: 'color', //color / texture
         color: '', //hex code
@@ -82,7 +86,8 @@ export default {
       tiles: [],
       displayTiles: [],
       tileSize: 32,
-      boardPadding: 200
+      boardPadding: 200,
+      heldNPC: null,
     }
   },
   methods: {
@@ -108,7 +113,7 @@ export default {
 
           if( (w + h) % 10 == 0){
              //GAME.NPCs[w][h] = createNPC(w,h);
-             tile.npc = tile;
+             tile.npc = true;//tile;
           }
 
           this.displayTiles.push(this.tiles[w][h]);
@@ -156,6 +161,18 @@ export default {
   }, 
   beforeMount(){
     this.buildBoard();
+  },
+  created(){
+    eventBus.$on('heldNPC', (npcComponent) => {
+      //console.log(npc);
+      //this.heldNPC = npc;
+    });
+
+    eventBus.$on('attachNPC', (tileComponent) => {
+      //console.log(tile);
+      //console.log(this.tiles[tileComponent.tile.x][tileComponent.tile.y]);
+      //this.tiles[tileComponent.tile.x][tileComponent.tile.y].npc = this.heldNPC;
+    });
   },
   components: {
     Tile,

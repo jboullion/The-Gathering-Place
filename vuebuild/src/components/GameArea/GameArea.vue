@@ -89,8 +89,8 @@ export default {
 }
 #gamearea-map-wrapper {
   background-color: #e5e5e0;
-  height: 100%;
-  max-height: 100%;
+  height: 100vh;
+  max-height: 100vh;
   width: 100%;
   overflow: auto; 
 }
