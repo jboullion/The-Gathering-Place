@@ -69,8 +69,8 @@ export default {
       boardWidthPixels: 0,
       boardheightPixels: 0,
       numTiles: (10 * 10),
-      width: 100,
-      height: 100,
+      width: 50,
+      height: 50,
       defaultTile: {
         x: 0,
         y: 0,
